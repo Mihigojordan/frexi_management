@@ -53,3 +53,21 @@ model Destination {
   isActive         Boolean  @default(true)
   createdAt        DateTime @default(now())
 }
+model Tour {
+  id               String   @id @default(uuid())
+  name             String // Destination name
+  country          String // Country name
+  city             String? // Optional city
+  description      Json // Rich description object
+  visaRequirements String? // Visa info
+  language         String? // Main language(s)
+  currencyUsed     String? // Currency name/symbol
+  areaKm2          Float? // Area in square kilometers
+  popularSites     Json?
+  highlights       Json?
+  estimatedBudget  Float? // Estimated budget in your preferred currency
+  mainPhotoUrl         String? // Main image
+  gallery          Json?
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+}

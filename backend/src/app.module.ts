@@ -4,13 +4,15 @@ import { AdminModule } from './modules/admin-management/admin.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { DestinationModule } from './modules/destination-managment/destination.module';
 import { TestimonialModule } from './modules/testmonial-managment/testmonial.module';
+import { TourModule } from './modules/tour-managmanr/tour.module';
 
 @Module({
   imports: [
     AdminModule,
     PrismaModule,
     DestinationModule,
-    TestimonialModule,  
+    TestimonialModule,
+    TourModule
   ],
   controllers: [AppController],
   providers: [],
