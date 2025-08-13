@@ -1,20 +1,23 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Param, 
-  Delete, 
-  Put, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
   Query,
   HttpStatus,
   HttpCode,
   UseInterceptors,
   UploadedFiles,
-  HttpException
+  HttpException,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { DestinationFileFields, DestinationUploadConfig } from 'src/common/utils/file-upload.util';
+import {
+  DestinationFileFields,
+  DestinationUploadConfig,
+} from 'src/common/utils/file-upload.util';
 import { TourService } from './tour.service';
 
 @Controller('tours')
@@ -23,21 +26,25 @@ export class TourController {
 
   @Post()
   @UseInterceptors(
-    FileFieldsInterceptor(DestinationFileFields,DestinationUploadConfig)
+    FileFieldsInterceptor(DestinationFileFields, DestinationUploadConfig),
   )
-  async create(@Body() createDestinationData: any, @UploadedFiles() files:{
-    mainPhotoUrl?: Express.Multer.File[],
-    gallery?:Express.Multer.File[]
-  }) {
+  async create(
+    @Body() createDestinationData: any,
+    @UploadedFiles()
+    files: {
+      mainPhotoUrl?: Express.Multer.File[];
+      gallery?: Express.Multer.File[];
+    },
+  ) {
     try {
-        const mainPhotoUrl = `uploads/destination-main-photos/${files.mainPhotoUrl?.[0].filename}`
-        const gallery =  files.gallery?.map(
-            (file) => `uploads/gallery/${file.filename}`
-        )
+      const mainPhotoUrl = `uploads/destination-main-photos/${files.mainPhotoUrl?.[0].filename}`;
+      const gallery = files.gallery?.map(
+        (file) => `uploads/gallery/${file.filename}`,
+      );
       return await this.tourService.create({
         ...createDestinationData,
         mainPhotoUrl,
-        gallery
+        gallery,
       });
     } catch (error) {
       throw new HttpException(error.message, error.status);
@@ -58,7 +65,7 @@ export class TourController {
     try {
       return await this.tourService.findActive();
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -67,7 +74,7 @@ export class TourController {
     try {
       return await this.tourService.search(query);
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -76,7 +83,7 @@ export class TourController {
     try {
       return await this.tourService.findByCountry(country);
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -85,22 +92,30 @@ export class TourController {
     try {
       return await this.tourService.findOne(id);
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 
   @Put(':id')
   @UseInterceptors(
-    FileFieldsInterceptor(DestinationFileFields,DestinationUploadConfig)
+    FileFieldsInterceptor(DestinationFileFields, DestinationUploadConfig),
   )
-  async update(@Param('id') id: string, @Body() updateDestinationData: any, @UploadedFiles() files?:{
-    mainPhotoUrl?: Express.Multer.File[],
-    gallery?:Express.Multer.File[]
-  } ) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateDestinationData: any,
+    @UploadedFiles()
+    files?: {
+      mainPhotoUrl?: Express.Multer.File[];
+      gallery?: Express.Multer.File[];
+    },
+  ) {
     try {
+      if (files?.mainPhotoUrl) {
+        updateDestinationData.mainPhotoUrl = `uploads/destination-main-photos/${files.mainPhotoUrl[0].filename}`;
+      }
       return await this.tourService.update(id, updateDestinationData);
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -109,7 +124,7 @@ export class TourController {
     try {
       return await this.tourService.remove(id);
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -118,7 +133,7 @@ export class TourController {
     try {
       return await this.tourService.softDelete(id);
     } catch (error) {
-     throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

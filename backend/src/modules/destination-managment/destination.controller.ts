@@ -98,6 +98,9 @@ export class DestinationController {
     gallery?:Express.Multer.File[]
   } ) {
     try {
+        if(files?.mainPhotoUrl){
+            updateDestinationData.mainPhotoUrl = `uploads/destination-main-photos/${files.mainPhotoUrl[0].filename}`
+        }
       return await this.destinationService.update(id, updateDestinationData);
     } catch (error) {
      throw new HttpException(error.message, error.status);

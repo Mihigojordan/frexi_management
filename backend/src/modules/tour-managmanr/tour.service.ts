@@ -109,7 +109,26 @@ export class TourService {
     }
   }
 
-  async update(id: string, data: any) {
+  async update(
+    id: string,
+    data: {
+      name?: string;
+      country?: string;
+      city?: string;
+      description?: string;
+      visaRequirements?: string;
+      language?: string;
+      currencyUsed?: string;
+      areaKm2?: number;
+      popularSites?: string;
+      highlights?: string[];
+      estimatedBudget?: number;
+      mainPhotoUrl?: string;
+      keepGalleryImages?: string; // JSON string of image URLs to keep
+      newGalleryImages?: Express.Multer.File[]; // New uploaded images
+      isActive?: boolean;
+    },
+  ) {
     try {
       const existingtour = await this.prisma.tour.findUnique({
         where: { id },
@@ -118,6 +137,65 @@ export class TourService {
       if (!existingtour) {
         throw new NotFoundException(`tour with ID ${id} not found`);
       }
+
+      if(data.mainPhotoUrl){
+        deleteFile(String(existingtour.mainPhotoUrl))
+      }
+
+      // Parse keepGalleryImages safely
+      let keepGalleryImages: string[] = [];
+      try {
+        keepGalleryImages = data?.keepGalleryImages
+          ? JSON.parse(data.keepGalleryImages)
+          : [];
+        if (!Array.isArray(keepGalleryImages)) {
+          throw new Error('Not an array');
+        }
+      } catch (error) {
+        throw new BadRequestException(
+          'Invalid keepGalleryImages format - must be a valid JSON array',
+        );
+      }
+
+      // Process new gallery images
+      const newGalleryImages =
+        data.newGalleryImages?.map(
+          (file) => `/uploads/gallery/${file.filename}`,
+        ) ?? [];
+
+      console.log('Keeping gallery images:', keepGalleryImages.length);
+      console.log('New gallery images:', newGalleryImages.length);
+
+      // Optional: Ensure max gallery images limit (adjust as needed)
+      const totalGalleryImages =
+        keepGalleryImages.length + newGalleryImages.length;
+      const maxGalleryImages = 10; // Adjust this limit as needed
+      if (totalGalleryImages > maxGalleryImages) {
+        throw new BadRequestException(
+          `Maximum ${maxGalleryImages} gallery images allowed (existing + new)`,
+        );
+      }
+
+      // Delete images not in keepGalleryImages from existing gallery
+      const currentGallery = (existingtour.gallery as string[]) || [];
+      const removedGalleryImages = currentGallery.filter(
+        (url) => !keepGalleryImages.includes(url),
+      );
+
+      // Delete removed images from storage
+      for (const url of removedGalleryImages) {
+        try {
+          // Assuming you have a deleteFile function similar to your product service
+          deleteFile(String(url));
+          console.log(`Deleted gallery image: ${url}`);
+        } catch (deleteError) {
+          console.error(`Failed to delete gallery image ${url}:`, deleteError);
+          // Continue with update even if file deletion fails
+        }
+      }
+
+      // Combine kept images with new images for final gallery
+      const finalGallery = [...keepGalleryImages, ...newGalleryImages];
 
       return await this.prisma.tour.update({
         where: { id },
@@ -131,7 +209,7 @@ export class TourService {
           }),
           ...(data.language !== undefined && { language: data.language }),
           ...(data.currencyUsed !== undefined && {
-            currencyUsed: Number(data.currencyUsed) ,
+            currencyUsed: data.currencyUsed,
           }),
           ...(data.areaKm2 !== undefined && { areaKm2: Number(data.areaKm2) }),
           ...(data.popularSites !== undefined && {
@@ -141,13 +219,19 @@ export class TourService {
           ...(data.estimatedBudget !== undefined && {
             estimatedBudget: Number(data.estimatedBudget),
           }),
-          ...(data.imageUrl !== undefined && { imageUrl: data.imageUrl }),
-          ...(data.gallery !== undefined && { gallery: data.gallery }),
-          ...(data.isActive !== undefined && { isActive: data.isActive }),
+          ...(data.mainPhotoUrl !== undefined && { mainPhotoUrl: data.mainPhotoUrl }),
+          // Update gallery with managed images
+          ...((data.keepGalleryImages !== undefined ||
+            data.newGalleryImages !== undefined) && {
+            gallery: finalGallery,
+          }),
         },
       });
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      ) {
         throw error;
       }
       throw new BadRequestException(
@@ -155,6 +239,7 @@ export class TourService {
       );
     }
   }
+
 
   async remove(id: string) {
     try {
