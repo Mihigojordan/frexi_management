@@ -1,0 +1,168 @@
+import React, { useState } from 'react';
+import { MapPin, Clock, Menu, X, ChevronDown } from 'lucide-react';
+
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleLanguage = () => {
+    setIsLanguageOpen(!isLanguageOpen);
+  };
+
+  const navLinks = [
+    { name: 'Home', href: '#home' },
+    { name: 'About Us', href: '#about' },
+    { name: 'Destination', href: '#destination' },
+    { name: 'Service', href: '#service' },
+    { name: 'Gallery', href: '#gallery' },
+    { name: 'Blog', href: '#blog' },
+    { name: 'Contact Us', href: '#contact' }
+  ];
+
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      {/* Top Info Bar - Hidden on mobile */}
+      <div className="bg-gray-50 text-sm text-gray-600 hidden lg:block">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-1">
+              <MapPin className="w-4 h-4" />
+              <span>Makuza Peace Piazza 3rd Floor F3-28, KN 4 Ave, Kigali</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Clock className="w-4 h-4" />
+              <span>from monday - sunday</span>
+            </div>
+            <span>24 / 7</span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <button 
+                onClick={toggleLanguage}
+                className="hover:text-gray-800 flex items-center space-x-1"
+              >
+                <span>Language</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              {isLanguageOpen && (
+                <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg border">
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kinyarwanda</a>
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">French</a>
+                </div>
+              )}
+            </div>
+            <a href="#faq" className="hover:text-gray-800">FAQ</a>
+            <a href="#support" className="hover:text-gray-800">Support</a>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-4">
+          {/* Logo */}
+          <div className="flex items-center">
+            <a href="#home" className="bg-black text-white px-3 py-2 font-bold text-lg hover:bg-gray-800 transition-colors">
+              FR
+              <div className="text-xs">FREXI</div>
+            </a>
+          </div>
+
+          {/* Desktop Navigation Menu */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-gray-700 hover:text-gray-900 font-medium transition-colors relative group"
+              >
+                {link.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
+              </a>
+            ))}
+          </div>
+
+          {/* Desktop Book Now Button & Mobile Menu Button */}
+          <div className="flex items-center space-x-4">
+            <a
+              href="#book"
+              className="bg-teal-800 text-white px-6 py-3 rounded-full hover:bg-teal-900 transition-colors font-medium hidden sm:inline-block"
+            >
+              Book Now →
+            </a>
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={toggleMenu}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6 text-gray-600" />
+              ) : (
+                <Menu className="w-6 h-6 text-gray-600" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        } overflow-hidden`}>
+          <div className="py-4 border-t border-gray-200">
+            {/* Mobile Top Info */}
+            <div className="lg:hidden pb-4 mb-4 border-b border-gray-200">
+              <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
+                <MapPin className="w-4 h-4" />
+                <span>Makuza Peace Piazza, Kigali</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <Clock className="w-4 h-4" />
+                <span>Monday - Sunday, 24/7</span>
+              </div>
+            </div>
+
+            {/* Mobile Navigation Links */}
+            <div className="space-y-2">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="block px-4 py-3 text-gray-700 hover:text-teal-800 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+
+            {/* Mobile Book Now Button */}
+            <div className="pt-4 mt-4 border-t border-gray-200">
+              <a
+                href="#book"
+                className="block w-full text-center bg-teal-800 text-white px-6 py-3 rounded-full hover:bg-teal-900 transition-colors font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Book Now →
+              </a>
+            </div>
+
+            {/* Mobile Language & Support */}
+            <div className="pt-4 flex justify-center space-x-6 text-sm text-gray-600">
+              <button className="hover:text-gray-800">Language</button>
+              <a href="#faq" className="hover:text-gray-800">FAQ</a>
+              <a href="#support" className="hover:text-gray-800">Support</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+export default Navbar;
