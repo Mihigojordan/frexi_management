@@ -1,9 +1,9 @@
-import { BrowserRouter,createBrowserRouter,Route,RouterProvider,Routes } from "react-router-dom"
+import { BrowserRouter, createBrowserRouter, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
 import React, { Suspense, lazy } from "react";
 import MainLayout from "../layouts/MainLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import AdminLogin from "../pages/auth/Login";
-const  HomePage = lazy(()=> import("../pages/HomePage"));
+const HomePage = lazy(() => import("../pages/HomePage"));
 
 
 // Loading component
@@ -14,28 +14,38 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const  SuspenseWrapper = ({children})=>{
-   return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+const SuspenseWrapper = ({ children }) => {
+  return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
 }
 
 const routes = createBrowserRouter([
   {
     path: '/',
-    element:<MainLayout/>,
-    children:[
-        { index:true , element: <SuspenseWrapper> <HomePage/> </SuspenseWrapper> }
+    element: <Outlet />,
+    children: [
+      {
+        path: '',
+        element: <MainLayout />,
+        children: [
+          { index: true, element: <SuspenseWrapper> <HomePage /> </SuspenseWrapper> }
+        ]
+      },
+      {
+        path: '/admin',
+        element: <h1>admin layout </h1>
+      }
     ]
   },
   {
-    path:'/auth',
+    path: '/auth',
     element: <AuthLayout />,
-    children:[
+    children: [
       {
-        path:'admin/login',
+        path: 'admin/login',
         element: <AdminLogin />
       },
       {
-        path:'admin/register',
+        path: 'admin/register',
         element: <h1>register</h1>
       }
     ]

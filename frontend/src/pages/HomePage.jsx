@@ -1,9 +1,12 @@
 import React from 'react'
+import WelcomePage from '../components/homepage/WelcomePage'
+import TourSection from '../components/tour/TourSection'
 
 const HomePage = () => {
   return (
     <div>
-      <h1>homepage</h1>
+      <WelcomePage />
+      <TourSection />
     </div>
   )
 }
