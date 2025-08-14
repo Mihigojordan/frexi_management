@@ -57,7 +57,7 @@ const routes = createBrowserRouter([
                 element: <Dashboard />
               },
                {
-                path: 'tour',
+                path: 'tours',
                 element: <TourManagement />
               }, 
               {
