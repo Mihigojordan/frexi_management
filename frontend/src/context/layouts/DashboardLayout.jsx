@@ -29,11 +29,17 @@ import { Outlet } from 'react-router-dom';
 
 const DashboardLayout = () => {
 
+    const [isOpen, setIsOpen] = useState(false)
+ 
+  const onToggle = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
     <div className="flex h-screen bg-slate-50">
-      <Sidebar />
+      <Sidebar onToggle={onToggle} isOpen={isOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
+        <Header onToggle={onToggle} />
         <main className="flex-1 overflow-y-auto">
          <Outlet />
         </main>

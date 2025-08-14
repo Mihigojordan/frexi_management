@@ -14,7 +14,7 @@ import {
   X
 } from 'lucide-react';
 import tourService from '../../../services/toursServices';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const TourViewPage = () => {
@@ -27,9 +27,7 @@ const TourViewPage = () => {
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
 
   // Mock navigation function - replace with actual useNavigate() when using React Router
-  const navigate = (path) => {
-    console.log('Navigate to:', path);
-  };
+    const navigate = useNavigate()
 
   useEffect(() => {
     const fetchTour = async () => {
