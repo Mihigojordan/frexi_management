@@ -8,8 +8,9 @@ import {
   Bell,
   Settings,
 
-  User,
-  RouteIcon
+  RouteIcon,
+  Handshake,
+  User
 } from 'lucide-react';
 import useAdminAuth from "../../context/AdminAuthContext";
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -23,6 +24,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
           { id: 'tours', label: 'Tours', icon: MapPin },
           { id: 'destinations', label: 'Destinations', icon: RouteIcon },
         
+          { id: 'partner', label: 'partner', icon: Handshake },
         ]
         const handleNavigateProfile = ()=>{
 

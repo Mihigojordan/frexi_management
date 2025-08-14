@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit3, Trash2, MapPin, Image,Tag, Check, AlertTriangle, Eye, RefreshCw, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import DeleteTourModal from '../../components/dashboard/tour/DeleteTourModal';
-import tourService from '../../services/toursServices';
 import { useNavigate } from 'react-router-dom';
+import tourService from '../../services/toursServices';
 
 const TourManagement = () => {
   const [tours, setTours] = useState([]);

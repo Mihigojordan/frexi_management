@@ -1,5 +1,6 @@
 import { BrowserRouter, createBrowserRouter, Navigate, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
 import React, { Suspense, lazy } from "react";
+
 import MainLayout from "../context/layouts/MainLayout";
 import AuthLayout from "../context/layouts/AuthLayout";
 import AdminLogin from "../pages/auth/Login";
@@ -16,7 +17,8 @@ import DestinationManagement from "../pages/dashboard/DestinationManagement";
 import CreateDestinationPage from "../components/dashboard/destination/CreateDestinationPage";
 import UpdateDestinationPage from "../components/dashboard/destination/UpdateTourPage";
 import DestinationViewPage from "../components/dashboard/destination/DestinationViewPage";
-const HomePage = lazy(() => import("../pages/HomePage"));
+import HomePage from "../pages/landing/HomePage";
+import PartnerManagement from "../pages/dashboard/PartnerManagement";
 
 
 // Loading component
@@ -102,7 +104,11 @@ const routes = createBrowserRouter([
               {
                 path: 'profile',
                 element: <AdminProfile />
-              }
+              },
+              {
+                path: 'partner',
+                element: <PartnerManagement />
+              },
             ]
           }
         ]
