@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, MapPin, Plane } from 'lucide-react';
-import useAdminAuth from '../../context/AuthContext'; // Adjust import path as needed
-import { Link } from 'react-router-dom';
+import useAdminAuth from '../../context/AdminAuthContext'; // Adjust import path as needed
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
-  const { login, isLoading: authLoading } = useAdminAuth();
+  const { login, isLoading: authLoading, isAuthenticated } = useAdminAuth();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -14,6 +14,21 @@ const AdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+
+
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      const from = location.state?.from?.pathname || "/admin/dashboard";
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate, location]);
+
+  
 
   // Real-time validation functions
   const validateEmail = (email) => {
@@ -131,7 +146,11 @@ const AdminLogin = () => {
         password: formData.password
       });
 
-      if (!response.authenticated) {
+         if (response.authenticated) {
+        // Redirect to intended page or dashboard
+        const from = location.state?.from?.pathname || "/admin/dashboard";
+        navigate(from, { replace: true });
+      } else {
         setErrors({ general: response.message || 'Login failed' });
       }
       // If successful, the auth context will handle the redirect/state update

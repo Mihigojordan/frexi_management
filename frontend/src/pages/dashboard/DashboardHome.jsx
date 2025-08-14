@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { 
   MapPin, 
   Plane, 
@@ -18,15 +17,11 @@ import {
   Download,
   Globe,
   Star,
-  Clock
+  Clock,
+  User
 } from 'lucide-react';
-import Header from '../components/dashboard/Header';
 
-const AdminDashboard = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [searchQuery, setSearchQuery] = useState('');
-  
-  // Sample data
+// Sample data
   const stats = [
     { label: 'Total Tours', value: '124', change: '+12%', icon: MapPin, color: 'from-blue-500 to-blue-600' },
     { label: 'Active Bookings', value: '89', change: '+5%', icon: Calendar, color: 'from-green-500 to-green-600' },
@@ -48,61 +43,7 @@ const AdminDashboard = ({ onLogout }) => {
     { id: 4, name: 'Rome Classic', bookings: 28, rating: 4.6, price: '$2,100', image: '🏛️' },
   ];
 
-  const Sidebar = () => (
-    <div className="w-64 bg-white border-r border-slate-200 h-full">
-      {/* Logo */}
-      <div className="p-6 border-b border-slate-200">
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-slate-500 to-slate-600 rounded-lg">
-            <div className="flex items-center space-x-0.5">
-              <MapPin className="w-4 h-4 text-white" />
-              <Plane className="w-3 h-3 text-white" />
-            </div>
-          </div>
-          <div>
-            <h2 className="font-bold text-slate-800">Travel Admin</h2>
-            <p className="text-sm text-slate-500">Management Portal</p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Navigation */}
-      <nav className="p-4 space-y-2">
-        {[
-          { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
-          { id: 'tours', label: 'Tours', icon: MapPin },
-          { id: 'bookings', label: 'Bookings', icon: Calendar },
-          { id: 'customers', label: 'Customers', icon: Users },
-          { id: 'revenue', label: 'Revenue', icon: DollarSign },
-          { id: 'settings', label: 'Settings', icon: Settings },
-        ].map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors ${
-              activeTab === item.id
-                ? 'bg-gradient-to-r from-slate-500 to-slate-600 text-white'
-                : 'text-slate-600 hover:bg-slate-50'
-            }`}
-          >
-            <item.icon className="w-5 h-5" />
-            <span className="font-medium">{item.label}</span>
-          </button>
-        ))}
-      </nav>
-      
-      {/* Logout */}
-      <div className="absolute bottom-4 left-4 right-4">
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors"
-        >
-          <LogOut className="w-5 h-5" />
-          <span className="font-medium">Logout</span>
-        </button>
-      </div>
-    </div>
-  );
+
 
 
 
@@ -203,76 +144,5 @@ const AdminDashboard = ({ onLogout }) => {
     </div>
   );
 
-  const renderContent = () => {
-    switch(activeTab) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'tours':
-        return (
-          <div className="p-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <MapPin className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">Tours Management</h3>
-              <p className="text-slate-600">Manage all your travel tours and destinations here.</p>
-            </div>
-          </div>
-        );
-      case 'bookings':
-        return (
-          <div className="p-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">Bookings Management</h3>
-              <p className="text-slate-600">View and manage all customer bookings.</p>
-            </div>
-          </div>
-        );
-      case 'customers':
-        return (
-          <div className="p-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">Customer Management</h3>
-              <p className="text-slate-600">Manage customer profiles and preferences.</p>
-            </div>
-          </div>
-        );
-      case 'revenue':
-        return (
-          <div className="p-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <DollarSign className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">Revenue Analytics</h3>
-              <p className="text-slate-600">Track your earnings and financial metrics.</p>
-            </div>
-          </div>
-        );
-      case 'settings':
-        return (
-          <div className="p-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <Settings className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">System Settings</h3>
-              <p className="text-slate-600">Configure your travel system preferences.</p>
-            </div>
-          </div>
-        );
-      default:
-        return <Dashboard />;
-    }
-  };
 
-  return (
-    <div className="flex h-screen bg-slate-50">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto">
-          {renderContent()}
-        </main>
-      </div>
-    </div>
-  );
-};
-
-export default AdminDashboard;
+  export default Dashboard
