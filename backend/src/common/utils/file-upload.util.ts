@@ -15,6 +15,8 @@ export const createUnifiedUploadConfig = (): MulterOptions => ({
         subFolder = 'destination-main-photos'
       }else if(file.fieldname === 'gallery'){
         subFolder = 'gallery'
+      }else if(file.fieldname === 'partnerImg'){
+        subFolder = 'partners_photos'
       }
       console.log('Received file.fieldname:', file.fieldname);
 
@@ -75,6 +77,10 @@ export const deleteFile = (filepath: string) => {
 export const TestmonialFileFields = [
     { name: "imageUrl" , maxCount: 1 }
 ]
+
+export const PartnerFileField =[
+  { name: "partnerImg" , maxCount:1 }
+]
 export const DestinationFileFields = [
     { name: "mainPhotoUrl", maxCount:1 },
     { name:"gallery", maxCount:10 }
@@ -82,3 +88,4 @@ export const DestinationFileFields = [
 
 export const TestmonialUploadConfig = createUnifiedUploadConfig()
 export const DestinationUploadConfig = createUnifiedUploadConfig()
+export const PartnerUploadConfig = createUnifiedUploadConfig()

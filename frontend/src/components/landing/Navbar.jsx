@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MapPin, Clock, Menu, X, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, Search, ArrowRight, ChevronUp, MapPin, Clock, Star, Mountain, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -80,9 +80,10 @@ const Navbar = () => {
                 key={link.name}
                 href={link.href}
                 className="text-gray-700 hover:text-gray-900 font-medium transition-colors relative group"
+                style={{color: link.name === 'Home' ? '#113d48' : ''}}
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300" style={{backgroundColor: '#113d48'}}></span>
               </a>
             ))}
           </div>
@@ -91,7 +92,8 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <a
               href="#book"
-              className="bg-teal-800 text-white px-6 py-3 rounded-full hover:bg-teal-900 transition-colors font-medium hidden sm:inline-block"
+              className="text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium hidden sm:inline-block"
+              style={{backgroundColor: '#113d48'}}
             >
               Book Now →
             </a>
@@ -133,7 +135,8 @@ const Navbar = () => {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="block px-4 py-3 text-gray-700 hover:text-teal-800 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                  className="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium"
+                  style={{color: link.name === 'Home' ? '#113d48' : ''}}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
@@ -145,7 +148,8 @@ const Navbar = () => {
             <div className="pt-4 mt-4 border-t border-gray-200">
               <a
                 href="#book"
-                className="block w-full text-center bg-teal-800 text-white px-6 py-3 rounded-full hover:bg-teal-900 transition-colors font-medium"
+                className="block w-full text-center text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium"
+                style={{backgroundColor: '#113d48'}}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Book Now →
@@ -165,4 +169,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar

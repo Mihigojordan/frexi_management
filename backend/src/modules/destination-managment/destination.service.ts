@@ -12,12 +12,18 @@ export class DestinationService {
 
   async create(data: any) {
     try {
+
+        const description = data.description
+        
+        const descriptionJson = description
+        ? { details: description }
+        : {details: ''};
       return await this.prisma.destination.create({
         data: {
           name: data.name,
           country: data.country,
           city: data.city,
-          description: data.description,
+          description: descriptionJson,
           visaRequirements: data.visaRequirements,
           language: data.language,
           currencyUsed: data.currencyUsed,
@@ -27,7 +33,7 @@ export class DestinationService {
           estimatedBudget: Number(data.estimatedBudget),
           mainPhotoUrl: data.mainPhotoUrl,
           gallery: data.gallery,
-          isActive: data.isActive ?? true,
+          isActive: JSON.parse(data.isActive) ?? true,
         },
       });
     } catch (error) {
@@ -142,6 +148,12 @@ export class DestinationService {
         deleteFile(String(existingDestination.mainPhotoUrl))
       }
 
+        const description = data.description
+        
+        const descriptionJson = description
+        ? { details: description }
+        : null;
+
       // Parse keepGalleryImages safely
       let keepGalleryImages: string[] = [];
       try {
@@ -203,7 +215,7 @@ export class DestinationService {
           ...(data.name && { name: data.name }),
           ...(data.country && { country: data.country }),
           ...(data.city !== undefined && { city: data.city }),
-          ...(data.description && { description: data.description }),
+          ...(descriptionJson && { description: descriptionJson }),
           ...(data.visaRequirements !== undefined && {
             visaRequirements: data.visaRequirements,
           }),
