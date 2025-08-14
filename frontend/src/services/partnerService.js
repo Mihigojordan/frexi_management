@@ -1,4 +1,4 @@
-import api from '../api/api'; // Adjust the import path as needed
+import api, { API_URL } from '../api/api'; // Adjust the import path as needed
 
 /**
  * Partner Service
@@ -222,7 +222,7 @@ class PartnerService {
         }
         
         // Otherwise, construct the full URL (adjust base URL as needed)
-        const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
+        const baseUrl = API_URL
         return `${baseUrl}/${partner.imageUrl}`;
     }
 

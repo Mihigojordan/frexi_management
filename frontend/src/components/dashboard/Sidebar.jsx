@@ -7,7 +7,7 @@ import {
   TrendingUp,
   Bell,
   Settings,
-
+  Handshake,
   User
 } from 'lucide-react';
 import useAdminAuth from "../../context/AdminAuthContext";
@@ -20,7 +20,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
     const navlinks = [
           { id: '', label: 'Dashboard', icon: TrendingUp },
           { id: 'tours', label: 'Tours', icon: MapPin },
-        
+          { id: 'partner', label: 'partner', icon: Handshake },
         ]
         const handleNavigateProfile = ()=>{
 

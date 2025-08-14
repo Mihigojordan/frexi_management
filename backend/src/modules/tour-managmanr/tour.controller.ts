@@ -113,6 +113,7 @@ export class TourController {
       if (files?.mainPhotoUrl) {
         updateDestinationData.mainPhotoUrl = `uploads/destination-main-photos/${files.mainPhotoUrl[0].filename}`;
       }
+      
       return await this.tourService.update(id, updateDestinationData);
     } catch (error) {
       throw new HttpException(error.message, error.status);

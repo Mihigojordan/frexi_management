@@ -9,7 +9,8 @@ import AdminProfile from "../pages/dashboard/AdminProfile";
 import ProtectPrivateAdminRoute from "../components/protectors/ProtectPrivateAdminRoute";
 import UnlockScreen from "../pages/auth/UnlockScreen";
 import TourManagement from "../pages/dashboard/TourManagement";
-const HomePage = lazy(() => import("../pages/HomePage"));
+import HomePage from "../pages/landing/HomePage";
+import PartnerManagement from "../pages/dashboard/PartnerManagement";
 
 
 // Loading component
@@ -63,7 +64,11 @@ const routes = createBrowserRouter([
               {
                 path: 'profile',
                 element: <AdminProfile />
-              }
+              },
+              {
+                path: 'partner',
+                element: <PartnerManagement />
+              },
             ]
           }
         ]
