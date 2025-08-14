@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, MessageCircle, Instagram, ArrowUp } from 'lucide-react';
 
 const Footer = () => {
@@ -18,7 +18,7 @@ const Footer = () => {
   };
 
   // Show/hide scroll to top button based on scroll position
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300);
     };
@@ -46,11 +46,13 @@ const Footer = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
-                className="px-6 py-3 rounded-full border border-gray-300 w-full sm:w-80 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="px-6 py-3 rounded-full border border-gray-300 w-full sm:w-80 focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{focusRingColor: '#113d48'}}
               />
               <button
                 onClick={handleSubscribe}
-                className="bg-teal-800 text-white px-8 py-3 rounded-full hover:bg-teal-900 transition-colors font-medium whitespace-nowrap"
+                className="text-white px-8 py-3 rounded-full hover:opacity-90 transition-colors font-medium whitespace-nowrap"
+                style={{backgroundColor: '#113d48'}}
               >
                 Subscribe Now →
               </button>
@@ -131,19 +133,19 @@ const Footer = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-6">Address</h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <Phone className="w-5 h-5 text-teal-600 mt-1 flex-shrink-0" />
-                  <a href="tel:+250782379122" className="text-gray-600 hover:text-teal-600 transition-colors">
+                  <Phone className="w-5 h-5 mt-1 flex-shrink-0" style={{color: '#113d48'}} />
+                  <a href="tel:+250782379122" className="text-gray-600 transition-colors" style={{'&:hover': {color: '#113d48'}}}>
                     +250 782 379 122
                   </a>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <Mail className="w-5 h-5 text-teal-600 mt-1 flex-shrink-0" />
-                  <a href="mailto:Booking@frexi.rw" className="text-gray-600 hover:text-teal-600 transition-colors">
+                  <Mail className="w-5 h-5 mt-1 flex-shrink-0" style={{color: '#113d48'}} />
+                  <a href="mailto:Booking@frexi.rw" className="text-gray-600 transition-colors" style={{'&:hover': {color: '#113d48'}}}>
                     Booking@frexi.rw
                   </a>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <MapPin className="w-5 h-5 text-teal-600 mt-1 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{color: '#113d48'}} />
                   <div className="text-gray-600">
                     <p>Makuza Peace Plaza 3rd</p>
                     <p>Floor F3-28, KN 4 Ave,</p>
@@ -175,19 +177,19 @@ const Footer = () => {
       </footer>
 
       {/* Bottom Footer */}
-      <div className="bg-gray-800 text-white py-6">
+      <div className="text-white py-6" style={{backgroundColor: '#113d48'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-gray-300 text-center sm:text-left">
+            <p className="text-white/80 text-center sm:text-left">
               Copyright 2024 Frexi Ltd . All Rights Reserved.
             </p>
             <div className="flex items-center space-x-2">
-              <span className="text-gray-300">We Accept</span>
+              <span className="text-white/80">We Accept</span>
               <div className="flex space-x-2 ml-2">
                 {/* Payment method placeholders */}
-                <div className="bg-white rounded px-2 py-1 text-xs text-gray-800 font-medium">VISA</div>
-                <div className="bg-white rounded px-2 py-1 text-xs text-gray-800 font-medium">MC</div>
-                <div className="bg-white rounded px-2 py-1 text-xs text-gray-800 font-medium">AMEX</div>
+                <div className="bg-white rounded px-2 py-1 text-xs font-medium" style={{color: '#113d48'}}>VISA</div>
+                <div className="bg-white rounded px-2 py-1 text-xs font-medium" style={{color: '#113d48'}}>MC</div>
+                <div className="bg-white rounded px-2 py-1 text-xs font-medium" style={{color: '#113d48'}}>AMEX</div>
               </div>
             </div>
           </div>
@@ -198,7 +200,8 @@ const Footer = () => {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-teal-800 text-white p-3 rounded-full shadow-lg hover:bg-teal-900 transition-all duration-300 z-50"
+          className="fixed bottom-8 right-8 text-white p-3 rounded-full shadow-lg hover:opacity-90 transition-all duration-300 z-50"
+          style={{backgroundColor: '#113d48'}}
           aria-label="Scroll to top"
         >
           <ArrowUp className="w-5 h-5" />
