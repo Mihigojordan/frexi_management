@@ -12,12 +12,20 @@ export class TourService {
 
   async create(data: any) {
     try {
+      const description = data.description
+        const descriptionJson = description
+        ? { details: description }
+        : { details: '' };
+      console.log(data);
+     
+      
+      
       return await this.prisma.tour.create({
         data: {
           name: data.name,
           country: data.country,
           city: data.city,
-          description: data.description,
+          description: descriptionJson,
           visaRequirements: data.visaRequirements,
           language: data.language,
           currencyUsed: data.currencyUsed,
@@ -27,7 +35,7 @@ export class TourService {
           estimatedBudget: Number(data.estimatedBudget),
           mainPhotoUrl: data.mainPhotoUrl,
           gallery: data.gallery,
-          isActive: data.isActive ?? true,
+          isActive: JSON.parse(data.isActive) ?? true,
         },
       });
     } catch (error) {
@@ -130,6 +138,8 @@ export class TourService {
     },
   ) {
     try {
+      console.log(data);
+      
       const existingtour = await this.prisma.tour.findUnique({
         where: { id },
       });
@@ -137,6 +147,12 @@ export class TourService {
       if (!existingtour) {
         throw new NotFoundException(`tour with ID ${id} not found`);
       }
+
+        const description = data.description
+        
+        const descriptionJson = description
+        ? { details: description }
+        : null;
 
       if(data.mainPhotoUrl){
         deleteFile(String(existingtour.mainPhotoUrl))
@@ -160,7 +176,7 @@ export class TourService {
       // Process new gallery images
       const newGalleryImages =
         data.newGalleryImages?.map(
-          (file) => `/uploads/gallery/${file.filename}`,
+          (file) => `uploads/gallery/${file.filename}`,
         ) ?? [];
 
       console.log('Keeping gallery images:', keepGalleryImages.length);
@@ -203,7 +219,7 @@ export class TourService {
           ...(data.name && { name: data.name }),
           ...(data.country && { country: data.country }),
           ...(data.city !== undefined && { city: data.city }),
-          ...(data.description && { description: data.description }),
+          ...(descriptionJson && { description: descriptionJson }),
           ...(data.visaRequirements !== undefined && {
             visaRequirements: data.visaRequirements,
           }),

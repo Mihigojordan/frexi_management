@@ -8,7 +8,8 @@ import {
   Bell,
   Settings,
 
-  User
+  User,
+  RouteIcon
 } from 'lucide-react';
 import useAdminAuth from "../../context/AdminAuthContext";
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -20,6 +21,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
     const navlinks = [
           { id: '', label: 'Dashboard', icon: TrendingUp },
           { id: 'tours', label: 'Tours', icon: MapPin },
+          { id: 'destinations', label: 'Destinations', icon: RouteIcon },
         
         ]
         const handleNavigateProfile = ()=>{

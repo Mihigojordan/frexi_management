@@ -1,4 +1,4 @@
-    import api from '../api/api'; // Your axios instance
+    import api, { API_URL } from '../api/api'; // Your axios instance
 
 /**
  * Destination Service - Handles all destination-related API operations
@@ -80,6 +80,17 @@ class DestinationService {
     }
   }
 
+
+
+  
+      getFullImageUrl(img){
+      if(!img) return null
+      console.log('the image',img);
+      
+      return `${API_URL}/${img}`
+  
+      }
+
   /**
    * Get a single destination by ID
    * @param {string} id - Destination ID
@@ -93,6 +104,8 @@ class DestinationService {
       throw this.handleError(error, `Failed to fetch destination with ID: ${id}`);
     }
   }
+
+
 
   /**
    * Get destinations by country
@@ -410,6 +423,30 @@ class DestinationService {
     }
   }
 
+  // Helper to parse description from backend response
+  parseDescription (description) {
+    if (!description) return '';
+    
+    // If description is already a JSON object with details
+    if (typeof description === 'object' && description.details) {
+      return description.details;
+    }
+    
+    // If description is a string, try parsing as JSON
+    if (typeof description === 'string') {
+      try {
+        const parsed = JSON.parse(description);
+        return parsed.details || parsed;
+      } catch {
+        // If parsing fails, return as-is (plain HTML string)
+        return description;
+      }
+    }
+    
+    return description;
+  }
+
+
   /**
    * Error handler helper
    * @param {Error} error - The error object
@@ -438,6 +475,8 @@ class DestinationService {
   }
 }
 
+
+
 // Create and export a singleton instance
 const destinationService = new DestinationService();
 export default destinationService;
@@ -459,5 +498,6 @@ export const {
   addGalleryImages,
   removeGalleryImages,
   getPopularDestinations,
-  getDestinationsByCountryGrouped
+  getDestinationsByCountryGrouped,
+  parseDescription,
 } = destinationService;

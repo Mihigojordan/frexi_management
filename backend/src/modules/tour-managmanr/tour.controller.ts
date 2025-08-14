@@ -41,6 +41,7 @@ export class TourController {
       const gallery = files.gallery?.map(
         (file) => `uploads/gallery/${file.filename}`,
       );
+      
       return await this.tourService.create({
         ...createDestinationData,
         mainPhotoUrl,
@@ -112,6 +113,9 @@ export class TourController {
     try {
       if (files?.mainPhotoUrl) {
         updateDestinationData.mainPhotoUrl = `uploads/destination-main-photos/${files.mainPhotoUrl[0].filename}`;
+      }
+      if(files?.gallery){
+        updateDestinationData.newGalleryImages = files.gallery;
       }
       return await this.tourService.update(id, updateDestinationData);
     } catch (error) {
