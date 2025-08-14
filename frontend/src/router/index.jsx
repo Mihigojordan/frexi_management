@@ -11,6 +11,7 @@ import UnlockScreen from "../pages/auth/UnlockScreen";
 import TourManagement from "../pages/dashboard/TourManagement";
 import HomePage from "../pages/landing/HomePage";
 import PartnerManagement from "../pages/dashboard/PartnerManagement";
+import TestimonialManagement from "../pages/dashboard/TestmonialManagement";
 
 
 // Loading component
@@ -68,6 +69,10 @@ const routes = createBrowserRouter([
               {
                 path: 'partner',
                 element: <PartnerManagement />
+              },
+              {
+                path: 'testmonial',
+                element: <TestimonialManagement />
               },
             ]
           }

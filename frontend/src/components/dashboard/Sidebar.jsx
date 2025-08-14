@@ -21,6 +21,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
           { id: '', label: 'Dashboard', icon: TrendingUp },
           { id: 'tours', label: 'Tours', icon: MapPin },
           { id: 'partner', label: 'partner', icon: Handshake },
+        
         ]
         const handleNavigateProfile = ()=>{
 
