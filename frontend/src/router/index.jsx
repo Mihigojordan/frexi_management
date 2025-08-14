@@ -1,5 +1,6 @@
 import { BrowserRouter, createBrowserRouter, Navigate, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
 import React, { Suspense, lazy } from "react";
+
 import MainLayout from "../context/layouts/MainLayout";
 import AuthLayout from "../context/layouts/AuthLayout";
 import AdminLogin from "../pages/auth/Login";
@@ -9,6 +10,13 @@ import AdminProfile from "../pages/dashboard/AdminProfile";
 import ProtectPrivateAdminRoute from "../components/protectors/ProtectPrivateAdminRoute";
 import UnlockScreen from "../pages/auth/UnlockScreen";
 import TourManagement from "../pages/dashboard/TourManagement";
+import CreateTourPage from "../components/dashboard/tour/CreateTourPage";
+import UpdateTourPage from "../components/dashboard/tour/UpdateTourPage";
+import TourViewPage from "../components/dashboard/tour/TourViewPage";
+import DestinationManagement from "../pages/dashboard/DestinationManagement";
+import CreateDestinationPage from "../components/dashboard/destination/CreateDestinationPage";
+import UpdateDestinationPage from "../components/dashboard/destination/UpdateTourPage";
+import DestinationViewPage from "../components/dashboard/destination/DestinationViewPage";
 import HomePage from "../pages/landing/HomePage";
 import PartnerManagement from "../pages/dashboard/PartnerManagement";
 import TestimonialManagement from "../pages/dashboard/TestmonialManagement";
@@ -40,14 +48,14 @@ const routes = createBrowserRouter([
       },
       {
         path: 'admin',
-        element:(
+        element: (
           <ProtectPrivateAdminRoute>
-             <Outlet />
+            <Outlet />
           </ProtectPrivateAdminRoute>
         ),
         children: [
           {
-            index:true,
+            index: true,
             element: <Navigate to={'/admin/dashboard'} replace />
           },
           {
@@ -58,10 +66,42 @@ const routes = createBrowserRouter([
                 index: true,
                 element: <Dashboard />
               },
-               {
+
+              // tour
+              {
                 path: 'tours',
                 element: <TourManagement />
-              }, 
+              },
+              {
+                path: 'tours/:id',
+                element: <TourViewPage />
+              },
+              {
+                path: 'tours/create',
+                element: <CreateTourPage />
+              },
+              {
+                path: 'tours/update/:id',
+                element: <UpdateTourPage />
+              },
+
+              // destination
+              {
+                path: 'destinations',
+                element: <DestinationManagement />
+              },
+              {
+                path: 'destinations/:id',
+                element: <DestinationViewPage />
+              },
+              {
+                path: 'destinations/create',
+                element: <CreateDestinationPage />
+              },
+              {
+                path: 'destinations/update/:id',
+                element: <UpdateDestinationPage />
+              },
               {
                 path: 'profile',
                 element: <AdminProfile />
@@ -71,7 +111,7 @@ const routes = createBrowserRouter([
                 element: <PartnerManagement />
               },
               {
-                path: 'testmonial',
+                path: 'testimonial',
                 element: <TestimonialManagement />
               },
             ]

@@ -133,7 +133,7 @@ const AddEditPartnerModal = ({ isOpen, onClose, onSubmit, partner, isLoading, is
                   <User size={32} className="text-gray-400" />
                 </div>
               )}
-              <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
+              <label className="absolute bottom-0 right-0 bg-primary-600 text-white p-2 rounded-full cursor-pointer hover:bg-primary-700 transition-colors">
                 <Upload size={16} />
                 <input
                   type="file"
@@ -158,7 +158,7 @@ const AddEditPartnerModal = ({ isOpen, onClose, onSubmit, partner, isLoading, is
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter partner name"
             />
           </div>
@@ -173,7 +173,7 @@ const AddEditPartnerModal = ({ isOpen, onClose, onSubmit, partner, isLoading, is
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter email address"
             />
           </div>
@@ -188,7 +188,7 @@ const AddEditPartnerModal = ({ isOpen, onClose, onSubmit, partner, isLoading, is
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter phone number"
             />
           </div>
@@ -203,7 +203,7 @@ const AddEditPartnerModal = ({ isOpen, onClose, onSubmit, partner, isLoading, is
               value={formData.address}
               onChange={handleInputChange}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter address"
             />
           </div>
@@ -220,7 +220,7 @@ const AddEditPartnerModal = ({ isOpen, onClose, onSubmit, partner, isLoading, is
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading && <RefreshCw size={16} className="animate-spin" />}
               {isEdit ? 'Update' : 'Add'} Partner

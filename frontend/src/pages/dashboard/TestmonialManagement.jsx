@@ -773,7 +773,7 @@ const TestimonialManagement = () => {
                     />
                   ) : null}
                   <div
-                    className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg"
+                    className="w-12 h-12 bg-gradient-to-br from-primary-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg"
                     style={{
                       display: testimonial.imageUrl ? "none" : "flex",
                     }}
@@ -910,7 +910,7 @@ const TestimonialManagement = () => {
                       />
                     ) : null}
                     <div
-                      className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold"
+                      className="w-10 h-10 bg-gradient-to-br from-primary-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold"
                       style={{
                         display: testimonial.imageUrl ? "none" : "flex",
                       }}
@@ -1015,7 +1015,7 @@ const TestimonialManagement = () => {
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-blue-600 rounded-lg">
+            <div className="p-2 bg-primary-600 rounded-lg">
               <Quote className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">
@@ -1040,7 +1040,7 @@ const TestimonialManagement = () => {
                 placeholder="Search testimonials by name, position, or message..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               />
             </div>
             <div className="flex gap-3">
@@ -1057,7 +1057,7 @@ const TestimonialManagement = () => {
               </button>
               <button
                 onClick={handleAddTestimonial}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg font-medium transition-colors shadow-sm"
+                className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2.5 rounded-lg font-medium transition-colors shadow-sm"
               >
                 <Plus size={20} />
                 Add Testimonial
@@ -1089,7 +1089,7 @@ const TestimonialManagement = () => {
             {!searchTerm && (
               <button
                 onClick={handleAddTestimonial}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
               >
                 <Plus size={20} />
                 Add Testimonial

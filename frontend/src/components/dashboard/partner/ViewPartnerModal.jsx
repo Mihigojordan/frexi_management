@@ -29,7 +29,7 @@ const ViewPartnerModal = ({ isOpen, onClose, partner }) => {
                 className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-gray-200"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-2xl mx-auto">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white font-semibold text-2xl mx-auto">
                 {partner.name?.charAt(0)?.toUpperCase() || <User size={32} />}
               </div>
             )}

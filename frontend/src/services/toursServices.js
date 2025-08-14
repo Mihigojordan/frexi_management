@@ -1,4 +1,4 @@
-    import api from '../api/api'; // Your axios instance
+    import api, { API_URL } from '../api/api'; // Your axios instance
 
     /**
      * Tour Service - Handles all tour-related API operations
@@ -52,6 +52,15 @@
         } catch (error) {
         throw this.handleError(error, 'Failed to create tour');
         }
+    }
+
+
+    getFullImageUrl(img){
+    if(!img) return null
+    console.log('the image',img);
+    
+    return `${API_URL}/${img}`
+
     }
 
     /**
