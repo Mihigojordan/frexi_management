@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
-import Navbar from '../components/Navbar'
+
 import { Outlet } from 'react-router-dom'
-import Footer from '../components/Footer'
+import Navbar from '../../components/landing/Navbar';
+import Footer from '../../components/landing/Footer';
+
 
 const MainLayout = () => {
   useEffect(() => {

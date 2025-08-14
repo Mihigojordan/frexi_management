@@ -1,9 +1,9 @@
 import { BrowserRouter, createBrowserRouter, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
 import React, { Suspense, lazy } from "react";
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from "../layouts/landing/MainLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import AdminLogin from "../pages/auth/Login";
-const HomePage = lazy(() => import("../pages/HomePage"));
+const HomePage = lazy(() => import("../pages/landing/HomePage"));
 
 
 // Loading component
