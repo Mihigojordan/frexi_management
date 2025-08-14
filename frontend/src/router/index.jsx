@@ -1,9 +1,15 @@
-import { BrowserRouter, createBrowserRouter, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
+import { BrowserRouter, createBrowserRouter, Navigate, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
 import React, { Suspense, lazy } from "react";
-import MainLayout from "../layouts/landing/MainLayout";
-import AuthLayout from "../layouts/AuthLayout";
+import MainLayout from "../context/layouts/MainLayout";
+import AuthLayout from "../context/layouts/AuthLayout";
 import AdminLogin from "../pages/auth/Login";
-const HomePage = lazy(() => import("../pages/landing/HomePage"));
+import DashboardLayout from "../context/layouts/DashboardLayout";
+import Dashboard from "../pages/dashboard/DashboardHome";
+import AdminProfile from "../pages/dashboard/AdminProfile";
+import ProtectPrivateAdminRoute from "../components/protectors/ProtectPrivateAdminRoute";
+import UnlockScreen from "../pages/auth/UnlockScreen";
+import TourManagement from "../pages/dashboard/TourManagement";
+const HomePage = lazy(() => import("../pages/HomePage"));
 
 
 // Loading component
@@ -31,8 +37,36 @@ const routes = createBrowserRouter([
         ]
       },
       {
-        path: '/admin',
-        element: <h1>admin layout </h1>
+        path: 'admin',
+        element:(
+          <ProtectPrivateAdminRoute>
+             <Outlet />
+          </ProtectPrivateAdminRoute>
+        ),
+        children: [
+          {
+            index:true,
+            element: <Navigate to={'/admin/dashboard'} replace />
+          },
+          {
+            path: 'dashboard',
+            element: <DashboardLayout />,
+            children: [
+              {
+                index: true,
+                element: <Dashboard />
+              },
+               {
+                path: 'tours',
+                element: <TourManagement />
+              }, 
+              {
+                path: 'profile',
+                element: <AdminProfile />
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -47,6 +81,10 @@ const routes = createBrowserRouter([
       {
         path: 'admin/register',
         element: <h1>register</h1>
+      },
+      {
+        path: 'admin/unlock',
+        element: <UnlockScreen />
       }
     ]
   }
