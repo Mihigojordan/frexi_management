@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import TourCard from './TourCard';
+import image1 from ;
+// Reusable Card Component
+
 
 const TourSection = () => {
   const [currentSlide, setCurrentSlide] = useState(3); // Start at first real slide
@@ -107,29 +110,29 @@ const TourSection = () => {
   }, [currentSlide, categories.length]);
 
   return (
-    <div className="relative bg-gradient-to-br from-blue-50 via-blue-25 to-cyan-50 py-20 px-4 overflow-hidden">
-      {/* Background decorative elements matching the original */}
+    <div className="relative bg-gradient-to-br from-primary-50 via-primary-100 to-primary-200 py-20 px-4 overflow-hidden">
+      {/* Background decorative elements with primary colors */}
       <div className="absolute inset-0 opacity-5">
-        {/* Scattered light blue circles */}
-        <div className="absolute top-16 left-20 w-16 h-16 rounded-full bg-blue-200"></div>
-        <div className="absolute top-32 right-32 w-12 h-12 rounded-full bg-cyan-200"></div>
-        <div className="absolute top-24 left-1/3 w-8 h-8 rounded-full bg-blue-300"></div>
-        <div className="absolute top-40 right-1/4 w-20 h-20 rounded-full bg-teal-200"></div>
-        <div className="absolute bottom-32 left-16 w-14 h-14 rounded-full bg-blue-200"></div>
-        <div className="absolute bottom-20 right-20 w-10 h-10 rounded-full bg-cyan-300"></div>
-        <div className="absolute bottom-40 left-1/2 w-18 h-18 rounded-full bg-blue-200"></div>
+        {/* Scattered light primary circles */}
+        <div className="absolute top-16 left-20 w-16 h-16 rounded-full bg-primary-200"></div>
+        <div className="absolute top-32 right-32 w-12 h-12 rounded-full bg-primary-300"></div>
+        <div className="absolute top-24 left-1/3 w-8 h-8 rounded-full bg-primary-400"></div>
+        <div className="absolute top-40 right-1/4 w-20 h-20 rounded-full bg-primary-200"></div>
+        <div className="absolute bottom-32 left-16 w-14 h-14 rounded-full bg-primary-300"></div>
+        <div className="absolute bottom-20 right-20 w-10 h-10 rounded-full bg-primary-400"></div>
+        <div className="absolute bottom-40 left-1/2 w-18 h-18 rounded-full bg-primary-200"></div>
         
         {/* Additional scattered elements */}
-        <div className="absolute top-60 left-40 w-6 h-6 rounded-full bg-teal-300"></div>
-        <div className="absolute top-80 right-40 w-24 h-24 rounded-full bg-blue-100"></div>
-        <div className="absolute bottom-60 left-1/4 w-16 h-16 rounded-full bg-cyan-200"></div>
+        <div className="absolute top-60 left-40 w-6 h-6 rounded-full bg-primary-300"></div>
+        <div className="absolute top-80 right-40 w-24 h-24 rounded-full bg-primary-100"></div>
+        <div className="absolute bottom-60 left-1/4 w-16 h-16 rounded-full bg-primary-200"></div>
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Header exactly matching the original */}
+        {/* Header with primary color accent */}
         <div className="text-center mb-16">
-          <p className="text-teal-600 font-normal text-xl mb-3 font-serif italic">Wonderful Place For You</p>
-          <h2 className="text-5xl font-bold text-slate-800 mb-4">Tour Categories</h2>
+          <p className="text-primary-500 font-normal text-xl mb-3 font-serif italic">Wonderful Place For You</p>
+          <h2 className="text-5xl font-bold text-primary-800 mb-4">Tour Categories</h2>
         </div>
 
         {/* Carousel Container */}
@@ -146,40 +149,17 @@ const TourSection = () => {
               style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
             >
               {infiniteCategories.map((category, index) => (
-                <div
+                <TourCard
                   key={`${category.id}-${index}`}
-                  className="w-1/3 flex-shrink-0 px-4"
-                >
-                  <div className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                    {/* Image Container */}
-                    <div className="relative h-72 overflow-hidden rounded-3xl">
-                      {/* Background image */}
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url("${category.bgImage}")` }}
-                      ></div>
-                      
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    </div>
-
-                    {/* Content positioned at bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                      <h3 className="text-2xl font-bold mb-3 text-white">
-                        {category.title}
-                      </h3>
-                      <button className="text-sm text-gray-200 hover:text-white transition-colors duration-300 font-normal">
-                        See More
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  category={category}
+                  isActive={((currentSlide - 3 + categories.length) % categories.length) === (index - 3)}
+                />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Dots Indicator exactly matching original */}
+        {/* Dots Indicator with primary colors */}
         <div className="flex justify-center mt-12 space-x-3">
           {categories.map((_, index) => (
             <button
@@ -187,8 +167,8 @@ const TourSection = () => {
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 ((currentSlide - 3 + categories.length) % categories.length) === index 
-                  ? 'bg-slate-800' 
-                  : 'bg-gray-300 hover:bg-gray-400'
+                  ? 'bg-primary-800' 
+                  : 'bg-gray-300 hover:bg-primary-400'
               }`}
             />
           ))}
