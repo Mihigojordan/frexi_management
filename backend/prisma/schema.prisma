@@ -24,6 +24,16 @@ model Admin {
   updatedAt  DateTime @updatedAt
 }
 
+model User{
+  id         String   @id @unique @default(uuid())
+  firstname   String?
+  lastname   String?
+  email  String @unique
+  phoneNumber String
+  password String
+  createdAt  DateTime @default(now())
+}
+
 model Testimonial {
   id        String   @id @default(uuid())
   name      String
