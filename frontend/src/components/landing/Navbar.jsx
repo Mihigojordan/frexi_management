@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Search, ArrowRight, ChevronUp, MapPin, Clock, Star, Mountain, Menu, X } from 'lucide-react';
-
+import logo from '../../assets/image/frexilogo.png';
+import { Link } from 'react-router-dom';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
@@ -14,11 +15,11 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About Us', href: '#about' },
+    { name: 'Home', href: '/' },
+    { name: 'About Us', href: '/about' },
     { name: 'Destination', href: '#destination' },
-    { name: 'Service', href: '#service' },
-    { name: 'Gallery', href: '#gallery' },
+    { name: 'Service', href: '/service' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'Blog', href: '#blog' },
     { name: 'Contact Us', href: '#contact' }
   ];
@@ -66,25 +67,22 @@ const Navbar = () => {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <div className="flex items-center">
-            <a href="#home" className="bg-black text-white px-3 py-2 font-bold text-lg hover:bg-gray-800 transition-colors">
-              FR
-              <div className="text-xs">FREXI</div>
-            </a>
+          <div className="flex items-center h-16">
+            <img src={logo} className='h-full' alt="" />
           </div>
 
           {/* Desktop Navigation Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="text-gray-700 hover:text-gray-900 font-medium transition-colors relative group"
                 style={{color: link.name === 'Home' ? '#113d48' : ''}}
               >
                 {link.name}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300" style={{backgroundColor: '#113d48'}}></span>
-              </a>
+              </Link>
             ))}
           </div>
 

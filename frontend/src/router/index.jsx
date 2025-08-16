@@ -3,32 +3,73 @@ import React, { Suspense, lazy } from "react";
 
 import MainLayout from "../context/layouts/MainLayout";
 import AuthLayout from "../context/layouts/AuthLayout";
-import AdminLogin from "../pages/auth/Login";
 import DashboardLayout from "../context/layouts/DashboardLayout";
-import Dashboard from "../pages/dashboard/DashboardHome";
-import AdminProfile from "../pages/dashboard/AdminProfile";
-import ProtectPrivateAdminRoute from "../components/protectors/ProtectPrivateAdminRoute";
-import UnlockScreen from "../pages/auth/UnlockScreen";
-import TourManagement from "../pages/dashboard/TourManagement";
-import CreateTourPage from "../components/dashboard/tour/CreateTourPage";
-import UpdateTourPage from "../components/dashboard/tour/UpdateTourPage";
-import TourViewPage from "../components/dashboard/tour/TourViewPage";
-import DestinationManagement from "../pages/dashboard/DestinationManagement";
-import CreateDestinationPage from "../components/dashboard/destination/CreateDestinationPage";
-import UpdateDestinationPage from "../components/dashboard/destination/UpdateTourPage";
-import DestinationViewPage from "../components/dashboard/destination/DestinationViewPage";
-import HomePage from "../pages/landing/HomePage";
-import PartnerManagement from "../pages/dashboard/PartnerManagement";
-import TestimonialManagement from "../pages/dashboard/TestmonialManagement";
+
+// Admin Auth
+
+const AdminLogin = lazy(() => import("../pages/auth/Login"));
+// Dashboard
+const Dashboard = lazy(() => import("../pages/dashboard/DashboardHome"));
+const AdminProfile = lazy(() => import("../pages/dashboard/AdminProfile"));
+const ProtectPrivateAdminRoute = lazy(() =>
+  import("../components/protectors/ProtectPrivateAdminRoute")
+);
+const UnlockScreen = lazy(() => import("../pages/auth/UnlockScreen"));
+
+// Tours
+const TourManagement = lazy(() => import("../pages/dashboard/TourManagement"));
+const CreateTourPage = lazy(() =>
+  import("../components/dashboard/tour/CreateTourPage")
+);
+const UpdateTourPage = lazy(() =>
+  import("../components/dashboard/tour/UpdateTourPage")
+);
+const TourViewPage = lazy(() =>
+  import("../components/dashboard/tour/TourViewPage")
+);
+
+// Destinations
+const DestinationManagement = lazy(() =>
+  import("../pages/dashboard/DestinationManagement")
+);
+const CreateDestinationPage = lazy(() =>
+  import("../components/dashboard/destination/CreateDestinationPage")
+);
+const UpdateDestinationPage = lazy(() =>
+  import("../components/dashboard/destination/UpdateTourPage")
+);
+const DestinationViewPage = lazy(() =>
+  import("../components/dashboard/destination/DestinationViewPage")
+);
+
+// Landing pages
+const HomePage = lazy(() => import("../pages/landing/HomePage"));
+const PartnerManagement = lazy(() =>
+  import("../pages/dashboard/PartnerManagement")
+);
+const TestimonialManagement = lazy(() =>
+  import("../pages/dashboard/TestmonialManagement")
+);
+const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
+const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
+const ServicePage = lazy(() => import("../pages/landing/ServicePage"));
+
+// Static assets
+import logo from "../assets/image/frexilogo.png";
 
 
-// Loading component
 const LoadingSpinner = () => (
-  <div className="loading-spinner">
-    <div className="spinner"></div>
-    <p>Loading...</p>
+  <div className="flex items-center justify-center h-screen bg-white">
+    <img
+      src={logo}
+      alt="Loading..."
+      className="h-40 animate-zoomInOut"
+    />
   </div>
 );
+
+
+
 
 const SuspenseWrapper = ({ children }) => {
   return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
@@ -43,7 +84,10 @@ const routes = createBrowserRouter([
         path: '',
         element: <MainLayout />,
         children: [
-          { index: true, element: <SuspenseWrapper> <HomePage /> </SuspenseWrapper> }
+          { index: true, element: <SuspenseWrapper> <HomePage /> </SuspenseWrapper> },
+          { path:'/about', element: <SuspenseWrapper> <AboutPage /> </SuspenseWrapper> },
+          { path:'/gallery', element: <SuspenseWrapper> <YachtGallery /> </SuspenseWrapper> },
+          { path:'/service', element: <SuspenseWrapper> <ServicePage /> </SuspenseWrapper> },
         ]
       },
       {

@@ -46,7 +46,7 @@ const TestimonialsSection = ({autoAdvance = true, interval = 6000 }) => {
           key={index}
           onClick={() => onChange(index)}
           className={`w-3 h-3 rounded-full transition-all duration-300 ${
-            index === current ? 'bg-blue-600' : 'bg-gray-300'
+            index === current ? 'bg-primary-600' : 'bg-gray-300'
           }`}
         />
       ))}
@@ -58,7 +58,7 @@ const TestimonialsSection = ({autoAdvance = true, interval = 6000 }) => {
   }
 
   return (
-    <section className="py-16 px-6 bg-gradient-to-r from-primary-50 to-primary-100">
+    <section className="py-16 px-6 bg-gray-50">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-2">What Client Say About us</h2>
