@@ -1,4 +1,12 @@
-import { BrowserRouter, createBrowserRouter, Navigate, Outlet, Route, RouterProvider, Routes } from "react-router-dom"
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router-dom";
 import React, { Suspense, lazy } from "react";
 
 import MainLayout from "../context/layouts/MainLayout";
@@ -20,7 +28,9 @@ import DestinationViewPage from "../components/dashboard/destination/Destination
 import HomePage from "../pages/landing/HomePage";
 import PartnerManagement from "../pages/dashboard/PartnerManagement";
 import TestimonialManagement from "../pages/dashboard/TestmonialManagement";
-
+import FrexiAuthPage from "../pages/auth/userAuth/UserAuth";
+import ProtectPrivateUserRoute from "../components/protectors/ProtectPrivateUserRoute";
+import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
 
 // Loading component
 const LoadingSpinner = () => (
@@ -31,23 +41,31 @@ const LoadingSpinner = () => (
 );
 
 const SuspenseWrapper = ({ children }) => {
-  return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
-}
+  return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>;
+};
 
 const routes = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Outlet />,
     children: [
       {
-        path: '',
+        path: "",
         element: <MainLayout />,
         children: [
-          { index: true, element: <SuspenseWrapper> <HomePage /> </SuspenseWrapper> }
-        ]
+          {
+            index: true,
+            element: (
+              <SuspenseWrapper>
+                {" "}
+                <HomePage />{" "}
+              </SuspenseWrapper>
+            ),
+          },
+        ],
       },
       {
-        path: 'admin',
+        path: "admin",
         element: (
           <ProtectPrivateAdminRoute>
             <Outlet />
@@ -56,89 +74,110 @@ const routes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Navigate to={'/admin/dashboard'} replace />
+            element: <Navigate to={"/admin/dashboard"} replace />,
           },
           {
-            path: 'dashboard',
+            path: "dashboard",
             element: <DashboardLayout />,
             children: [
               {
                 index: true,
-                element: <Dashboard />
+                element: <Dashboard />,
               },
 
               // tour
               {
-                path: 'tours',
-                element: <TourManagement />
+                path: "tours",
+                element: <TourManagement />,
               },
               {
-                path: 'tours/:id',
-                element: <TourViewPage />
+                path: "tours/:id",
+                element: <TourViewPage />,
               },
               {
-                path: 'tours/create',
-                element: <CreateTourPage />
+                path: "tours/create",
+                element: <CreateTourPage />,
               },
               {
-                path: 'tours/update/:id',
-                element: <UpdateTourPage />
+                path: "tours/update/:id",
+                element: <UpdateTourPage />,
               },
 
               // destination
               {
-                path: 'destinations',
-                element: <DestinationManagement />
+                path: "destinations",
+                element: <DestinationManagement />,
               },
               {
-                path: 'destinations/:id',
-                element: <DestinationViewPage />
+                path: "destinations/:id",
+                element: <DestinationViewPage />,
               },
               {
-                path: 'destinations/create',
-                element: <CreateDestinationPage />
+                path: "destinations/create",
+                element: <CreateDestinationPage />,
               },
               {
-                path: 'destinations/update/:id',
-                element: <UpdateDestinationPage />
+                path: "destinations/update/:id",
+                element: <UpdateDestinationPage />,
               },
               {
-                path: 'profile',
-                element: <AdminProfile />
+                path: "profile",
+                element: <AdminProfile />,
               },
               {
-                path: 'partner',
-                element: <PartnerManagement />
+                path: "partner",
+                element: <PartnerManagement />,
               },
               {
-                path: 'testimonial',
-                element: <TestimonialManagement />
+                path: "testimonial",
+                element: <TestimonialManagement />,
               },
-            ]
-          }
-        ]
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path:"user",
+    element:(
+      <ProtectPrivateUserRoute>
+        <Outlet/>
+      </ProtectPrivateUserRoute>
+    ),
+    children:[
+      {
+        index:true,
+        element: <Navigate to={"/user/dashboard"} replace />, 
+      },
+      {
+        path:'dashboard',
+        element:<UserDashboardHome/>
       }
     ]
   },
   {
-    path: '/auth',
+    path: "/auth",
     element: <AuthLayout />,
     children: [
       {
-        path: 'admin/login',
-        element: <AdminLogin />
+        path: "admin/login",
+        element: <AdminLogin />,
       },
       {
-        path: 'admin/register',
-        element: <h1>register</h1>
+        path: "admin/register",
+        element: <h1>register</h1>,
       },
       {
-        path: 'admin/unlock',
-        element: <UnlockScreen />
-      }
-    ]
-  }
+        path: "admin/unlock",
+        element: <UnlockScreen />,
+      },
+    ],
+  },
+  {
+    path: "/auth/user",
+    element: <FrexiAuthPage />,
+  },
+]);
 
-])
-
-export default routes
+export default routes;

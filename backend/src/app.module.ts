@@ -6,6 +6,7 @@ import { DestinationModule } from './modules/destination-managment/destination.m
 import { TestimonialModule } from './modules/testmonial-managment/testmonial.module';
 import { TourModule } from './modules/tour-managmanr/tour.module';
 import { PartnerModule } from './modules/partner-management/partner.module';
+import { UserModule } from './modules/user-management/user.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { PartnerModule } from './modules/partner-management/partner.module';
     DestinationModule,
     TestimonialModule,
     TourModule,
-    PartnerModule
+    PartnerModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [],

@@ -1,64 +1,130 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Patch,
+  Delete,
+  UseGuards,
+  Req,
+  Res,
+  HttpException,
+  Put,
+} from '@nestjs/common';
+import { UserService } from './user.service';
+import { Response } from 'express';
+import { RequestWithUser } from 'src/common/interfaces/user.interface';
+import { UserJwtAuthGuard } from 'src/guards/userGuard.guard';
 
-@Injectable()
-export class UserService {
-  constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
-  // REGISTER and LOGIN directly
-  async register(data: { firstname?: string; lastname?: string; email: string; phoneNumber: string; password: string }) {
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email: data.email },
-    });
+  @Post('register')
+  async register(
+    @Body()
+    body: {
+      firstname?: string;
+      lastname?: string;
+      email: string;
+      phoneNumber: string;
+      password: string;
+    },
+    @Res() res: Response,
+  ) {
+    try {
+      const token = await this.userService.register(body);
 
-    if (existingUser) {
-      throw new BadRequestException('Email already in use');
+      res.cookie('AccessUserToken', token, {
+        httpOnly: true,
+        secure: true, // Set to true in production
+        sameSite: 'none', // Required for cross-origin cookies
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+      res.status(200).json({
+        message: 'user registered successfully',
+        authenticated: true,
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
     }
-
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
-    const user = await this.prisma.user.create({
-      data: {
-        firstname: data.firstname,
-        lastname: data.lastname,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        password: hashedPassword,
-      },
-    });
-
-    const token = await this.generateToken(user.id, user.email);
-
-    return { user, token };
   }
 
-  // LOGIN
-  async login(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+  @Post('login')
+  async login(
+    @Body() body: { email: string; password: string },
+    @Res() res: Response,
+  ) {
+    try {
+      const token = await this.userService.login(body.email, body.password);
+      res.cookie('AccessUserToken', token, {
+        httpOnly: true,
+        secure: true, // Set to true in production
+        sameSite: 'none', // Required for cross-origin cookies
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      res.status(200).json({
+        message: 'user logged in successfully',
+        authenticated: true,
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const token = await this.generateToken(user.id, user.email);
-
-    return { user, token };
   }
 
-  // GENERATE TOKEN
-  private async generateToken(userId: string, email: string) {
-    const payload = { sub: userId, email };
-    return this.jwtService.sign(payload);
+  @Get('me')
+  @UseGuards(UserJwtAuthGuard)
+  async getProfile(@Req() req: RequestWithUser) {
+    try {
+      const userId = req.user?.id as string;
+      return await this.userService.getProfile(userId);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  @Put('edit')
+  updateProfile(
+    @Req() req,
+    @Body()
+    body: { firstname?: string; lastname?: string; phoneNumber?: string },
+  ) {
+    return this.userService.updateProfile(req.user.userId, body);
+  }
+
+  @Patch('me/password')
+  changePassword(
+    @Req() req,
+    @Body() body: { oldPassword: string; newPassword: string },
+  ) {
+    return this.userService.changePassword(
+      req.user.userId,
+      body.oldPassword,
+      body.newPassword,
+    );
+  }
+
+  @Delete('me')
+  deleteAccount(@Req() req) {
+    return this.userService.deleteAccount(req.user.userId);
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    try {
+      res.clearCookie('AccessUserToken', {
+        httpOnly: true,
+        secure: true, // <-- Required for SameSite=None in production
+        sameSite: 'none', // <-- Required for cross-origin cookies
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+      return { message: 'logged out successfully' };
+    } catch (error) {
+      console.log('error logging out:', error);
+      throw new Error(error.message);
+    }
   }
 }
