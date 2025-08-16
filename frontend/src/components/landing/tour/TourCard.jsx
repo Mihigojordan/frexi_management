@@ -1,31 +1,38 @@
-const TourCard = ({ category, isActive = false }) => {
-  return (
-    <div className="w-1/3 flex-shrink-0 px-4">
-      <div className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
-        {/* Image Container */}
-        <div className="relative h-72 overflow-hidden rounded-3xl">
-          {/* Background image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url("${category.bgImage}")` }}
-          ></div>
-          
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        </div>
+const TourCard = ({ title, image, alt, position, isActive, onClick }) => {
+  const cardPositions = [
+    { transform: 'rotate(-8deg)', left: '7%', top: '60px' },
+    { transform: 'rotate(-4deg)', left: '25%', top: '20px' },
+    { transform: 'rotate(0deg)', left: '42.5%', top: '0px' },
+    { transform: 'rotate(4deg)', left: '60%', top: '20px' },
+    { transform: 'rotate(8deg)', left: '78%', top: '70px' },
+  ];
 
-        {/* Content positioned at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-          <h3 className="text-2xl font-bold mb-3 text-white">
-            {category.title}
-          </h3>
-          <button className="text-sm text-gray-200 hover:text-white transition-colors duration-300 font-normal">
-            See More
+
+  const style = cardPositions[position];
+  
+  return (
+    <div
+      className={`card bg-white w-[250px] min-h-[300px] absolute cursor-pointer shadow-lg rounded-[22px] transition-all duration-700 ease-out hover:scale-105 ${
+        isActive ? 'z-20 scale-110' : 'z-10'
+      }`}
+      style={style}
+      onClick={onClick}
+    >
+      <img src={image} alt={alt} className="w-full h-60 object-cover rounded-t-[22px]" />
+      <div className="card-body p-4">
+        <div className="card-title text-lg font-bold text-[#0b4a5a] mb-2">{title}</div>
+        {isActive && (
+          <button className="bg-[#0b4a5a] text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:bg-[#0d5a6b] hover:scale-105">
+            See More →
           </button>
-        </div>
+        )}
+        {!isActive && (
+          <a href="#" className="see-more text-sm text-[#425a60] no-underline hover:underline">See More</a>
+        )}
       </div>
     </div>
   );
 };
 
-export default TourCard
+
+export default TourCard;
