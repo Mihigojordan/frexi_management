@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, MessageCircle, Instagram, ArrowUp } from 'lucide-react';
+import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, MessageCircle, Instagram, ArrowUp} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -101,29 +102,29 @@ const Footer = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-6">Quick Links</h3>
               <ul className="space-y-4">
                 <li>
-                  <a href="#home" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="/about" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → About us
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#service" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="/service" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Our Service
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#terms" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="#terms" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Terms of Service
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#book" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="#book" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Tour Booking Now
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

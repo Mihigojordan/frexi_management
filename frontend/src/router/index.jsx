@@ -67,6 +67,9 @@ const TestimonialManagement = lazy(() =>
 const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
 const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
 const ServicePage = lazy(() => import("../pages/landing/ServicePage"));
+const BlogPage  = lazy(()=> import("../pages/landing/BlogPage"))
+const DestinationPage = lazy(()=> import("../pages/landing/DestinationPage"))
+const ContactUsPage = lazy(()=> import("../pages/landing/ContactUsPage"))
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-screen bg-white">
@@ -95,6 +98,9 @@ const routes = createBrowserRouter([
           { path:'/about', element: <SuspenseWrapper> <AboutPage /> </SuspenseWrapper> },
           { path:'/gallery', element: <SuspenseWrapper> <YachtGallery /> </SuspenseWrapper> },
           { path:'/service', element: <SuspenseWrapper> <ServicePage /> </SuspenseWrapper> },
+          { path:'/blogs', element: <SuspenseWrapper> <BlogPage /> </SuspenseWrapper> },
+          { path:'/destination', element: <SuspenseWrapper> <DestinationPage /> </SuspenseWrapper> },
+          { path:'/contact', element: <SuspenseWrapper> <ContactUsPage /> </SuspenseWrapper> },
         ]
       },
       {
