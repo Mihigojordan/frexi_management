@@ -12,29 +12,17 @@ import React, { Suspense, lazy } from "react";
 import MainLayout from "../context/layouts/MainLayout";
 import AuthLayout from "../context/layouts/AuthLayout";
 import DashboardLayout from "../context/layouts/DashboardLayout";
-import Dashboard from "../pages/dashboard/DashboardHome";
-import AdminProfile from "../pages/dashboard/AdminProfile";
-import ProtectPrivateAdminRoute from "../components/protectors/ProtectPrivateAdminRoute";
-import UnlockScreen from "../pages/auth/UnlockScreen";
-import TourManagement from "../pages/dashboard/TourManagement";
-import CreateTourPage from "../components/dashboard/tour/CreateTourPage";
-import UpdateTourPage from "../components/dashboard/tour/UpdateTourPage";
-import TourViewPage from "../components/dashboard/tour/TourViewPage";
-import DestinationManagement from "../pages/dashboard/DestinationManagement";
-import CreateDestinationPage from "../components/dashboard/destination/CreateDestinationPage";
-import UpdateDestinationPage from "../components/dashboard/destination/UpdateTourPage";
-import DestinationViewPage from "../components/dashboard/destination/DestinationViewPage";
-import HomePage from "../pages/landing/HomePage";
-import PartnerManagement from "../pages/dashboard/PartnerManagement";
-import TestimonialManagement from "../pages/dashboard/TestmonialManagement";
 import FrexiAuthPage from "../pages/auth/userAuth/UserAuth";
 import ProtectPrivateUserRoute from "../components/protectors/ProtectPrivateUserRoute";
 import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
 
-// Admin Auth
+// Static assets
+import logo from "../assets/image/frexilogo.png";
 
+// Admin Auth - Lazy loaded
 const AdminLogin = lazy(() => import("../pages/auth/Login"));
-// Dashboard
+
+// Dashboard - Lazy loaded
 const Dashboard = lazy(() => import("../pages/dashboard/DashboardHome"));
 const AdminProfile = lazy(() => import("../pages/dashboard/AdminProfile"));
 const ProtectPrivateAdminRoute = lazy(() =>
@@ -42,7 +30,7 @@ const ProtectPrivateAdminRoute = lazy(() =>
 );
 const UnlockScreen = lazy(() => import("../pages/auth/UnlockScreen"));
 
-// Tours
+// Tours - Lazy loaded
 const TourManagement = lazy(() => import("../pages/dashboard/TourManagement"));
 const CreateTourPage = lazy(() =>
   import("../components/dashboard/tour/CreateTourPage")
@@ -54,7 +42,7 @@ const TourViewPage = lazy(() =>
   import("../components/dashboard/tour/TourViewPage")
 );
 
-// Destinations
+// Destinations - Lazy loaded
 const DestinationManagement = lazy(() =>
   import("../pages/dashboard/DestinationManagement")
 );
@@ -68,7 +56,7 @@ const DestinationViewPage = lazy(() =>
   import("../components/dashboard/destination/DestinationViewPage")
 );
 
-// Landing pages
+// Landing pages - Lazy loaded
 const HomePage = lazy(() => import("../pages/landing/HomePage"));
 const PartnerManagement = lazy(() =>
   import("../pages/dashboard/PartnerManagement")
@@ -80,10 +68,6 @@ const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
 const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
 const ServicePage = lazy(() => import("../pages/landing/ServicePage"));
 
-// Static assets
-import logo from "../assets/image/frexilogo.png";
-
-
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-screen bg-white">
     <img
@@ -93,9 +77,6 @@ const LoadingSpinner = () => (
     />
   </div>
 );
-
-
-
 
 const SuspenseWrapper = ({ children }) => {
   return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>;
@@ -119,9 +100,11 @@ const routes = createBrowserRouter([
       {
         path: "admin",
         element: (
-          <ProtectPrivateAdminRoute>
-            <Outlet />
-          </ProtectPrivateAdminRoute>
+          <SuspenseWrapper>
+            <ProtectPrivateAdminRoute>
+              <Outlet />
+            </ProtectPrivateAdminRoute>
+          </SuspenseWrapper>
         ),
         children: [
           {
@@ -134,55 +117,55 @@ const routes = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Dashboard />,
+                element: <SuspenseWrapper><Dashboard /></SuspenseWrapper>,
               },
 
               // tour
               {
                 path: "tours",
-                element: <TourManagement />,
+                element: <SuspenseWrapper><TourManagement /></SuspenseWrapper>,
               },
               {
                 path: "tours/:id",
-                element: <TourViewPage />,
+                element: <SuspenseWrapper><TourViewPage /></SuspenseWrapper>,
               },
               {
                 path: "tours/create",
-                element: <CreateTourPage />,
+                element: <SuspenseWrapper><CreateTourPage /></SuspenseWrapper>,
               },
               {
                 path: "tours/update/:id",
-                element: <UpdateTourPage />,
+                element: <SuspenseWrapper><UpdateTourPage /></SuspenseWrapper>,
               },
 
               // destination
               {
                 path: "destinations",
-                element: <DestinationManagement />,
+                element: <SuspenseWrapper><DestinationManagement /></SuspenseWrapper>,
               },
               {
                 path: "destinations/:id",
-                element: <DestinationViewPage />,
+                element: <SuspenseWrapper><DestinationViewPage /></SuspenseWrapper>,
               },
               {
                 path: "destinations/create",
-                element: <CreateDestinationPage />,
+                element: <SuspenseWrapper><CreateDestinationPage /></SuspenseWrapper>,
               },
               {
                 path: "destinations/update/:id",
-                element: <UpdateDestinationPage />,
+                element: <SuspenseWrapper><UpdateDestinationPage /></SuspenseWrapper>,
               },
               {
                 path: "profile",
-                element: <AdminProfile />,
+                element: <SuspenseWrapper><AdminProfile /></SuspenseWrapper>,
               },
               {
                 path: "partner",
-                element: <PartnerManagement />,
+                element: <SuspenseWrapper><PartnerManagement /></SuspenseWrapper>,
               },
               {
                 path: "testimonial",
-                element: <TestimonialManagement />,
+                element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
               },
             ],
           },
@@ -214,7 +197,7 @@ const routes = createBrowserRouter([
     children: [
       {
         path: "admin/login",
-        element: <AdminLogin />,
+        element: <SuspenseWrapper><AdminLogin /></SuspenseWrapper>,
       },
       {
         path: "admin/register",
@@ -222,7 +205,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "admin/unlock",
-        element: <UnlockScreen />,
+        element: <SuspenseWrapper><UnlockScreen /></SuspenseWrapper>,
       },
     ],
   },

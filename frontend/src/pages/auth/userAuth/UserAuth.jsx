@@ -4,6 +4,7 @@ import { Eye, EyeOff, User, Mail, Lock, AlertCircle, Phone } from 'lucide-react'
 import useUserAuth from '../../../context/UserAuthContext';
 import bgimage from "../../../assets/image/gorilla1.jpg"
 import { useLocation, useNavigate } from 'react-router-dom';
+import frexilogo from '../../../../public/frexilogo.png'
 
 export default function FrexiAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -222,13 +223,7 @@ export default function FrexiAuthPage() {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="flex items-center justify-end mb-8">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-primary-500 rounded mr-2 flex items-center justify-center">
-                <div className="w-4 h-4 bg-white rounded-sm"></div>
-              </div>
-              <span className="text-xl font-bold text-primary-500">Frexi</span>
-              <span className="text-sm text-gray-500 ml-1">Travel</span>
-            </div>
+            <img src={frexilogo} className=' w-20 h-20' alt="" />
           </div>
 
           {/* Header */}
