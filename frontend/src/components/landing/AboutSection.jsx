@@ -4,7 +4,7 @@ import { ArrowRight, Anchor, Shield, Users } from 'lucide-react';
 export default function AboutSection() {
   return (
     <section className="py-20 px-6 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <div className=" mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Side - Overlapping Images */}
           <div className="flex flex-col items-start relative gap-5 w-[400px]">
@@ -12,7 +12,7 @@ export default function AboutSection() {
             <img 
               src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop"
               alt="Mountain lake adventure"
-              className="w-full h-[200px] object-cover rounded-2xl shadow-xl transition-transform duration-300 hover:scale-105 hover:z-30 relative z-10"
+              className="w-full h-[500px] object-cover rounded-2xl shadow-xl transition-transform duration-300 hover:scale-105 hover:z-30 relative z-10"
               style={{ transform: 'translate(0, 0)' }}
             />
             
@@ -20,7 +20,7 @@ export default function AboutSection() {
             <img 
               src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=350&h=280&fit=crop&crop=faces"
               alt="Group of happy travelers"
-              className="w-full h-[240px] object-cover rounded-2xl shadow-xl transition-transform duration-300 hover:scale-105 hover:z-30 relative z-20 border-4 border-white"
+              className="w-full h-[500px] object-cover rounded-2xl shadow-xl transition-transform duration-300 hover:scale-105 hover:z-30 relative z-20 border-4 border-white"
               style={{ transform: 'translate(120px, -60px)' }}
             />
             

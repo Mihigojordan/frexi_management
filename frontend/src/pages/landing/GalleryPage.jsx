@@ -59,7 +59,7 @@ const galleryImages = [
      <HeaderBanner title={'Our Gallery'} />
       {/* Gallery Section */}
       <div className="relative z-20 bg-white py-20 px-4 md:px-8 lg:px-16">
-        <div className="max-w-7xl mx-auto">
+        <div className=" mx-auto">
           {/* Gallery Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
             {galleryImages.map((image, index) => {

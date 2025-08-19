@@ -28,7 +28,7 @@ const Navbar = () => {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       {/* Top Info Bar - Hidden on mobile */}
       <div className="bg-gray-50 text-sm text-gray-600 hidden lg:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
+        <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-1">
               <MapPin className="w-4 h-4" />
@@ -64,7 +64,7 @@ const Navbar = () => {
       </div>
 
       {/* Main Navigation */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center h-16">

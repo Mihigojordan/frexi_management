@@ -92,13 +92,13 @@ const TourCard = ({ title, image, alt, position, isActive, onClick, isSliding, s
   
   return (
     <div
-      className={`card  w-[250px] min-h-[320px] absolute cursor-pointer  rounded-[20px] transition-all duration-500 ease-linear hover:scale-105 ${
+      className={`card  w-[300px] min-h-[420px] absolute cursor-pointer  rounded-[20px] transition-all duration-500 ease-linear hover:scale-105 ${
         isActive ? ' scale-110' : ' scale-95'
       } ${isSliding ? 'transition-all duration-700 ease-in-out' : ''}`}
       style={style}
       onClick={onClick}
     >
-      <img src={image} alt={alt} className="w-full h-48 object-cover  rounded-[20px]" />
+      <img src={image} alt={alt} className="w-full h-[270px] object-cover  rounded-[20px]" />
       <div className="card-body p-4 text-center">
         <div className="card-title text-xl font-bold text-primary-500 mb-3">{title}</div>
         <button className="text-[#6b7280] text-sm hover:text-primary-500 transition-colors">
@@ -249,7 +249,7 @@ const App = () => {
       </div>
       
       {/* Cards Container */}
-      <div className="cards relative h-[450px] mx-auto w-11/12 overflow-hidden flex items-center justify-center">
+      <div className="cards relative h-[500px]  mx-auto w-full overflow-hidden flex items-center justify-center">
         {getVisibleCards().map((dataIndex, position) => {
           const tour = tourData[dataIndex];
           const isActive = position === 2; // Center card is active
