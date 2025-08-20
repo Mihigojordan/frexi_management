@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, MessageCircle, Instagram, ArrowUp} from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/image/frexilogo.png';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
