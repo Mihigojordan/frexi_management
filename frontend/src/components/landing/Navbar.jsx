@@ -90,7 +90,7 @@ const Navbar = () => {
           {/* Desktop Book Now Button & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
             <Link
-              href="/auth/user"
+              to="/auth/user"
               className="text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium hidden sm:inline-block"
               style={{backgroundColor: '#113d48'}}
             >
