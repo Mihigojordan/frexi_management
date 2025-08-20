@@ -132,7 +132,7 @@ export default function FrexiAuthPage() {
         const from = location.state?.from?.pathname || "/user/dashboard";
         navigate(from, { replace: true });
       } else {
-        setErrors({ general: result.message || "Login failed" });
+        setError({ general: result.message || "Login failed" });
       }
     } catch (err) {
       console.error('Login error:', err); // Debug log
@@ -174,8 +174,9 @@ export default function FrexiAuthPage() {
         // Redirect to intended page or dashboard
         const from = location.state?.from?.pathname || "/user/dashboard";
         navigate(from, { replace: true });
+        alert('registered successfully')
       } else {
-        setErrors({ general: response.message || "register failed" });
+        setError({ general: response.message || "register failed" });
       }
     } catch (err) {
       console.error('Registration error:', err); // Debug log
@@ -406,31 +407,6 @@ export default function FrexiAuthPage() {
                   >
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
-                </div>
-
-                {/* Terms Checkbox */}
-                <div className="flex items-start pt-2">
-                  <input
-                    type="checkbox"
-                    id="agreeToTerms"
-                    name="agreeToTerms"
-                    checked={registerData.agreeToTerms}
-                    onChange={handleRegisterChange}
-                    className="mt-1 h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
-                    required
-                    disabled={isSubmitting}
-                  />
-                  <label htmlFor="agreeToTerms" className="ml-3 text-sm text-gray-600">
-                    I agree with the{' '}
-                    <button 
-                      type="button" 
-                      className="text-primary-500 hover:text-primary-600 font-medium underline"
-                      onClick={() => {/* Handle terms modal/link */}}
-                      disabled={isSubmitting}
-                    >
-                      Terms & Condition
-                    </button>
-                  </label>
                 </div>
               </div>
             )}

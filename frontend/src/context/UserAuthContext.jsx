@@ -39,26 +39,23 @@ export const UserAuthContextProvider = ({ children }) => {
             const response = await userAuthService.registerUser(userData)
 
             // After successful registration, automatically log the user in
-            if (response.success) {
+            if (response.authenticated) {
+                // Fetch user profile after successful login
                 try {
-                    const loginResponse = await userAuthService.userLogin({
-                        email: userData.email,
-                        password: userData.password
+                    const userProfile = await userAuthService.getUserProfile()
+                    
+                    updateAuthState({
+                        user: userProfile,
+                        isAuthenticated: true
                     })
-
-                    if (loginResponse.token) {
-                        // Fetch user profile after successful login
-                        const userProfile = await userAuthService.getUserProfile()
-                        
-                        updateAuthState({
-                            user: userProfile,
-                            isAuthenticated: true
-                        })
-                    }
-                } catch (loginError) {
-                    console.log('Auto-login after registration failed:', loginError)
-                    // Registration was successful, but auto-login failed
-                    // User will need to log in manually
+                } catch (profileError) {
+                    console.log('Error fetching user profile after login:', profileError)
+                    
+                    // Still update auth status even if profile fetch fails
+                    updateAuthState({
+                        user: null,
+                        isAuthenticated: true
+                    })
                 }
             }
 
@@ -79,7 +76,7 @@ export const UserAuthContextProvider = ({ children }) => {
 
             const response = await userAuthService.userLogin(loginData)
 
-            if (response.token) {
+            if (response.authenticated) {
                 // Fetch user profile after successful login
                 try {
                     const userProfile = await userAuthService.getUserProfile()

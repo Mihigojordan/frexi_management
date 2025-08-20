@@ -21,7 +21,8 @@ const Navbar = () => {
     { name: 'Service', href: '/service' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'Blog', href: '/blogs' },
-    { name: 'Contact Us', href: 'contact' }
+    { name: 'Contact Us', href: '/contact' },
+    { name: '', href: '/auth/user' },
   ];
 
   return (
@@ -89,7 +90,7 @@ const Navbar = () => {
           {/* Desktop Book Now Button & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
             <Link
-              href="/contact"
+              href="/auth/user"
               className="text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium hidden sm:inline-block"
               style={{backgroundColor: '#113d48'}}
             >
@@ -145,7 +146,7 @@ const Navbar = () => {
             {/* Mobile Book Now Button */}
             <div className="pt-4 mt-4 border-t border-gray-200">
               <Link
-                to="/contact"
+                to="/auth/user"
                 className="block w-full text-center text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium"
                 style={{backgroundColor: '#113d48'}}
                 onClick={() => setIsMenuOpen(false)}
