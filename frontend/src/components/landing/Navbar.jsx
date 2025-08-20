@@ -17,11 +17,11 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
-    { name: 'Destination', href: '#destination' },
+    { name: 'Destination', href: '/destination' },
     { name: 'Service', href: '/service' },
     { name: 'Gallery', href: '/gallery' },
-    { name: 'Blog', href: '#blog' },
-    { name: 'Contact Us', href: '#contact' }
+    { name: 'Blog', href: '/blogs' },
+    { name: 'Contact Us', href: 'contact' }
   ];
 
   return (
@@ -88,13 +88,13 @@ const Navbar = () => {
 
           {/* Desktop Book Now Button & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
-            <a
-              href="#book"
+            <Link
+              href="/contact"
               className="text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium hidden sm:inline-block"
               style={{backgroundColor: '#113d48'}}
             >
               Book Now →
-            </a>
+            </Link>
             
             {/* Mobile Menu Button */}
             <button
@@ -130,28 +130,28 @@ const Navbar = () => {
             {/* Mobile Navigation Links */}
             <div className="space-y-2">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium"
                   style={{color: link.name === 'Home' ? '#113d48' : ''}}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </div>
 
             {/* Mobile Book Now Button */}
             <div className="pt-4 mt-4 border-t border-gray-200">
-              <a
-                href="#book"
+              <Link
+                to="/contact"
                 className="block w-full text-center text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium"
                 style={{backgroundColor: '#113d48'}}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Book Now →
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Language & Support */}
