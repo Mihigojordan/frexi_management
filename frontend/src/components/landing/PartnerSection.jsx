@@ -38,19 +38,16 @@ export default function PartnersSection() {
             <div className="max-w-7xl mx-auto">
                 {/* Section Header */}
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-teal-800 rounded-full mb-6 shadow-lg">
+                    {/* <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-teal-800 rounded-full mb-6 shadow-lg">
                         <Building2 className="w-8 h-8 text-white" />
-                    </div>
-                    <p className="text-lg md:text-xl text-slate-600 font-light italic mb-3 tracking-wide">
+                    </div> */}
+                    <p className="text-lg font-medium text-teal-600 font-light italic mb-3 tracking-wide">
                         Trusted Network
                     </p>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 bg-clip-text text-transparent mb-4">
                         Our Partners
                     </h1>
-                    <p className="text-slate-600 max-w-2xl mx-auto">
-                        We collaborate with industry leaders and innovative companies to deliver exceptional results
-                    </p>
-                    <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-teal-300 mx-auto rounded-full mt-6"></div>
+                   
                 </div>
 
                 {/* Partners Grid */}
