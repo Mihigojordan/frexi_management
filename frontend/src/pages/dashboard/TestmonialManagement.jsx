@@ -174,7 +174,7 @@ const AddEditTestimonialModal = ({ isOpen, onClose, onSubmit, testimonial, isLoa
                   <Image size={32} className="text-gray-400" />
                 </div>
               )}
-              <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
+              <label className="absolute bottom-0 right-0 bg-primary-600 text-white p-2 rounded-full cursor-pointer hover:bg-primary-700 transition-colors">
                 <Upload size={16} />
                 <input
                   type="file"
@@ -199,7 +199,7 @@ const AddEditTestimonialModal = ({ isOpen, onClose, onSubmit, testimonial, isLoa
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter customer name"
             />
           </div>
@@ -214,7 +214,7 @@ const AddEditTestimonialModal = ({ isOpen, onClose, onSubmit, testimonial, isLoa
               name="position"
               value={formData.position}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter position or title (optional)"
             />
           </div>
@@ -254,7 +254,7 @@ const AddEditTestimonialModal = ({ isOpen, onClose, onSubmit, testimonial, isLoa
               onChange={handleInputChange}
               rows={4}
               maxLength={400}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Enter the testimonial message..."
             />
             <div className="text-right text-xs text-gray-500 mt-1">
@@ -274,7 +274,7 @@ const AddEditTestimonialModal = ({ isOpen, onClose, onSubmit, testimonial, isLoa
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading && <RefreshCw size={16} className="animate-spin" />}
               {isEdit ? 'Update' : 'Add'} Testimonial
@@ -371,7 +371,7 @@ const ViewTestimonialModal = ({ isOpen, onClose, testimonial }) => {
                 className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-gray-200"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-2xl mx-auto">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white font-semibold text-2xl mx-auto">
                 {testimonial.name?.charAt(0)?.toUpperCase() || <User size={32} />}
               </div>
             )}
@@ -674,7 +674,7 @@ const TestimonialManagement = () => {
                 onClick={() => setCurrentPage(page)}
                 className={`px-3 py-2 text-sm rounded-md transition-colors ${
                   currentPage === page
-                    ? "bg-blue-600 text-white"
+                    ? "bg-primary-600 text-white"
                     : "border border-gray-300 text-gray-700 hover:bg-gray-100"
                 }`}
               >
@@ -712,8 +712,8 @@ const TestimonialManagement = () => {
               <p className="text-sm font-medium text-gray-600">Total Testimonials</p>
               <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
             </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <MessageSquare className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+              <MessageSquare className="w-6 h-6 text-primary-600" />
             </div>
           </div>
         </div>
@@ -811,7 +811,7 @@ const TestimonialManagement = () => {
                   </button>
                   <button
                     onClick={() => handleEditTestimonial(testimonial)}
-                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                     title="Edit testimonial"
                   >
                     <Edit3 size={16} />
@@ -968,7 +968,7 @@ const TestimonialManagement = () => {
                     </button>
                     <button
                       onClick={() => handleEditTestimonial(testimonial)}
-                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                       title="Edit"
                     >
                       <Edit3 size={16} />
@@ -1070,7 +1070,7 @@ const TestimonialManagement = () => {
         {isLoading && !isRefreshing ? (
           <div className="text-center py-12">
             <div className="inline-flex items-center gap-3">
-              <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
+              <RefreshCw className="w-5 h-5 animate-spin text-primary-600" />
               <p className="text-gray-600">Loading testimonials...</p>
             </div>
           </div>

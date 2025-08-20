@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, MessageCircle, Instagram, ArrowUp } from 'lucide-react';
+import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, MessageCircle, Instagram, ArrowUp} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ const Footer = () => {
     <>
       {/* Newsletter Section */}
       <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
             <div className="text-center lg:text-left">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
@@ -63,16 +64,11 @@ const Footer = () => {
 
       {/* Footer */}
       <footer className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-black text-white px-3 py-2 font-bold text-lg">
-                  FR
-                  <div className="text-xs">FREXI</div>
-                </div>
-              </div>
+              <img src={logo} className='h-20' alt="" />
               <p className="text-gray-600 mb-6 leading-relaxed">
                 Rapidiously myocardinate cross-platform intellectual capital model. 
                 Appropriately create interactive infrastructures
@@ -101,29 +97,29 @@ const Footer = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-6">Quick Links</h3>
               <ul className="space-y-4">
                 <li>
-                  <a href="#home" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="/about" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → About us
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#service" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="/service" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Our Service
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#terms" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="#terms" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Terms of Service
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#book" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Link to="#book" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                     → Tour Booking Now
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

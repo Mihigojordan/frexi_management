@@ -1,218 +1,183 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-const TravelDestinations = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+const DestinationCarousel = () => {
+  const [currentSlide, setCurrentSlide] = useState(2); // Start with Nairobi (middle item)
 
-  const slideSets = [
-    [
-      {
-        id: 1,
-        name: "Dubai",
-        listings: "15 Listing",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        isMain: true
-      },
-      {
-        id: 2,
-        name: "Istanbul", 
-        listings: "22 Listing",
-        image: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
-        isMain: true
-      },
-      {
-        id: 3,
-        name: "Paris",
-        listings: "18 Listing", 
-        image: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
-        isMain: false
-      },
-      {
-        id: 4,
-        name: "Tokyo",
-        listings: "12 Listing",
-        image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2094&q=80",
-        isMain: false
-      }
-    ],
-    [
-      {
-        id: 5,
-        name: "London",
-        listings: "28 Listing",
-        image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        isMain: false
-      },
-      {
-        id: 6,
-        name: "New York", 
-        listings: "35 Listing",
-        image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        isMain: true
-      },
-      {
-        id: 7,
-        name: "Barcelona",
-        listings: "24 Listing", 
-        image: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        isMain: false
-      },
-      {
-        id: 8,
-        name: "Sydney",
-        listings: "19 Listing",
-        image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        isMain: false
-      }
-    ],
-    [
-      {
-        id: 9,
-        name: "Rome",
-        listings: "31 Listing",
-        image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2096&q=80",
-        isMain: false
-      },
-      {
-        id: 10,
-        name: "Santorini", 
-        listings: "16 Listing",
-        image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2119&q=80",
-        isMain: true
-      },
-      {
-        id: 11,
-        name: "Bali",
-        listings: "27 Listing", 
-        image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        isMain: false
-      },
-      {
-        id: 12,
-        name: "Singapore",
-        listings: "20 Listing",
-        image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2052&q=80",
-        isMain: false
-      }
-    ]
+  const destinations = [
+    {
+      id: 1,
+      name: "Nyungwe",
+      listings: "25 Listing",
+      image: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=80",
+      showButton: false
+    },
+    {
+      id: 2,
+      name: "Volcano Park",
+      listings: "15 Listing",
+      image: "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=800&q=80",
+      showButton: false
+    },
+    {
+      id: 3,
+      name: "Nairobi",
+      listings: "28 Listing",
+      image: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=800&q=80",
+      showButton: true
+    },
+    {
+      id: 4,
+      name: "Mombasa",
+      listings: "20 Listing",
+      image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=800&q=80",
+      showButton: false
+    },
+    {
+      id: 5,
+      name: "Dubai",
+      listings: "30 Listing",
+      image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600",
+      showButton: false
+    },
+    
   ];
 
-  // Auto-slide functionality
+  // Auto-advance carousel
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slideSets.length);
-    }, 5000);
+      setCurrentSlide((prev) => (prev + 1) % destinations.length);
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, [slideSets.length]);
+  }, [destinations.length]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slideSets.length);
+  const getSlidePosition = (index) => {
+    let position = index - currentSlide;
+    
+    // Handle wrapping for infinite loop
+    if (position > destinations.length / 2) {
+      position -= destinations.length;
+    } else if (position < -destinations.length / 2) {
+      position += destinations.length;
+    }
+    
+    return position;
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slideSets.length) % slideSets.length);
+  const getSlideStyles = (position) => {
+    const isActive = position === 0;
+    const isAdjacent = Math.abs(position) === 1;
+    const isFarther = Math.abs(position) === 2;
+    
+    if (isActive) {
+      return {
+        transform: `translateX(${position * 160}px) scale(1.1)`,
+        zIndex: 10,
+        filter: 'none',
+        opacity: 1,
+        width: '360px',
+        height: '90%'
+      };
+    } else if (isAdjacent) {
+      return {
+        transform: `translateX(${position * 200}px) scale(0.85)`,
+        zIndex: 5,
+        filter: 'blur(3px) brightness(0.7)',
+        opacity: 1,
+        width: '280px',
+        height: '360px'
+      };
+    } else if (isFarther) {
+      return {
+        transform: `translateX(${position * 160}px) scale(0.65)`,
+        zIndex: 2,
+        filter: 'blur(5px) brightness(0.5)',
+        opacity: 1,
+        width: '240px',
+        height: '300px'
+      };
+    } else {
+      return {
+        transform: `translateX(${position * 160}px) scale(0.4)`,
+        zIndex: 1,
+        filter: 'blur(3px) brightness(0.3)',
+        opacity: 0.2,
+        width: '200px',
+        height: '240px'
+      };
+    }
   };
-
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
-
-  const currentDestinations = slideSets[currentSlide];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-primary-500 mb-2">
-            <span className="text-3xl font-light text-cyan-600">Top Destination</span>
-          </h1>
-          <h2 className="text-5xl font-bold text-primary-500">Popular Destination</h2>
-        </div>
+    <div className="w-full bg-white text-center py-16">
+      {/* Header */}
+      <h4 className="text-[#0b4a5a] text-xl mb-3" style={{ fontFamily: 'cursive', fontWeight: 'normal' }}>
+        Top Destination
+      </h4>
+      <h2 className="text-[#425a60] text-4xl font-bold mb-16">
+        Popular Destination
+      </h2>
 
-        {/* Slideshow Navigation */}
-        <div className="flex justify-center items-center gap-4 mb-8">
-          <button 
-            onClick={prevSlide}
-            className="bg-white shadow-lg rounded-full p-2 hover:shadow-xl transition-all duration-300 hover:scale-110"
-          >
-            <ChevronLeft size={20} className="text-primary-500" />
-          </button>
+      {/* Carousel Container */}
+      <div className="relative flex justify-center items-center h-[600px] overflow-hidden px-4">
+        {destinations.map((destination, index) => {
+          const position = getSlidePosition(index);
+          const styles = getSlideStyles(position);
+          const isActive = position === 0;
           
-          {/* Slide Indicators */}
-          <div className="flex gap-2">
-            {slideSets.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  currentSlide === index 
-                    ? 'bg-primary-500 scale-125' 
-                    : 'bg-primary-200 hover:bg-primary-300'
-                }`}
-              />
-            ))}
-          </div>
-          
-          <button 
-            onClick={nextSlide}
-            className="bg-white shadow-lg rounded-full p-2 hover:shadow-xl transition-all duration-300 hover:scale-110"
-          >
-            <ChevronRight size={20} className="text-primary-500" />
-          </button>
-        </div>
-
-        {/* Destinations Grid */}
-        <div className="flex items-center justify-center gap-8 transition-all duration-700 ease-in-out">
-          {currentDestinations.map((destination, index) => (
+          return (
             <div
               key={destination.id}
-              className={`relative overflow-hidden rounded-3xl transition-all duration-500 hover:scale-105 ${
-                destination.isMain 
-                  ? 'w-80 h-96 z-10 shadow-2xl' 
-                  : 'w-64 h-80 opacity-75 hover:opacity-100'
-              } ${index === 0 ? 'blur-sm hover:blur-none' : ''} ${index === 3 ? 'blur-sm hover:blur-none' : ''}`}
-              style={{
-                backgroundImage: `url(${destination.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
+              className="absolute transition-all duration-700 ease-out rounded-3xl overflow-hidden cursor-pointer shadow-2xl"
+              style={styles}
+              onClick={() => setCurrentSlide(index)}
             >
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              {/* Image with overlay gradient */}
+              <div className="relative w-full h-full">
+                <img
+                  src={destination.image}
+                  alt={destination.name}
+                  className="w-full h-full object-cover"
+                />
+                {/* Dark overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              </div>
               
-              {/* Content */}
-              <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-2xl font-bold mb-1">{destination.name}</h3>
-                <p className="text-sm opacity-80">{destination.listings}</p>
+              {/* Card Info */}
+              <div className="absolute bottom-6 left-6 text-white text-left">
+                <h3 className="text-xl font-bold mb-1 drop-shadow-lg">{destination.name}</h3>
+                <p className="text-sm opacity-90 drop-shadow-md">{destination.listings}</p>
               </div>
 
-              {/* View All Button - Only on main card */}
-              {destination.isMain && (
+              {/* View Button - only show on active slide */}
+              {isActive && (
                 <div className="absolute bottom-6 right-6">
-                  <button className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 text-white text-sm font-medium hover:bg-white/30 transition-all duration-300 flex items-center gap-2">
-                    View All
-                    <ArrowRight size={16} />
+                  <button className="bg-white/20 backdrop-blur-sm border border-white/40 px-4 py-2 rounded-full text-white text-sm font-medium transition-all duration-300 hover:bg-white/30 hover:scale-105 shadow-lg">
+                    View All →
                   </button>
                 </div>
               )}
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-primary-500/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
 
-        {/* Bottom Navigation Arrow */}
-        <div className="fixed bottom-8 right-8">
-          <button className="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all duration-300 hover:scale-110">
-            <ArrowUp size={24} className="text-primary-500" />
-          </button>
-        </div>
+      {/* Navigation Dots */}
+      <div className="flex justify-center mt-12 space-x-3">
+        {destinations.map((_, index) => (
+          <button
+            key={index}
+            className={`transition-all duration-300 rounded-full ${
+              index === currentSlide 
+                ? 'w-8 h-3 bg-[#0b4a5a]' 
+                : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+            }`}
+            onClick={() => setCurrentSlide(index)}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
-export default TravelDestinations;
+export default DestinationCarousel;
