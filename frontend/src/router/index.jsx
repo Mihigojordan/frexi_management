@@ -71,6 +71,7 @@ const BlogPage  = lazy(()=> import("../pages/landing/BlogPage"))
 const DestinationPage = lazy(()=> import("../pages/landing/DestinationPage"))
 const ContactUsPage = lazy(()=> import("../pages/landing/ContactUsPage"))
 
+// eslint-disable-next-line react-refresh/only-export-components
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-screen bg-white">
     <img
@@ -81,6 +82,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 const SuspenseWrapper = ({ children }) => {
   return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>;
 };

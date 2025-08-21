@@ -1,326 +1,220 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 const tourData = [
-  { title: "Wildlife", image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=600", alt: "Wildlife" },
-  { title: "Walking", image: "https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=600", alt: "Walking" },
-  { title: "Cruises", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600", alt: "Cruises" },
-  { title: "Hiking", image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=600", alt: "Hiking" },
-  { title: "Airbirds", image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=600", alt: "Airbirds" },
-  { title: "Mountain", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=600", alt: "Mountain" },
-  { title: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600", alt: "Beach" },
-  { title: "Forest", image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=600", alt: "Forest" },
-  { title: "Desert", image: "https://images.unsplash.com/photo-1509316785289-025f5b846b35?q=80&w=600", alt: "Desert" },
+  { title: "Wildlife", image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=600", alt: "Wildlife", description: "Discover amazing creatures" },
+  { title: "Walking", image: "https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=600", alt: "Walking", description: "Peaceful nature walks" },
+  { title: "Cruises", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600", alt: "Cruises", description: "Luxury ocean adventures" },
+  { title: "Hiking", image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=600", alt: "Hiking", description: "Mountain trail experiences" },
+  { title: "Airbirds", image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=600", alt: "Airbirds", description: "Sky watching tours" },
+  { title: "Mountain", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=600", alt: "Mountain", description: "Peak exploration" },
+  { title: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600", alt: "Beach", description: "Coastal paradise" },
+  { title: "Forest", image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=600", alt: "Forest", description: "Woodland adventures" },
+  { title: "Desert", image: "https://images.unsplash.com/photo-1509316785289-025f5b846b35?q=80&w=600", alt: "Desert", description: "Sand dune expeditions" },
 ];
 
-const TourCard = ({ title, image, alt, position, isActive, onClick, isSliding, slideDirection }) => {
-  // Circular arrangement positions - exactly like the reference image
-  const cardPositions = [
-    // Left side
-    { 
-      transform: 'rotate(-15deg)', 
-      left: '7%', 
-      top: '120px',
-      zIndex: 5
-    },
-    // Left-center
-    { 
-      transform: 'rotate(-7deg)', 
-      left: '25%', 
-      top: '40px',
-      zIndex: 8
-    },
-    // Center (active)
-    { 
-      transform: 'rotate(0deg)', 
-      left: '50%', 
-      top: '0px',
-      zIndex: 10,
-      marginLeft: '-125px' // Center the card
-    },
-    // Right-center
-    { 
-      transform: 'rotate(7deg)', 
-      left: '75%', 
-      top: '40px',
-      zIndex: 8,
-      marginLeft: '-250px'
-    },
-    // Right side
-    { 
-      transform: 'rotate(15deg)', 
-      left: '95%', 
-      top: '120px',
-      zIndex: 5,
-      marginLeft: '-250px'
-    },
-  ];
-
-  let style = { ...cardPositions[position] };
-  
-  // Handle sliding animations with proper directions
-  if (isSliding) {
-    if (slideDirection === 'out-left') {
-      // Card sliding out to the left
-      style = {
-        ...style,
-        transform: `${cardPositions[position].transform} translateX(-300px) translateY(50px)`,
-        opacity: 0
-      };
-    } else if (slideDirection === 'out-right') {
-      // Card sliding out to the right
-      style = {
-        ...style,
-        transform: `${cardPositions[position].transform} translateX(300px) translateY(50px)`,
-        opacity: 0
-      };
-    } else if (slideDirection === 'in-left') {
-      // New card sliding in from the left
-      style = {
-        ...style,
-        transform: `${cardPositions[position].transform} translateX(-300px) translateY(50px)`,
-        opacity: 0
-      };
-    } else if (slideDirection === 'in-right') {
-      // New card sliding in from the right
-      style = {
-        ...style,
-        transform: `${cardPositions[position].transform} translateX(300px) translateY(50px)`,
-        opacity: 0
-      };
-    }
-  }
-  
+const TourCard = ({ title, image, alt, description, isActive, onClick }) => {
   return (
     <div
-      className={`card  w-[300px] min-h-[420px] absolute cursor-pointer  rounded-[20px] transition-all duration-500 ease-linear hover:scale-105 ${
-        isActive ? ' scale-110' : ' scale-95'
-      } ${isSliding ? 'transition-all duration-700 ease-in-out' : ''}`}
-      style={style}
+      className={`relative w-[350px] h-[450px] rounded-3xl overflow-hidden transition-all duration-700 ease-out group ${
+        isActive 
+          ? 'scale-100 shadow-2xl shadow-slate-300/30 z-20 opacity-100' 
+          : 'scale-90 z-10 opacity-50'
+      }`}
       onClick={onClick}
     >
-      <img src={image} alt={alt} className="w-full h-[270px] object-cover  rounded-[20px]" />
-      <div className="card-body p-4 text-center">
-        <div className="card-title text-xl font-bold text-primary-500 mb-3">{title}</div>
-        <button className="text-[#6b7280] text-sm hover:text-primary-500 transition-colors">
-          See More
-        </button>
+      {/* Main card background */}
+      <div className="absolute inset-0 bg-white shadow-xl rounded-3xl overflow-hidden">
+        
+        {/* Image section */}
+        <div className="relative h-[280px] overflow-hidden">
+          <img
+            src={image}
+            alt={alt}
+            className={`w-full h-full object-cover transition-transform duration-700 ${
+              isActive ? 'scale-110' : 'scale-100'
+            }`}
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          
+          {/* Category badge */}
+          <div className="absolute top-4 left-4">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold text-slate-700 shadow-lg">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+              Adventure
+            </div>
+          </div>
+
+          {/* Favorite heart */}
+          <div className="absolute top-4 right-4">
+            <div className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        {/* Content section */}
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+            <div className="flex text-amber-400">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+          </div>
+          
+          <p className="text-slate-600 text-sm mb-4 leading-relaxed">{description}</p>
+          
+          {/* Bottom section */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex -space-x-2">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 border-2 border-white"></div>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-purple-400 to-purple-500 border-2 border-white"></div>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-pink-400 to-pink-500 border-2 border-white"></div>
+              </div>
+              <span className="text-xs text-slate-500 font-medium">2.1k+ joined</span>
+            </div>
+            
+            <button className="flex items-center space-x-2 bg-slate-800 text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-slate-700 transition-colors shadow-lg">
+              <span>Explore</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
+      
+      {/* Active card accent */}
+      {isActive && (
+        <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-500 rounded-3xl blur-sm opacity-30 -z-10"></div>
+      )}
     </div>
   );
 };
 
 const App = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [slidingCards, setSlidingCards] = useState(new Map());
 
-  // Get the current 5 visible cards
-  const getVisibleCards = () => {
-    const visible = [];
-    for (let i = 0; i < 5; i++) {
-      visible.push((currentIndex + i) % tourData.length);
+  const visibleCards = () => {
+    const cards = [];
+    for (let i = 0; i < 3; i++) {
+      cards.push((currentIndex + i) % tourData.length);
     }
-    return visible;
+    return cards;
   };
 
-  const slideNext = () => {
-    if (isAnimating) return;
-    
-    setIsAnimating(true);
-    
-    // Mark the first card as sliding out to the left
-    const firstCardIndex = currentIndex;
-    setSlidingCards(new Map([[firstCardIndex, 'out-left']]));
-    
-    setTimeout(() => {
-      // Move to next set of cards
-      const newIndex = (currentIndex + 1) % tourData.length;
-      setCurrentIndex(newIndex);
-      
-      // Mark the new last card as sliding in from the right (correct direction)
-      const newLastCardIndex = (newIndex + 4) % tourData.length;
-      setSlidingCards(new Map([[newLastCardIndex, 'in-right']]));
-      
-      setTimeout(() => {
-        setSlidingCards(new Map());
-        setIsAnimating(false);
-      }, 400);
-    }, 300);
-  };
+  const slideNext = () => setCurrentIndex((prev) => (prev + 1) % tourData.length);
+  const slidePrev = () =>
+    setCurrentIndex((prev) => (prev - 1 + tourData.length) % tourData.length);
 
-  const slidePrev = () => {
-    if (isAnimating) return;
-    
-    setIsAnimating(true);
-    
-    // Mark the last card as sliding out to the right
-    const lastCardIndex = (currentIndex + 4) % tourData.length;
-    setSlidingCards(new Map([[lastCardIndex, 'out-right']]));
-    
-    setTimeout(() => {
-      // Move to previous set of cards
-      const newIndex = (currentIndex - 1 + tourData.length) % tourData.length;
-      setCurrentIndex(newIndex);
-      
-      // Mark the new first card as sliding in from the left (correct direction)
-      const newFirstCardIndex = newIndex;
-      setSlidingCards(new Map([[newFirstCardIndex, 'in-left']]));
-      
-      setTimeout(() => {
-        setSlidingCards(new Map());
-        setIsAnimating(false);
-      }, 400);
-    }, 300);
-  };
-
-  // Auto-advance carousel every 4 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      slideNext();
-    }, 4000);
-
+    const interval = setInterval(slideNext, 4000);
     return () => clearInterval(interval);
-  }, [isAnimating]);
+  }, []);
 
-  const handleCardClick = (dataIndex) => {
-    if (isAnimating) return;
-    
-    const visibleCards = getVisibleCards();
-    const clickedPosition = visibleCards.indexOf(dataIndex);
-    
-    if (clickedPosition === 2) return; // Already active (center position)
-    
-    // Calculate how many steps to move to center the clicked card
-    const stepsToCenter = clickedPosition - 2;
-    
-    if (stepsToCenter < 0) {
-      // Move backwards
-      for (let i = 0; i < Math.abs(stepsToCenter); i++) {
-        setTimeout(() => slidePrev(), i * 400);
-      }
+  const handleCardClick = (index) => {
+    const visible = visibleCards();
+    const position = visible.indexOf(index);
+    if (position === 1) return; // Center card for 3-card layout
+    const steps = position - 1;
+    if (steps > 0) {
+      for (let i = 0; i < steps; i++) setTimeout(slideNext, i * 200);
     } else {
-      // Move forwards
-      for (let i = 0; i < stepsToCenter; i++) {
-        setTimeout(() => slideNext(), i * 400);
-      }
-    }
-  };
-
-  const handleDotClick = (dotIndex) => {
-    if (isAnimating) return;
-    
-    const visibleCards = getVisibleCards();
-    const targetDataIndex = visibleCards[dotIndex];
-    
-    // If clicking the center dot, do nothing
-    if (dotIndex === 2) return;
-    
-    // Calculate steps needed to center the clicked card
-    const stepsToCenter = dotIndex - 2;
-    
-    if (stepsToCenter < 0) {
-      // Need to move left (previous)
-      for (let i = 0; i < Math.abs(stepsToCenter); i++) {
-        setTimeout(() => slidePrev(), i * 450);
-      }
-    } else {
-      // Need to move right (next)
-      for (let i = 0; i < stepsToCenter; i++) {
-        setTimeout(() => slideNext(), i * 450);
-      }
+      for (let i = 0; i < Math.abs(steps); i++) setTimeout(slidePrev, i * 200);
     }
   };
 
   return (
-    <section className="text-center bg-white py-20 px-5 bg-gradient-to-br min-h-[80vh] font-[system-ui,sans-serif] relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-300"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 rounded-full bg-cyan-300"></div>
-        <div className="absolute bottom-20 left-1/4 w-20 h-20 rounded-full bg-blue-400"></div>
-      </div>
-      
-      {/* Header */}
-      <div className="relative z-10 mb-20">
-        <h4 className="text-primary-500 text-2xl mb-4 font-light italic">
-          Wonderful Place For You
-        </h4>
-        <h1 className="text-[#1f2937] text-5xl font-bold tracking-tight">Tour Categories</h1>
-      </div>
-      
-      {/* Cards Container */}
-      <div className="cards relative h-[500px]  mx-auto w-full overflow-hidden flex items-center justify-center">
-        {getVisibleCards().map((dataIndex, position) => {
-          const tour = tourData[dataIndex];
-          const isActive = position === 2; // Center card is active
-          const slideDirection = slidingCards.get(dataIndex);
-          const isSliding = slidingCards.has(dataIndex); 
-          
-          return (
-            <TourCard
-              key={`${dataIndex}-${currentIndex}`} // Updated key to force re-render
-              title={tour.title}
-              image={tour.image}
-              alt={tour.alt}
-              position={position}
-              isActive={isActive}
-              onClick={() => handleCardClick(dataIndex)}
-              isSliding={isSliding}
-              slideDirection={slideDirection}
-            />
-          );
-        })}
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 ">
+      <section className="relative py-10 px-6 text-center">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        {/* Header */}
+        <div className="relative z-10 mb-10">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-slate-200/50 text-slate-600 text-sm font-semibold mb-6 shadow-lg">
+            <svg className="w-4 h-4 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Discover Amazing Places
+          </div>
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 bg-clip-text text-transparent mb-6">
+            Tour Categories
+          </h1>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Embark on extraordinary adventures and create memories that will last a lifetime
+          </p>
+        </div>
 
-      {/* Navigation Dots - styled like the reference
-      <div className="flex justify-center mt-16 space-x-4">
-        {getVisibleCards().map((dataIndex, i) => (
+        {/* Cards carousel - 3 cards */}
+        <div className="relative flex justify-center items-center gap-8 overflow-hidden h-[520px] mb-12">
+          {visibleCards().map((idx, pos) => {
+            const tour = tourData[idx];
+            return (
+              <TourCard
+                key={idx}
+                title={tour.title}
+                image={tour.image}
+                alt={tour.alt}
+                description={tour.description}
+                isActive={pos === 1} // Center card is active in 3-card layout
+                onClick={() => handleCardClick(idx)}
+              />
+            );
+          })}
+        </div>
+
+        {/* Modern navigation */}
+        <div className="flex justify-center items-center gap-8 -mt-10">
           <button
-            key={`dot-${dataIndex}-${i}`}
-            className={`transition-all duration-300 rounded-full border-2 hover:scale-110 cursor-pointer ${
-              i === 2 
-                ? 'w-4 h-4 bg-primary-500 border-primary-500' 
-                : 'w-4 h-4 bg-transparent border-gray-300 hover:border-primary-500 hover:bg-primary-500/20'
-            } ${isAnimating ? 'cursor-not-allowed opacity-50' : ''}`}
-            onClick={() => handleDotClick(i)}
-            disabled={isAnimating}
-            aria-label={`Go to ${tourData[dataIndex].title} tour`}
-            title={`${tourData[dataIndex].title} - Position ${i + 1}`}
-          />
-        ))}
-      </div> */}
-
-      {/* Manual Navigation Controls */}
-      <div className="flex justify-center gap-6 mt-8">
-        <button
-          onClick={slidePrev}
-          disabled={isAnimating}
-          className={`px-8 py-3 bg-primary-500 text-white rounded-full font-medium transition-all duration-300 hover:bg-[#1e3a8a] hover:scale-105 ${
-            isAnimating ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
-          }`}
-          aria-label="Previous tour"
-        >
-          ← Previous
-        </button>
-        <button
-          onClick={slideNext}
-          disabled={isAnimating}
-          className={`px-8 py-3 bg-primary-500 text-white rounded-full font-medium transition-all duration-300 hover:bg-[#1e3a8a] hover:scale-105 ${
-            isAnimating ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
-          }`}
-          aria-label="Next tour"
-        >
-          Next →
-        </button>
-      </div>
-
-      {/* Progress indicator */}
-      <div className="flex justify-center mt-6">
-        <span className="text-sm text-[#6b7280] bg-white/50 px-4 py-2 rounded-full backdrop-blur-sm">
-          Showing {currentIndex + 1}-{((currentIndex + 4) % tourData.length) + 1} of {tourData.length} tours
-        </span>
-      </div>
-    </section>
+            onClick={slidePrev}
+            className="group flex items-center space-x-3 bg-white/80 backdrop-blur-lg border border-slate-200/50 text-slate-700 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:bg-white hover:shadow-xl hover:scale-105 shadow-lg"
+          >
+            <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+            <span>Previous</span>
+          </button>
+          
+          {/* Progress indicator */}
+          <div className="flex space-x-3">
+            {tourData.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`h-3 rounded-full transition-all duration-500 ${
+                  index === currentIndex 
+                    ? 'w-8 bg-gradient-to-r from-emerald-400 to-blue-500 shadow-lg' 
+                    : 'w-3 bg-slate-300 hover:bg-slate-400'
+                }`}
+              />
+            ))}
+          </div>
+          
+          <button
+            onClick={slideNext}
+            className="group flex items-center space-x-3 bg-white/80 backdrop-blur-lg border border-slate-200/50 text-slate-700 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:bg-white hover:shadow-xl hover:scale-105 shadow-lg"
+          >
+            <span>Next</span>
+            <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
+        </div>
+      </section>
+    </div>
   );
 };
 
