@@ -318,9 +318,9 @@ setHighlights(() => {
         if (!formData.name.trim()) newErrors.name = 'Destination name is required';
         if (!formData.country.trim()) newErrors.country = 'Country is required';
 
-        // Main photo validation - require either existing or new
+        // Featured Photo validation - require either existing or new
         if (!existingMainPhoto && !newMainPhoto) {
-            newErrors.mainPhoto = 'Main photo is required';
+            newErrors.mainPhoto = 'Featured Photo is required';
         }
 
         if (newMainPhoto && newMainPhoto.size > 5 * 1024 * 1024) {
@@ -643,21 +643,21 @@ setHighlights(() => {
                                 <div className="space-y-4">
                                     <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Images</h3>
 
-                                    {/* Main Photo */}
+                                    {/* Featured Photo */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             <Camera className="inline mr-1" size={14} />
-                                            Main Photo
+                                            Featured Photo
                                         </label>
 
-                                        {/* Current main photo */}
+                                        {/* Current Featured Photo */}
                                         {existingMainPhoto && !newMainPhoto && (
                                             <div className="mb-3">
-                                                <p className="text-sm text-gray-600 mb-2">Current main photo:</p>
+                                                <p className="text-sm text-gray-600 mb-2">Current Featured Photo:</p>
                                                 <div className="relative">
                                                     <img
                                                         src={destinationService.getFullImageUrl(existingMainPhoto)}
-                                                        alt="Current main photo"
+                                                        alt="Current Featured Photo"
                                                         className="w-full h-48 object-cover rounded-lg border-2 border-gray-300"
                                                     />
                                                     <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
@@ -667,14 +667,14 @@ setHighlights(() => {
                                             </div>
                                         )}
 
-                                        {/* New main photo preview */}
+                                        {/* New Featured Photo preview */}
                                         {newMainPhotoPreview && (
                                             <div className="mb-3">
-                                                <p className="text-sm text-gray-600 mb-2">New main photo:</p>
+                                                <p className="text-sm text-gray-600 mb-2">New Featured Photo:</p>
                                                 <div className="relative">
                                                     <img
                                                         src={newMainPhotoPreview}
-                                                        alt="New main photo preview"
+                                                        alt="New Featured Photo preview"
                                                         className="w-full h-48 object-cover rounded-lg border-2 border-green-300"
                                                     />
                                                     <button
@@ -691,7 +691,7 @@ setHighlights(() => {
                                             </div>
                                         )}
 
-                                        {/* Upload new main photo */}
+                                        {/* Upload new Featured Photo */}
                                         <div className="relative">
                                             <input
                                                 type="file"
@@ -707,7 +707,7 @@ setHighlights(() => {
                                             >
                                                 <div className="text-center">
                                                     <Upload className="mx-auto mb-1" size={20} />
-                                                    {existingMainPhoto ? 'Change main photo' : 'Upload main photo'}
+                                                    {existingMainPhoto ? 'Change Featured Photo' : 'Upload Featured Photo'}
                                                 </div>
                                             </label>
                                             {errors.mainPhoto && <p className="text-red-500 text-xs mt-1">{errors.mainPhoto}</p>}

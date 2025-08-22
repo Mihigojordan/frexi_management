@@ -20,6 +20,7 @@ model Admin {
   adminEmail String?  @unique
   password   String?
   isLocked   Boolean? @default(false)
+  blogs Blog[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -83,12 +84,23 @@ model Tour {
 }
 
 model Partner {
-  id            String   @id @default(cuid())
+  id            String   @id @default(uuid())
   name          String?
   email         String?   @unique
   phone         String?   @unique
   address       String?
   imageUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Blog {
+  id            String   @id @default(uuid())
+  title          String?
+  description      Json // Rich description object
+  imageUrl      String?
+  authorId      String?
+  author       Admin?    @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
