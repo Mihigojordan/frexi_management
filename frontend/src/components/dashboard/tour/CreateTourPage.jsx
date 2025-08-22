@@ -217,7 +217,7 @@ const removeGalleryPreview = (index) => {
     
     if (!formData.name.trim()) newErrors.name = 'Tour name is required';
     if (!formData.country.trim()) newErrors.country = 'Country is required';
-    if (!mainPhoto ) newErrors.mainPhoto = 'Main Photo  is required';
+    if (!mainPhoto ) newErrors.mainPhoto = 'Featured Photo  is required';
     
     if (mainPhoto && mainPhoto.size > 5 * 1024 * 1024  ) newErrors.mainPhoto =  'File size should be less than 5MB';
     if (!formData.description.trim() || formData.description === '<p><br></p>') {
@@ -546,7 +546,7 @@ setGalleryPreviews([]);
                  <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     <Camera className="inline mr-1" size={14} />
-    Main Photo
+    Featured Photo
   </label>
   <div className="relative">
     <input
@@ -561,7 +561,7 @@ setGalleryPreviews([]);
       <div className="relative">
         <img
           src={mainPhotoPreview}
-          alt="Main photo preview"
+          alt="Featured Photo preview"
           className="w-full h-48 object-cover rounded-lg border-2 border-gray-300"
         />
         <button
@@ -584,7 +584,7 @@ setGalleryPreviews([]);
       >
         <div className="text-center">
           <Upload className="mx-auto mb-2" size={24} />
-          Choose main photo
+          Choose Featured Photo
         </div>
       </label>
     )}

@@ -11,7 +11,8 @@ import {
   Handshake,
   User,
   X,
-  UserRoundCog
+  UserRoundCog,
+  LetterTextIcon
 } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -27,6 +28,7 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
     { id: 'destinations', label: 'Destinations', icon: RouteIcon, path: '/admin/dashboard/destinations' },
     { id: 'partner', label: 'Partners', icon: Handshake, path: '/admin/dashboard/partner' },
     { id: 'testimonial', label: 'Testimonials', icon: UserRoundCog, path: '/admin/dashboard/testimonial' },
+    { id: 'testimonial', label: 'Blogs', icon: LetterTextIcon, path: '/admin/dashboard/blogs' },
   
   ];
 

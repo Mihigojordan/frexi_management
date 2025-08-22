@@ -18,6 +18,7 @@ import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
 
 // Static assets
 import logo from "../assets/image/frexilogo.png";
+import ViewBlogPage from "../components/dashboard/blog/ViewMorePage";
 
 // Admin Auth - Lazy loaded
 const AdminLogin = lazy(() => import("../pages/auth/Login"));
@@ -60,6 +61,9 @@ const DestinationViewPage = lazy(() =>
 const HomePage = lazy(() => import("../pages/landing/HomePage"));
 const PartnerManagement = lazy(() =>
   import("../pages/dashboard/PartnerManagement")
+);
+const BlogsManagement = lazy(() =>
+  import("../pages/dashboard/BlogsManagement")
 );
 const TestimonialManagement = lazy(() =>
   import("../pages/dashboard/TestmonialManagement")
@@ -172,6 +176,14 @@ const routes = createBrowserRouter([
               {
                 path: "testimonial",
                 element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "blogs",
+                element: <SuspenseWrapper><BlogsManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "blogs/:id",
+                element: <SuspenseWrapper><ViewBlogPage /></SuspenseWrapper>,
               },
             ],
           },

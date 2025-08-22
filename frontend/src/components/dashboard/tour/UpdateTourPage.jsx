@@ -318,9 +318,9 @@ setHighlights(() => {
         if (!formData.name.trim()) newErrors.name = 'Tour name is required';
         if (!formData.country.trim()) newErrors.country = 'Country is required';
 
-        // Main photo validation - require either existing or new
+        //Featured Photo validation - require either existing or new
         if (!existingMainPhoto && !newMainPhoto) {
-            newErrors.mainPhoto = 'Main photo is required';
+            newErrors.mainPhoto = 'Featured Photo is required';
         }
 
         if (newMainPhoto && newMainPhoto.size > 5 * 1024 * 1024) {
@@ -647,7 +647,7 @@ setHighlights(() => {
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             <Camera className="inline mr-1" size={14} />
-                                            Main Photo
+                                           Featured Photo
                                         </label>
 
                                         {/* Current main photo */}
@@ -670,11 +670,11 @@ setHighlights(() => {
                                         {/* New main photo preview */}
                                         {newMainPhotoPreview && (
                                             <div className="mb-3">
-                                                <p className="text-sm text-gray-600 mb-2">New main photo:</p>
+                                                <p className="text-sm text-gray-600 mb-2">New Featured Photo:</p>
                                                 <div className="relative">
                                                     <img
                                                         src={newMainPhotoPreview}
-                                                        alt="New main photo preview"
+                                                        alt="New Featured Photo preview"
                                                         className="w-full h-48 object-cover rounded-lg border-2 border-green-300"
                                                     />
                                                     <button
@@ -707,7 +707,7 @@ setHighlights(() => {
                                             >
                                                 <div className="text-center">
                                                     <Upload className="mx-auto mb-1" size={20} />
-                                                    {existingMainPhoto ? 'Change main photo' : 'Upload main photo'}
+                                                    {existingMainPhoto ? 'Change Featured Photo' : 'Upload Featured Photo'}
                                                 </div>
                                             </label>
                                             {errors.mainPhoto && <p className="text-red-500 text-xs mt-1">{errors.mainPhoto}</p>}
