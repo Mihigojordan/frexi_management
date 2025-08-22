@@ -8,6 +8,8 @@ import { TourModule } from './modules/tour-managmanr/tour.module';
 import { PartnerModule } from './modules/partner-management/partner.module';
 import { UserModule } from './modules/user-management/user.module';
 import { BlogModule } from './modules/blog-management/blog.module';
+import { ConversationModule } from './modules/conversation-management/conversation.module';
+import { MessageModule } from './modules/message-management/message.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { BlogModule } from './modules/blog-management/blog.module';
     PartnerModule,
     UserModule,
     BlogModule,
+    ConversationModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [],
