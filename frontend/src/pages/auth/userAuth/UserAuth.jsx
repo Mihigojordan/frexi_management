@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, AlertCircle, Phone } from 'lucide-react';
-// Updated import - make sure this path is correct
 import useUserAuth from '../../../context/UserAuthContext';
-import bgimage from "../../../assets/image/gorilla1.jpg"
+import bgimage from '../../../assets/image/gorilla1.jpg';
 import { useLocation, useNavigate } from 'react-router-dom';
-import frexilogo from '../../../../public/frexilogo.png'
+import frexilogo from "../../../assets/image/frexilogo.png"; // Adjust path as needed
 
 export default function FrexiAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,31 +11,43 @@ export default function FrexiAuthPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // Get auth functions from context - add error handling
+  const [tourId, setTourId] = useState(null);
+
   const authContext = useUserAuth();
-  
+
   if (!authContext) {
     return <div>Error: Authentication context not available</div>;
   }
-  
-  const { login, register , isAuthenticated, isLoading: authLoading } = authContext;
 
-    const navigate = useNavigate();
-    const location = useLocation();
+  const { login, register, isAuthenticated, isLoading: authLoading } = authContext;
 
-    // Redirect if already authenticated
-    useEffect(() => {
-      if (isAuthenticated && !authLoading) {
-        const from = location.state?.from?.pathname || "/user/dashboard";
-        navigate(from, { replace: true });
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Read query parameters to set initial isLogin and tourId states
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    const tourIdParam = params.get('tourId');
+    if (tourIdParam) setTourId(tourIdParam);
+    setIsLogin(mode !== 'register');
+  }, [location.search]);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      let from = location.state?.from?.pathname || '/user/dashboard/messages';
+      if (tourId) {
+        from += `?tourId=${tourId}`;
       }
-    }, [isAuthenticated, authLoading, navigate, location]);
-  
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate, location, tourId]);
+
   // Login form data
   const [loginData, setLoginData] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   // Register form data
@@ -45,28 +56,26 @@ export default function FrexiAuthPage() {
     lastName: '',
     email: '',
     password: '',
-    phoneNumber:'',
+    phoneNumber: '',
     confirmPassword: '',
-    agreeToTerms: false
+    agreeToTerms: false,
   });
 
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
-    setLoginData(prev => ({
+    setLoginData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    // Clear error when user starts typing
     if (error) setError('');
   };
 
   const handleRegisterChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setRegisterData(prev => ({
+    setRegisterData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
-    // Clear error when user starts typing
     if (error) setError('');
   };
 
@@ -95,8 +104,8 @@ export default function FrexiAuthPage() {
       setError('Password must be at least 6 characters long');
       return false;
     }
-    if (registerData.password.phoneNumber) {
-      setError('phone number is required ');
+    if (!registerData.phoneNumber) {
+      setError('Phone number is required');
       return false;
     }
     return true;
@@ -116,26 +125,27 @@ export default function FrexiAuthPage() {
 
   const handleLoginSubmit = async (e) => {
     if (e) e.preventDefault();
-    
+
     if (!validateLoginForm()) return;
-    
+
     setIsSubmitting(true);
     setError('');
-    
+
     try {
-      console.log('Attempting login with:', { email: loginData.email }); // Debug log
+      console.log('Attempting login with:', { email: loginData.email });
       const result = await login(loginData);
-      console.log('Login result:', result); // Debug log
-      // Success - user will be redirected by the auth context or parent component
+      console.log('Login result:', result);
       if (result.authenticated) {
-        // Redirect to intended page or dashboard
-        const from = location.state?.from?.pathname || "/user/dashboard";
+        let from = location.state?.from?.pathname || '/user/dashboard/messages';
+        if (tourId) {
+          from += `?tourId=${tourId}`;
+        }
         navigate(from, { replace: true });
       } else {
-        setError({ general: result.message || "Login failed" });
+        setError(result.message || 'Login failed');
       }
     } catch (err) {
-      console.error('Login error:', err); // Debug log
+      console.error('Login error:', err);
       setError(err.message || 'Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -144,42 +154,38 @@ export default function FrexiAuthPage() {
 
   const handleRegisterSubmit = async (e) => {
     if (e) e.preventDefault();
-    
+
     if (!validateRegisterForm()) return;
-    
+
     setIsSubmitting(true);
     setError('');
-    
+
     try {
-      // Prepare data for registration
       const registrationData = {
-        firstName: registerData.firstName,
-        lastName: registerData.lastName,
-        fullName: `${registerData.firstName} ${registerData.lastName}`.trim(),
+        firstname: registerData.firstName,
+        lastname: registerData.lastName,
+        fullname: `${registerData.firstName} ${registerData.lastName}`.trim(),
         email: registerData.email,
         password: registerData.password,
-        phoneNumber:registerData.phoneNumber
+        phoneNumber: registerData.phoneNumber,
       };
-      
-      console.log('Attempting registration with:', { 
-        firstName: registrationData.firstName, 
-        lastName: registrationData.lastName,
-        email: registrationData.email 
-      }); // Debug log
-      
+
+      console.log('Attempting registration with:', registrationData);
+
       const result = await register(registrationData);
-      console.log('Registration result:', result); // Debug log
-      // Success - user will be automatically logged in by the auth context
+      console.log('Registration result:', result);
       if (result.authenticated) {
-        // Redirect to intended page or dashboard
-        const from = location.state?.from?.pathname || "/user/dashboard";
+        let from = location.state?.from?.pathname || '/user/dashboard/messages';
+        if (tourId) {
+          from += `?tourId=${tourId}`;
+        }
         navigate(from, { replace: true });
-        alert('registered successfully')
+        alert('Registered successfully');
       } else {
-        setError({ general: response.message || "register failed" });
+        setError(result.message || 'Registration failed');
       }
     } catch (err) {
-      console.error('Registration error:', err); // Debug log
+      console.error('Registration error:', err);
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -193,25 +199,30 @@ export default function FrexiAuthPage() {
       lastName: '',
       email: '',
       password: '',
-      phoneNumber:'',
+      phoneNumber: '',
       confirmPassword: '',
-      agreeToTerms: false
+      agreeToTerms: false,
     });
   };
 
   const toggleAuthMode = () => {
+    const newMode = !isLogin ? 'login' : 'register';
+    const params = new URLSearchParams(location.search); // Copy current query params
+    params.set('mode', newMode); // Update only the mode
     setIsLogin(!isLogin);
     setError('');
     setShowPassword(false);
     setShowConfirmPassword(false);
     resetForms();
+    // Navigate with preserved query params
+    navigate(`?${params.toString()}`, { replace: true });
   };
 
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Hero Image */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img 
+        <img
           src={bgimage}
           alt="Students collaborating"
           className="absolute inset-0 w-full h-full object-cover"
@@ -224,7 +235,7 @@ export default function FrexiAuthPage() {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="flex items-center justify-end mb-8">
-            <img src={frexilogo} className=' w-20 h-20' alt="" />
+            <img src={frexilogo} className="w-20 h-20" alt="Frexi Logo" />
           </div>
 
           {/* Header */}
@@ -247,10 +258,8 @@ export default function FrexiAuthPage() {
 
           {/* Auth Form */}
           <form onSubmit={isLogin ? handleLoginSubmit : handleRegisterSubmit}>
-            {/* Login Form */}
             {isLogin ? (
               <div className="space-y-4">
-                {/* Email Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-primary-500" />
@@ -266,8 +275,6 @@ export default function FrexiAuthPage() {
                     disabled={isSubmitting}
                   />
                 </div>
-
-                {/* Password Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-primary-500" />
@@ -293,9 +300,7 @@ export default function FrexiAuthPage() {
                 </div>
               </div>
             ) : (
-              /* Register Form */
               <div className="space-y-4">
-                {/* First Name and Last Name */}
                 <div className="flex space-x-4">
                   <div className="flex-1 relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -325,8 +330,6 @@ export default function FrexiAuthPage() {
                     />
                   </div>
                 </div>
-
-                {/* Email Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-primary-500" />
@@ -342,7 +345,6 @@ export default function FrexiAuthPage() {
                     disabled={isSubmitting}
                   />
                 </div>
-                {/* phone Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Phone className="h-5 w-5 text-primary-500" />
@@ -358,8 +360,6 @@ export default function FrexiAuthPage() {
                     disabled={isSubmitting}
                   />
                 </div>
-
-                {/* Password Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-primary-500" />
@@ -383,8 +383,6 @@ export default function FrexiAuthPage() {
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-
-                {/* Confirm Password Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-primary-500" />
@@ -411,30 +409,30 @@ export default function FrexiAuthPage() {
               </div>
             )}
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
               className="w-full bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 disabled:cursor-not-allowed text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 mt-6"
             >
-              {isSubmitting 
-                ? (isLogin ? 'Signing in...' : 'Creating account...') 
-                : (isLogin ? 'Sign In' : 'Create Account')
-              }
+              {isSubmitting
+                ? isLogin
+                  ? 'Signing in...'
+                  : 'Creating account...'
+                : isLogin
+                ? 'Sign In'
+                : 'Create Account'}
             </button>
           </form>
 
-          {/* Divider */}
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-200"></div>
             <span className="px-4 text-sm text-gray-500">or</span>
             <div className="flex-grow h-px bg-gray-200"></div>
           </div>
 
-          {/* Toggle between Login/Register */}
           <div className="text-center">
             <p className="text-gray-600">
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              {isLogin ? "Don't have an account? " : 'Already have an account? '}
               <button
                 type="button"
                 onClick={toggleAuthMode}

@@ -14,11 +14,17 @@ import AuthLayout from "../context/layouts/AuthLayout";
 import DashboardLayout from "../context/layouts/DashboardLayout";
 import FrexiAuthPage from "../pages/auth/userAuth/UserAuth";
 import ProtectPrivateUserRoute from "../components/protectors/ProtectPrivateUserRoute";
-import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
+
 
 // Static assets
 import logo from "../assets/image/frexilogo.png";
 import ViewBlogPage from "../components/dashboard/blog/ViewMorePage";
+import TourPage from "../pages/landing/TourPage";
+import TourDetailsPage from "../pages/landing/TourDetailsPage";
+import UserDashboardLayout from "../context/layouts/UserDashboardLayout";
+import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
+import MessageManagement from "../pages/user-dashboard/MessageManagement";
+import AdminMessageManagement from "../pages/dashboard/MessageManagement";
 
 // Admin Auth - Lazy loaded
 const AdminLogin = lazy(() => import("../pages/auth/Login"));
@@ -109,6 +115,8 @@ const routes = createBrowserRouter([
           { path:'/service', element: <SuspenseWrapper> <ServicePage /> </SuspenseWrapper> },
           { path:'/blogs', element: <SuspenseWrapper> <BlogPage /> </SuspenseWrapper> },
           { path:'/destination', element: <SuspenseWrapper> <DestinationPage /> </SuspenseWrapper> },
+          { path:'/tour', element: <SuspenseWrapper> <TourPage /> </SuspenseWrapper> },
+          { path:'/tour/:id', element: <SuspenseWrapper> <TourDetailsPage /> </SuspenseWrapper> },
           { path:'/contact', element: <SuspenseWrapper> <ContactUsPage /> </SuspenseWrapper> },
         ]
       },
@@ -183,9 +191,14 @@ const routes = createBrowserRouter([
                 element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
               },
               {
+
                 path: "contact-message",
                 element: <SuspenseWrapper><ContactMessageManagement /></SuspenseWrapper>,
               },
+              {
+                path: "messages",
+                element: <SuspenseWrapper><AdminMessageManagement /></SuspenseWrapper>,
+       },
               {
                 path: "blogs",
                 element: <SuspenseWrapper><BlogsManagement /></SuspenseWrapper>,
@@ -214,8 +227,20 @@ const routes = createBrowserRouter([
       },
       {
         path:'dashboard',
-        element:<UserDashboardHome/>
-      }
+        element:<UserDashboardLayout/>,
+        children:[
+          {
+            index:true,
+            element:<SuspenseWrapper><UserDashboardHome/></SuspenseWrapper>
+          },
+          {
+            path:"messages",
+            element: <SuspenseWrapper><MessageManagement /> </SuspenseWrapper>
+          }
+          
+        ]
+      },
+      
     ]
   },
   {

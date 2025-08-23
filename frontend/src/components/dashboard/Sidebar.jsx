@@ -13,7 +13,7 @@ import {
   X,
   UserRoundCog,
   LetterTextIcon,
-  MessageCircleIcon
+  MessageCircle
 } from 'lucide-react';
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -28,9 +28,12 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
     { id: 'tours', label: 'Tours', icon: MapPin, path: '/admin/dashboard/tours' },
     { id: 'destinations', label: 'Destinations', icon: RouteIcon, path: '/admin/dashboard/destinations' },
     { id: 'partner', label: 'Partners', icon: Handshake, path: '/admin/dashboard/partner' },
-    { id: 'testimonial', label: 'Testimonials', icon: UserRoundCog, path: '/admin/dashboard/testimonial' },
+    { id: 'blog', label: 'Testimonials', icon: UserRoundCog, path: '/admin/dashboard/testimonial' },
     { id: 'testimonial', label: 'Blogs', icon: LetterTextIcon, path: '/admin/dashboard/blogs' },
-    { id: 'contact-message', label: 'contact-message', icon: MessageCircleIcon, path: '/admin/dashboard/contact-message' },
+
+    { id: 'contact-message', label: 'contact-message', icon: MessageCircle, path: '/admin/dashboard/contact-message' },
+    {id:'message', label:'Messages', icon: MessageCircle, path:'/admin/dashboard/messages'},
+
   
   ];
 

@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
-import { Eye, EyeOff, MapPin, Plane } from "lucide-react";
-import useAdminAuth from "../../context/AdminAuthContext"; // Adjust import path as needed
+import { Eye, EyeOff, Shield, AlertCircle, ArrowLeft } from "lucide-react";
+import useAdminAuth from "../../context/AdminAuthContext"; 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
@@ -23,39 +24,6 @@ const AdminLogin = () => {
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, authLoading, navigate, location]);
-
-  // Real-time validation functions
-  const validateEmail = (email) => {
-    if (!email) {
-      return "Email is required";
-    }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return "Please enter a valid email address";
-    }
-    return "";
-  };
-
-  const validatePassword = (password) => {
-    if (!password) {
-      return "Password is required";
-    }
-    if (password.length < 6) {
-      return "Password must be at least 6 characters";
-    }
-    return "";
-  };
-
-  // Validate field on change
-  const validateField = (name, value) => {
-    switch (name) {
-      case "email":
-        return validateEmail(value);
-      case "password":
-        return validatePassword(value);
-      default:
-        return "";
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -122,34 +90,23 @@ const AdminLogin = () => {
     setIsLoading(true);
     setErrors({});
     try {
+      console.log("Attempting admin login with:", { email: formData.email });
       const response = await login({
         adminEmail: formData.email,
         password: formData.password,
       });
       if (response.authenticated) {
-        // Redirect to intended page or dashboard
         const from = location.state?.from?.pathname || "/admin/dashboard";
         navigate(from, { replace: true });
       } else {
-        setErrors({ general: response.message || "Login failed" });
+        setError(response.message || "Login failed");
       }
-      // If successful, the auth context will handle the redirect/state update
-    } catch (error) {
-      console.error("Login error:", error);
-      setErrors({
-        general:
-          error.message || "An error occurred during login. Please try again.",
-      });
+    } catch (err) {
+      console.error("Admin login error:", err);
+      setError(err.message || "Login failed. Please try again.");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
-  };
-
-  // Check if form is valid
-  const isFormValid = () => {
-    return (
-      formData.email && formData.password && !errors.email && !errors.password
-    );
   };
 
   return (
