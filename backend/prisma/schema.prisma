@@ -109,6 +109,14 @@ model Blog {
 }
 
 
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
 model Conversation {
   id        String    @id @default(uuid())
   userId    String    @unique

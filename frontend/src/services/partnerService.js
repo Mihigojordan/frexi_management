@@ -18,13 +18,13 @@ class PartnerService {
     async create(partnerData) {
         try {
             const formData = new FormData();
-            
+
             // Append text fields
             if (partnerData.name) formData.append('name', partnerData.name);
             if (partnerData.email) formData.append('email', partnerData.email);
             if (partnerData.phone) formData.append('phone', partnerData.phone);
             if (partnerData.address) formData.append('address', partnerData.address);
-            
+
             // Append file if provided
             if (partnerData.partnerImg) {
                 formData.append('partnerImg', partnerData.partnerImg);
@@ -39,8 +39,8 @@ class PartnerService {
         } catch (error) {
             console.error('Error creating partner:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to create partner';
 
@@ -59,8 +59,8 @@ class PartnerService {
         } catch (error) {
             console.error('Error fetching partners:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to fetch partners';
 
@@ -78,14 +78,14 @@ class PartnerService {
             const response = await api.get(`/partners/${id}`);
             return response.data;
         } catch (error) {
-            if (error.response?.status === 404) {
+            if (error.response.status === 404) {
                 return null; // Partner not found
             }
 
             console.error('Error fetching partner:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to fetch partner';
 
@@ -107,13 +107,13 @@ class PartnerService {
     async update(id, partnerData) {
         try {
             const formData = new FormData();
-            
+
             // Append text fields
             if (partnerData.name !== undefined) formData.append('name', partnerData.name);
             if (partnerData.email !== undefined) formData.append('email', partnerData.email);
             if (partnerData.phone !== undefined) formData.append('phone', partnerData.phone);
             if (partnerData.address !== undefined) formData.append('address', partnerData.address);
-            
+
             // Append file if provided
             if (partnerData.partnerImg) {
                 formData.append('partnerImg', partnerData.partnerImg);
@@ -128,8 +128,8 @@ class PartnerService {
         } catch (error) {
             console.error('Error updating partner:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to update partner';
 
@@ -149,8 +149,8 @@ class PartnerService {
         } catch (error) {
             console.error('Error deleting partner:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to delete partner';
 
@@ -168,14 +168,14 @@ class PartnerService {
             const response = await api.get(`/partners/by-email/${email}`);
             return response.data;
         } catch (error) {
-            if (error.response?.status === 404) {
+            if (error.response.status === 404) {
                 return null; // Partner not found
             }
 
             console.error('Error finding partner by email:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to find partner';
 
@@ -193,14 +193,14 @@ class PartnerService {
             const response = await api.get(`/partners/by-phone/${phone}`);
             return response.data;
         } catch (error) {
-            if (error.response?.status === 404) {
+            if (error.response.status === 404) {
                 return null; // Partner not found
             }
 
             console.error('Error finding partner by phone:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to find partner';
 
@@ -214,13 +214,13 @@ class PartnerService {
      * @returns {string|null} Full image URL or null if no image
      */
     getImageUrl(partner) {
-        if (!partner?.imageUrl) return null;
-        
+        if (!partner.imageUrl) return null;
+
         // If imageUrl is already a full URL, return as is
         if (partner.imageUrl.startsWith('http')) {
             return partner.imageUrl;
         }
-        
+
         // Otherwise, construct the full URL (adjust base URL as needed)
         const baseUrl = API_URL
         return `${baseUrl}/${partner.imageUrl}`;
@@ -250,7 +250,7 @@ class PartnerService {
         }
 
         // Name validation (only required for creation)
-        if (!isUpdate && !partnerData.name?.trim()) {
+        if (!isUpdate && !partnerData.name.trim()) {
             errors.push('Name is required');
         } else if (partnerData.name && partnerData.name.trim().length < 2) {
             errors.push('Name must be at least 2 characters long');
@@ -293,7 +293,7 @@ class PartnerService {
      */
     isValidPhone(phone) {
         // Basic phone validation - allows various international formats
-        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+        const phoneRegex = /^[+]?[0-9\s\-()]{10,}$/;
         return phoneRegex.test(phone);
     }
 
@@ -304,17 +304,17 @@ class PartnerService {
      */
     formatPhone(phone) {
         if (!phone) return '';
-        
+
         // Remove all non-digit characters
         const digits = phone.replace(/\D/g, '');
-        
+
         // Format based on length (assuming US format for 10-11 digits)
         if (digits.length === 10) {
             return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
         } else if (digits.length === 11 && digits[0] === '1') {
             return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
         }
-        
+
         return phone; // Return original if doesn't match expected format
     }
 
@@ -330,8 +330,8 @@ class PartnerService {
         } catch (error) {
             console.error('Error searching partners:', error);
 
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.error ||
+            const errorMessage = error.response.data.message ||
+                error.response.data.error ||
                 error.message ||
                 'Failed to search partners';
 

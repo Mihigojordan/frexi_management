@@ -8,6 +8,7 @@ import { TourModule } from './modules/tour-managmanr/tour.module';
 import { PartnerModule } from './modules/partner-management/partner.module';
 import { UserModule } from './modules/user-management/user.module';
 import { BlogModule } from './modules/blog-management/blog.module';
+import { ContactMessageModule } from './modules/contact-message-management/contact-message.module';
 import { ConversationModule } from './modules/conversation-management/conversation.module';
 import { MessageModule } from './modules/message-management/message.module';
 
@@ -20,6 +21,7 @@ import { MessageModule } from './modules/message-management/message.module';
     TourModule,
     PartnerModule,
     UserModule,
+    ContactMessageModule,
     BlogModule,
     ConversationModule,
     MessageModule,

@@ -15,7 +15,7 @@ import {
   LetterTextIcon,
   MessageCircle
 } from 'lucide-react';
-import { useState, useEffect } from "react";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import useAdminAuth from '../../context/AdminAuthContext';
 
@@ -30,7 +30,10 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
     { id: 'partner', label: 'Partners', icon: Handshake, path: '/admin/dashboard/partner' },
     { id: 'blog', label: 'Testimonials', icon: UserRoundCog, path: '/admin/dashboard/testimonial' },
     { id: 'testimonial', label: 'Blogs', icon: LetterTextIcon, path: '/admin/dashboard/blogs' },
+
+    { id: 'contact-message', label: 'contact-message', icon: MessageCircle, path: '/admin/dashboard/contact-message' },
     {id:'message', label:'Messages', icon: MessageCircle, path:'/admin/dashboard/messages'},
+
   
   ];
 
