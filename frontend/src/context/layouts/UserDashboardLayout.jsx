@@ -8,10 +8,20 @@ import { useSocket, useSocketEvent } from '../SocketContext';
 
 const UserDashboardLayout = () => {
   const { user } = useUserAuth();
-  const { emit, isConnected } = useSocket();
+  const { emit, isConnected,socket} = useSocket();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const hasJoinedRoom = useRef(false);
+  
+  const isOnline = useRef(false);
+  // Join room when user is available and socket is connected
+  useEffect(() => {
+    if (user?.id && isConnected && !isOnline.current) {
+      console.log('Joining room for user:', user.id);
+      emit('goOnline', { userId: user.id });
+      isOnline.current = true;
+    }
+  }, [user?.id, isConnected, emit,socket  ]);
 
   // Join room when user is available and socket is connected
   useEffect(() => {
@@ -26,6 +36,7 @@ const UserDashboardLayout = () => {
   useEffect(() => {
     if (!isConnected) {
       hasJoinedRoom.current = false;
+      isOnline.current = false;
     }
   }, [isConnected]);
 
@@ -34,7 +45,7 @@ const UserDashboardLayout = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="h-screen bg-gray-100 flex">
       {/* Sidebar */}
       <Sidebar />
       
@@ -49,7 +60,7 @@ const UserDashboardLayout = () => {
         </main>
       </div>
 
-      {/* Socket Status Indicator (optional - for debugging) */}
+      {/* Socket Status Indicator (optional - for debugging)
       {import.meta.env.VITE_NODE_ENV === 'development' && (
         <div className={`fixed bottom-4 right-4 px-3 py-2 rounded-full text-sm font-medium ${
           isConnected 
@@ -58,7 +69,7 @@ const UserDashboardLayout = () => {
         }`}>
           {isConnected ? '🟢 Connected' : '🔴 Disconnected'}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

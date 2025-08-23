@@ -74,7 +74,7 @@ const TravelLandingPage = () => {
   };
 
   return (
-    <div className="relative h-[550px] overflow-hidden">
+    <div className="relative min-h-[550px] overflow-hidden">
       {/* Slideshow Background */}
       <div className="absolute inset-0 ">
         {slides.map((slide, index) => (

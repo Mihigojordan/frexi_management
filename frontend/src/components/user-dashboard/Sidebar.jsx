@@ -10,9 +10,9 @@ const Sidebar = ({ user }) => {
   const navigation = [
     { name: 'Dashboard', id: 'dashboard', icon: Home, path: '/user/dashboard' },
     { name: 'Messages', id: 'messages', icon: MessageCircle, path: '/user/dashboard/messages' },
-    { name: 'My Bookings', id: 'bookings', icon: Calendar, path: '/user/dashboard/bookings' },
-    { name: 'Tours', id: 'tours', icon: MapPin, path: '/user/dashboard/tours' },
-    { name: 'Payments', id: 'payments', icon: CreditCard, path: '/user/dashboard/payments' },
+    // { name: 'My Bookings', id: 'bookings', icon: Calendar, path: '/user/dashboard/bookings' },
+    // { name: 'Tours', id: 'tours', icon: MapPin, path: '/user/dashboard/tours' },
+    // { name: 'Payments', id: 'payments', icon: CreditCard, path: '/user/dashboard/payments' },
   ];
 
   return (
