@@ -12,9 +12,10 @@ import {
   User,
   X,
   UserRoundCog,
-  LetterTextIcon
+  LetterTextIcon,
+  MessageCircleIcon
 } from 'lucide-react';
-import { useState, useEffect } from "react";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import useAdminAuth from '../../context/AdminAuthContext';
 
@@ -29,6 +30,7 @@ const Sidebar = ({ isOpen = true, onToggle }) => {
     { id: 'partner', label: 'Partners', icon: Handshake, path: '/admin/dashboard/partner' },
     { id: 'testimonial', label: 'Testimonials', icon: UserRoundCog, path: '/admin/dashboard/testimonial' },
     { id: 'testimonial', label: 'Blogs', icon: LetterTextIcon, path: '/admin/dashboard/blogs' },
+    { id: 'contact-message', label: 'contact-message', icon: MessageCircleIcon, path: '/admin/dashboard/contact-message' },
   
   ];
 

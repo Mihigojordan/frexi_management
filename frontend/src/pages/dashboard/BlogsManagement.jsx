@@ -32,14 +32,14 @@ const BlogManagement = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [, setIsViewModalOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [notification, setNotification] = useState(null);
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage,] = useState(5);
 
   const navigate = useNavigate();
 
@@ -214,13 +214,6 @@ const BlogManagement = () => {
     setSelectedBlog(null);
   };
 
-  // Helper function to truncate text
-  const truncateText = (text, maxLength = 100) => {
-    if (!text) return "No description";
-    if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + "...";
-  };
-
   // Pagination Component
   const PaginationComponent = () => (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-gray-200 bg-gray-50">
@@ -286,7 +279,7 @@ const BlogManagement = () => {
   const CardView = () => (
     <div className="md:hidden">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {currentItems.map((blog, index) => (
+        {currentItems.map((blog) => (
           <div
             key={blog.id}
             className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"

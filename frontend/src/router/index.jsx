@@ -68,6 +68,9 @@ const BlogsManagement = lazy(() =>
 const TestimonialManagement = lazy(() =>
   import("../pages/dashboard/TestmonialManagement")
 );
+const ContactMessageManagement = lazy(() =>
+  import("../pages/dashboard/ContactMessageManagement")
+);
 const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
 const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
 const ServicePage = lazy(() => import("../pages/landing/ServicePage"));
@@ -178,6 +181,10 @@ const routes = createBrowserRouter([
               {
                 path: "testimonial",
                 element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "contact-message",
+                element: <SuspenseWrapper><ContactMessageManagement /></SuspenseWrapper>,
               },
               {
                 path: "blogs",
