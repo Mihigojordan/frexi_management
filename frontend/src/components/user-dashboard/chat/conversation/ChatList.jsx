@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Conversation from './Conversation'
+import { useSocketEvent } from '../../../../context/SocketContext';
 
-const ChatList = ({ handleChatSelect , chats, activeChat }) => {
+const ChatList = ({ handleChatSelect , chats, activeChat, isOnline }) => {
+
   return (
     <div>
       <div className="w-96 border-r bg-white flex flex-col">
@@ -12,7 +14,7 @@ const ChatList = ({ handleChatSelect , chats, activeChat }) => {
 
                 <div className="flex-1  overflow-y-auto">
                     {chats.map((chat) => (
-                       <Conversation key={chat.id} activeChat={activeChat} handleChatSelect={handleChatSelect} chat={chat} />
+                       <Conversation key={chat.id} isOnline={isOnline} activeChat={activeChat} handleChatSelect={handleChatSelect} chat={chat} />
                     ))}
                 </div>
             </div>

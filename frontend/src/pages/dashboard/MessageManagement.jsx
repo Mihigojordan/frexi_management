@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ChatList from '../../components/dashboard/chat/conversation/ChatList'; // Admin version
 import ChatMessages from '../../components/dashboard/chat/message/ChatMessages'; // Admin version
 import conversationService from '../../services/conversationService';
+import messageService from '../../services/messageService'; // Import the message service
 import { useSocket, useSocketEvent } from '../../context/SocketContext';
 
 const AdminMessageManagement = () => {
@@ -17,12 +18,18 @@ const AdminMessageManagement = () => {
     const [conversationsFetched, setConversationsFetched] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredConversations, setFilteredConversations] = useState([]);
+
+    const [onlineUsers, setOnlineUsers] = useState([]);
     
     const messagesEndRef = useRef(null);
     const { user: currentAdmin } = useAdminAuth();
     const { emit, isConnected } = useSocket();
     const location = useLocation();
     const navigate = useNavigate();
+
+    const [selectedImage, setSelectedImage] = useState(null);
+const [imagePreview, setImagePreview] = useState(null);
+const fileInputRef = useRef(null);
 
     // Helper function to sort messages by createdAt
     const sortMessagesByCreatedAt = (messages) => {
@@ -63,7 +70,18 @@ const AdminMessageManagement = () => {
           hasJoinedRoom.current = false;
         }
       }, [isConnected]);
-    
+
+      // Listen for online users updates
+useSocketEvent('onlineUsers', (data) => {
+    console.log('Online users updated:', data.onlineUsers);
+    setOnlineUsers(data.onlineUsers || []);
+}, []);
+
+// Listen for user going offline
+useSocketEvent('userOffline', (data) => {
+    console.log('User went offline:', data.userId);
+    setOnlineUsers(prevUsers => prevUsers.filter(userId => userId !== data.userId));
+}, []);
 
     // Listen for real-time messages from all conversations
     useSocketEvent('newMessage', (data) => {
@@ -224,134 +242,223 @@ const AdminMessageManagement = () => {
         }
     }, [location.search, conversations, activeChat, navigate]);
 
-    // Send message function with admin-specific data
-    const sendMessage = useCallback(async () => {
-        if (!message.trim() || !activeChat || !currentAdmin?.id || !isConnected) {
-            if (!isConnected) {
-                setError('Not connected to server. Please check your connection.');
-            }
+    // Handle image selection
+const handleImageSelect = useCallback((event) => {
+    const file = event.target.files[0];
+    if (file) {
+        // Check file size (e.g., 5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+            setError('Image size should be less than 5MB');
             return;
         }
+        
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            setError('Please select a valid image file');
+            return;
+        }
+        
+        setSelectedImage(file);
+        
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => setImagePreview(e.target.result);
+        reader.readAsDataURL(file);
+    }
+}, []);
 
-        const messageText = message.trim();
-        const tempId = `temp-${Date.now()}`;
+// Remove selected image
+const removeSelectedImage = useCallback(() => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
+}, []);
 
-        // Create optimistic message for immediate UI update
-        const optimisticMessage = {
-            id: tempId,
-            senderId: currentAdmin.id,
-            senderAdminId: currentAdmin.id,
-            senderType: 'ADMIN',
-            text: messageText,
-            createdAt: new Date(),
-            conversationId: activeChat.id,
-            // Add sender admin data for UI
-            senderAdmin: {
-                id: currentAdmin.id,
-                names: currentAdmin.adminName,
-                email: currentAdmin.adminEmail,
+const handleUpdateConversation = (updatedConversation)=>{
+    if(!updatedConversation) return
+       // Sort messages in the updated conversation
+            const sortedMessages = sortMessagesByCreatedAt(updatedConversation.messages || []);
+            
+            // Update conversations list with new message
+            setConversations(prevConversations => {
+                const updatedConversations = prevConversations.map(conv => 
+                    conv.id === updatedConversation.id 
+                        ? {
+                            ...conv,
+                            messages: sortedMessages,
+                            lastMessage: sortedMessages[sortedMessages.length - 1]?.text || '',
+                            updatedAt: new Date(),
+                            // Mark as unread if not the active chat and message is from user
+                            unreadCount: conv.id !== activeChat?.id && 
+                                        sortedMessages[sortedMessages.length - 1]?.senderType === 'USER'
+                                        ? (conv.unreadCount || 0) + 1 
+                                        : conv.unreadCount || 0
+                        }
+                        : conv
+                );
+                
+                // Resort conversations by activity
+                return sortConversationsByActivity(updatedConversations);
+
+    })
+
+
+      // Update active chat if it matches
+            if (activeChat?.id === updatedConversation.id) {
+                setActiveChat(prevChat => ({
+                    ...prevChat,
+                    messages: sortedMessages,
+                    unreadCount: 0 // Reset unread count when viewing
+                }));
             }
+}
+
+// Send message function with messageService instead of socket emit
+const sendMessage = useCallback(async () => {
+    if ((!message.trim() && !selectedImage) || !activeChat || !currentAdmin?.id) {
+        return;
+    }
+
+    const messageText = message.trim();
+    const tempId = `temp-${Date.now()}`;
+
+    // Create optimistic message for immediate UI update
+    const optimisticMessage = {
+        id: tempId,
+        senderId: currentAdmin.id,
+        senderAdminId: currentAdmin.id,
+        senderType: 'ADMIN',
+        text: messageText,
+        createdAt: new Date(),
+        conversationId: activeChat.id,
+        // Add sender admin data for UI
+        senderAdmin: {
+            id: currentAdmin.id,
+            names: currentAdmin.adminName,
+            email: currentAdmin.adminEmail,
+        }
+    };
+
+    try {
+        setSendingMessage(true);
+        setError(null);
+        console.warn('BEFORE SENDING - Image:', selectedImage);
+
+        // Optimistically update UI with sorted messages
+        setConversations((prevConversations) =>
+            prevConversations.map((conv) =>
+                conv.id === activeChat.id
+                    ? {
+                        ...conv,
+                        messages: sortMessagesByCreatedAt([...(conv.messages || []), optimisticMessage]),
+                        lastMessage: messageText,
+                        updatedAt: new Date(),
+                    }
+                    : conv
+            )
+        );
+
+        setActiveChat((prevChat) => ({
+            ...prevChat,
+            messages: sortMessagesByCreatedAt([...(prevChat.messages || []), optimisticMessage]),
+        }));
+
+        // Clear message input immediately (but keep the image until after sending)
+        setMessage('');
+
+        // Send message via messageService with optional image
+        const messageData = {
+            conversationId: activeChat.id,
+            senderType: 'ADMIN',
+            senderAdminId: currentAdmin.id,
+            text: messageText
         };
 
-        try {
-            setSendingMessage(true);
-            setError(null);
+        const response = await messageService.sendMessage(messageData, selectedImage);
+        console.log('Message sent successfully:', response);
 
-            // Optimistically update UI with sorted messages
-            setConversations((prevConversations) =>
-                prevConversations.map((conv) =>
-                    conv.id === activeChat.id
-                        ? {
-                            ...conv,
-                            messages: sortMessagesByCreatedAt([...(conv.messages || []), optimisticMessage]),
-                            lastMessage: messageText,
-                            updatedAt: new Date(),
-                        }
-                        : conv
-                )
-            );
+        
 
-            setActiveChat((prevChat) => ({
-                ...prevChat,
-                messages: sortMessagesByCreatedAt([...(prevChat.messages || []), optimisticMessage]),
-            }));
-
-            // Clear message input immediately
-            setMessage('');
-
-            // Send message via socket with admin-specific data
-            const messageData = {
-                conversationId: activeChat.id,
-                senderType: 'ADMIN',
-                senderAdminId: currentAdmin.id,
-                text: messageText
-            };
-
-            emit('sendMessage', messageData, (response) => {
-                // Handle socket response if needed
-                if (response?.error) {
-                    console.error('Message sending failed:', response.error);
-                    setError('Failed to send message. Please try again.');
-                    
-                    // Remove optimistic message on error
-                    setConversations((prevConversations) =>
-                        prevConversations.map((conv) =>
-                            conv.id === activeChat.id
-                                ? {
-                                    ...conv,
-                                    messages: sortMessagesByCreatedAt(
-                                        conv.messages.filter(msg => msg.id !== tempId)
-                                    ),
-                                }
-                                : conv
-                        )
-                    );
-                    
-                    setActiveChat((prevChat) => ({
-                        ...prevChat,
-                        messages: sortMessagesByCreatedAt(
-                            prevChat.messages.filter(msg => msg.id !== tempId)
-                        ),
-                    }));
-                    
-                    // Restore message in input
-                    setMessage(messageText);
-                } else {
-                    console.log('Admin message sent successfully');
-                }
-            });
-
-        } catch (err) {
-            console.error('Error sending message:', err);
-            setError('Failed to send message. Please try again.');
+         const updatedConversation = response.conversation;
+         handleUpdateConversation(updatedConversation)
             
-            // Remove optimistic message on error
-            setConversations((prevConversations) =>
-                prevConversations.map((conv) =>
-                    conv.id === activeChat.id
-                        ? {
-                            ...conv,
-                            messages: sortMessagesByCreatedAt(
-                                conv.messages.filter(msg => msg.id !== tempId)
-                            ),
-                        }
-                        : conv
-                )
-            );
-            
-            setActiveChat((prevChat) => ({
-                ...prevChat,
-                messages: sortMessagesByCreatedAt(
-                    prevChat.messages.filter(msg => msg.id !== tempId)
-                ),
-            }));
-            
-            // Restore message in input
-            setMessage(messageText);
-        } finally {
-            setSendingMessage(false);
+         
+        // Clear image ONLY after successful send
+        if (selectedImage) {
+            removeSelectedImage();
         }
-    }, [message, activeChat, currentAdmin?.id, isConnected, emit]);
+
+        emit('sendMessage', {conversation: response.conversation}, (socketResponse) => {
+            // Handle socket response if needed
+            if (socketResponse?.error) {
+                console.error('Message sending failed:', socketResponse.error);
+                setError('Failed to send message. Please try again.');
+                
+                // Remove optimistic message on error
+                setConversations((prevConversations) =>
+                    prevConversations.map((conv) =>
+                        conv.id === activeChat.id
+                            ? {
+                                ...conv,
+                                messages: sortMessagesByCreatedAt(
+                                    conv.messages.filter(msg => msg.id !== tempId)
+                                ),
+                            }
+                            : conv
+                    )
+                );
+                
+                setActiveChat((prevChat) => ({
+                    ...prevChat,
+                    messages: sortMessagesByCreatedAt(
+                        prevChat.messages.filter(msg => msg.id !== tempId)
+                    ),
+                }));
+                
+                // Restore message in input on error
+                setMessage(messageText);
+            } else {
+                console.log('Admin message sent successfully');
+            }
+        });
+
+        console.log('Admin message sent successfully:', response);
+
+    } catch (err) {
+        console.error('Error sending message:', err);
+        setError('Failed to send message. Please try again.');
+        
+        // Remove optimistic message on error
+        setConversations((prevConversations) =>
+            prevConversations.map((conv) =>
+                conv.id === activeChat.id
+                    ? {
+                        ...conv,
+                        messages: sortMessagesByCreatedAt(
+                            conv.messages.filter(msg => msg.id !== tempId)
+                        ),
+                    }
+                    : conv
+            )
+        );
+        
+        setActiveChat((prevChat) => ({
+            ...prevChat,
+            messages: sortMessagesByCreatedAt(
+                prevChat.messages.filter(msg => msg.id !== tempId)
+            ),
+        }));
+        
+        // Restore message in input on error
+        setMessage(messageText);
+        
+        // Don't clear image on error so user can retry
+    } finally {
+        setSendingMessage(false);
+    }
+}, [message, selectedImage, activeChat, currentAdmin?.id, removeSelectedImage, emit, sortMessagesByCreatedAt]);
 
     // Auto-scroll to bottom when messages change
     useEffect(() => {
@@ -427,6 +534,7 @@ const AdminMessageManagement = () => {
                         Dismiss
                     </button>
                 </div>
+            // </div>
             )}
 
             {/* Conversations List */}
@@ -472,30 +580,40 @@ const AdminMessageManagement = () => {
                                 }`}
                             >
                                 <div className="flex items-center space-x-3">
-                                    <div className="relative">
-                                        {conversation.user?.profilePicture ? (
-                                            <img
-                                                src={conversation.user.profilePicture}
-                                                alt={`${conversation.user.firstName} ${conversation.user.lastName}`}
-                                                className="w-10 h-10 rounded-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                                <User className="h-5 w-5 text-gray-600" />
-                                            </div>
-                                        )}
-                                        {(conversation.unreadCount || 0) > 0 && (
-                                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                                                {conversation.unreadCount}
-                                            </span>
-                                        )}
-                                    </div>
-                                    
+    <div className="relative">
+        {conversation.user?.profilePicture ? (
+            <img
+                src={conversation.user.profilePicture}
+                alt={`${conversation.user.firstName} ${conversation.user.lastName}`}
+                className="w-10 h-10 rounded-full object-cover"
+            />
+        ) : (
+            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                <User className="h-5 w-5 text-gray-600" />
+            </div>
+        )}
+        
+        {/* Online status indicator */}
+        {onlineUsers.includes(conversation.user?.id) && (
+            <div className="absolute -bottom-0 -right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+        )}
+        
+        {(conversation.unreadCount || 0) > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                {conversation.unreadCount}
+            </span>
+        )}
+    </div>    
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start">
-                                            <p className="font-medium text-gray-900 truncate">
-                                                                              <span className="font-medium text-gray-900">{conversation?.user.firstname} {conversation?.user.lastname} {(!conversation?.user.lastname || !conversation?.user.firstname )&& conversation.user.email} </span>
-                                            </p>
+                                            <p className="font-medium text-gray-900 truncate flex items-center">
+    <span className="font-medium text-gray-900">
+        {conversation?.user.firstname} {conversation?.user.lastname} {(!conversation?.user.lastname || !conversation?.user.firstname) && conversation.user.email}
+    </span>
+    {onlineUsers.includes(conversation.user?.id) && (
+        <span className="ml-2 text-xs text-green-600 font-medium">● Online</span>
+    )}
+</p>
                                             <span className="text-xs text-gray-500 ml-2">
                                                 {new Date(conversation.updatedAt || conversation.createdAt).toLocaleDateString()}
                                             </span>
@@ -513,24 +631,24 @@ const AdminMessageManagement = () => {
             </div>
 
             {/* Chat Messages */}
-            <ChatMessages
-                activeChat={activeChat}
-                message={message}
-                messagesEndRef={messagesEndRef}
-                sendMessage={sendMessage}
-                setMessage={setMessage}
-                user={currentAdmin}
-                userType="ADMIN"
-                onKeyPress={handleKeyPress}
-                loading={loading || sendingMessage}
-                isConnected={isConnected}
-                disabled={!isConnected || sendingMessage}
-                placeholder={
-                    activeChat 
-                        ? `Message ${activeChat.user?.firstName} ${activeChat.user?.lastName}...`
-                        : 'Select a conversation to start messaging...'
-                }
-            />
+<ChatMessages
+    activeChat={activeChat}
+    message={message}
+    messagesEndRef={messagesEndRef}
+    sendMessage={sendMessage}
+    setMessage={setMessage}
+    user={currentAdmin}
+    onKeyPress={handleKeyPress}
+    loading={loading || sendingMessage}
+    isConnected={isConnected}
+    disabled={sendingMessage}
+    selectedImage={selectedImage}
+    imagePreview={imagePreview}
+    onImageSelect={handleImageSelect}
+    onRemoveImage={removeSelectedImage}
+    fileInputRef={fileInputRef}
+    onlineUsers={onlineUsers}  // Add this line
+/>
         </div>
     );
 };

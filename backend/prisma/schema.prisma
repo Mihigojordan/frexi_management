@@ -138,7 +138,7 @@ model Message {
 
   senderUserId   String?      // set if senderType = USER
   senderUser     User?        @relation(fields: [senderUserId], references: [id])
-
+  imageUrl       String?
   text           String
   createdAt      DateTime     @default(now())
 }

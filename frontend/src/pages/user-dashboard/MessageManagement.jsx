@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ChatList from '../../components/user-dashboard/chat/conversation/ChatList';
 import ChatMessages from '../../components/user-dashboard/chat/message/ChatMessages';
 import conversationService from '../../services/conversationService';
+import messageService from '../../services/messageService'; // Import the message service
 import { useSocket, useSocketEvent } from '../../context/SocketContext'; // Adjust path as needed
 
 const MessageManagement = () => {
@@ -16,13 +17,20 @@ const MessageManagement = () => {
     const [error, setError] = useState(null);
     const [chats, setChats] = useState([]);
     const [conversationFetched, setConversationFetched] = useState(false);
+
+     
+    const [isOnline,setIsOnline] = useState(false)
     
     const messagesEndRef = useRef(null);
     const { user: currentUser } = useUserAuth();
-    const { emit, isConnected } = useSocket();
+    const { isConnected ,emit} = useSocket(); // Removed emit since we're using the service
     const location = useLocation();
     const navigate = useNavigate();
 
+
+    const [selectedImage, setSelectedImage] = useState(null);
+const [imagePreview, setImagePreview] = useState(null);
+const fileInputRef = useRef(null);
     // Helper function to sort messages by createdAt
     const sortMessagesByCreatedAt = (messages) => {
         if (!messages || !Array.isArray(messages)) return [];
@@ -86,14 +94,7 @@ const MessageManagement = () => {
     const buildBookingMessage = useCallback((tour) => {
         return `
 Hello Admin 👋,  
-I would like to book a tour.
-
-📍 **Tour Name**: ${tour.name}  
-🌍 **Country**: ${tour.country}${tour.city ? `, ${tour.city}` : ''}  
-💰 **Estimated Budget**: ${tour.estimatedBudget ? `$${tour.estimatedBudget}` : 'N/A'}  
-💳 **Currency Used**: ${tour.currencyUsed || 'N/A'}  
-🛂 **Visa Requirements**: ${tour.visaRequirements || 'N/A'}  
-🗣️ **Language(s)**: ${tour.language || 'N/A'}  
+I would like to book a tour called ${tour.name} .
 
 Could you please share more details about availability, payment, and next steps?  
 Thank you 🙏
@@ -140,6 +141,17 @@ Thank you 🙏
             setLoading(false);
         }
     }, [conversationFetched]);
+
+   
+    
+    useSocketEvent('onlineAdmin', (data) => {
+    setIsOnline(data?.isOnline)
+  },[activeChat?.id]);
+
+
+
+
+
 
     // Fetch tour details for booking
     const fetchTourDetails = useCallback(async (tourId) => {
@@ -227,136 +239,217 @@ Thank you 🙏
         }
     }, [location.search, chats, activeChat, fetchTourDetails, navigate]);
 
-    // Send message function with real-time socket integration
-    const sendMessage = useCallback(async () => {
-        if (!message.trim() || !activeChat || !currentUser?.id || !isConnected) {
-            if (!isConnected) {
-                setError('Not connected to server. Please check your connection.');
-            }
+
+    // Handle image selection
+const handleImageSelect = useCallback((event) => {
+    const file = event.target.files[0];
+    if (file) {
+        // Check file size (e.g., 5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+            setError('Image size should be less than 5MB');
             return;
         }
+        
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            setError('Please select a valid image file');
+            return;
+        }
+        
+        setSelectedImage(file);
+        
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => setImagePreview(e.target.result);
+        reader.readAsDataURL(file);
+    }
+}, []);
 
-        const messageText = message.trim();
-        const tempId = `temp-${Date.now()}`;
+console.log('select images :' , selectedImage);
 
-        // Create optimistic message for immediate UI update
-        const optimisticMessage = {
-            id: tempId,
-            senderId: currentUser.id,
-            senderUserId: currentUser.id,
-            senderType: 'USER',
-            text: messageText,
-            createdAt: new Date(),
-            conversationId: activeChat.id,
-            // Add sender user data for UI
-            senderUser: {
-                id: currentUser.id,
-                firstName: currentUser.firstName,
-                lastName: currentUser.lastName,
-                email: currentUser.email,
-                profilePicture: currentUser.profilePicture
+
+// Remove selected image
+const removeSelectedImage = useCallback(() => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
+}, []);
+
+const handleUpdateConversation = (updatedConversation)=>{
+    if(!updatedConversation) return
+       // Sort messages in the updated conversation
+const sortedMessages = sortMessagesByCreatedAt(updatedConversation.messages || []);
+            
+            // Update chats state with new message
+            setChats(prevChats => {
+                const updatedChats = prevChats.map(chat => 
+                    chat.id === updatedConversation.id 
+                        ? {
+                            ...chat,
+                            messages: sortedMessages,
+                            lastMessage: sortedMessages[sortedMessages.length - 1]?.text || '',
+                            updatedAt: new Date()
+                        }
+                        : chat
+                );
+                
+                // Resort chats by activity
+                return sortChatsByActivity(updatedChats);
+            });
+            
+            // Update active chat if it matches
+            if (activeChat?.id === updatedConversation.id) {
+                setActiveChat(prevChat => ({
+                    ...prevChat,
+                    messages: sortedMessages
+                }));
             }
+        
+}
+
+
+// Send message function with messageService instead of socket emit
+const sendMessage = useCallback(async () => {
+    if ((!message.trim() && !selectedImage) || !activeChat || !currentUser?.id) {
+        return;
+    }
+    
+    const messageText = message.trim();
+    const tempId = `temp-${Date.now()}`;
+
+    // Create optimistic message for immediate UI update
+    const optimisticMessage = {
+        id: tempId,
+        senderId: currentUser.id,
+        senderUserId: currentUser.id,
+        senderType: 'USER',
+        text: messageText,
+        createdAt: new Date(),
+        conversationId: activeChat.id,
+        // Add sender user data for UI
+        senderUser: {
+            id: currentUser.id,
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            email: currentUser.email,
+            profilePicture: currentUser.profilePicture
+        }
+    };
+
+    try {
+        setSendingMessage(true);
+        setError(null);
+        console.warn('BEFORE SENDING - Image:', selectedImage);
+
+        // Optimistically update UI with sorted messages
+        setChats((prevChats) =>
+            prevChats.map((chat) =>
+                chat.id === activeChat.id
+                    ? {
+                        ...chat,
+                        messages: sortMessagesByCreatedAt([...(chat.messages || []), optimisticMessage]),
+                        lastMessage: messageText,
+                        updatedAt: new Date(),
+                    }
+                    : chat
+            )
+        );
+
+        setActiveChat((prevChat) => ({
+            ...prevChat,
+            messages: sortMessagesByCreatedAt([...(prevChat.messages || []), optimisticMessage]),
+        }));
+
+        // Clear message input immediately (but keep the image until after sending)
+        setMessage('');
+
+        // Send message via messageService with optional image
+        const messageData = {
+            conversationId: activeChat.id,
+            senderType: 'USER',
+            senderUserId: currentUser.id,
+            text: messageText
         };
 
-        try {
-            setSendingMessage(true);
-            setError(null);
+        const response = await messageService.sendMessage(messageData, selectedImage);
+        console.log('Message sent successfully:', response);
+        const  updatedConversation  = response.conversation
+        handleUpdateConversation(updatedConversation)
 
-            // Optimistically update UI with sorted messages
-            setChats((prevChats) =>
-                prevChats.map((chat) =>
-                    chat.id === activeChat.id
-                        ? {
-                            ...chat,
-                            messages: sortMessagesByCreatedAt([...(chat.messages || []), optimisticMessage]),
-                            lastMessage: messageText,
-                            updatedAt: new Date(),
-                        }
-                        : chat
-                )
-            );
-
-            setActiveChat((prevChat) => ({
-                ...prevChat,
-                messages: sortMessagesByCreatedAt([...(prevChat.messages || []), optimisticMessage]),
-            }));
-
-            // Clear message input immediately
-            setMessage('');
-
-            // Send message via socket
-            const messageData = {
-                conversationId: activeChat.id,
-                senderType: 'USER',
-                senderUserId: currentUser.id,
-                text: messageText
-            };
-
-            emit('sendMessage', messageData, (response) => {
-                // Handle socket response if needed
-                if (response?.error) {
-                    console.error('Message sending failed:', response.error);
-                    setError('Failed to send message. Please try again.');
-                    
-                    // Remove optimistic message on error
-                    setChats((prevChats) =>
-                        prevChats.map((chat) =>
-                            chat.id === activeChat.id
-                                ? {
-                                    ...chat,
-                                    messages: sortMessagesByCreatedAt(
-                                        chat.messages.filter(msg => msg.id !== tempId)
-                                    ),
-                                }
-                                : chat
-                        )
-                    );
-                    
-                    setActiveChat((prevChat) => ({
-                        ...prevChat,
-                        messages: sortMessagesByCreatedAt(
-                            prevChat.messages.filter(msg => msg.id !== tempId)
-                        ),
-                    }));
-                    
-                    // Restore message in input
-                    setMessage(messageText);
-                } else {
-                    console.log('Message sent successfully');
-                }
-            });
-
-        } catch (err) {
-            console.error('Error sending message:', err);
-            setError('Failed to send message. Please try again.');
-            
-            // Remove optimistic message on error
-            setChats((prevChats) =>
-                prevChats.map((chat) =>
-                    chat.id === activeChat.id
-                        ? {
-                            ...chat,
-                            messages: sortMessagesByCreatedAt(
-                                chat.messages.filter(msg => msg.id !== tempId)
-                            ),
-                        }
-                        : chat
-                )
-            );
-            
-            setActiveChat((prevChat) => ({
-                ...prevChat,
-                messages: sortMessagesByCreatedAt(
-                    prevChat.messages.filter(msg => msg.id !== tempId)
-                ),
-            }));
-            
-            // Restore message in input
-            setMessage(messageText);
-        } finally {
-            setSendingMessage(false);
+        // Clear image ONLY after successful send
+        if (selectedImage) {
+            removeSelectedImage();
         }
-    }, [message, activeChat, currentUser?.id, isConnected, emit]);
+
+        emit('sendMessage', {conversation: response.conversation || activeChat}, (response) => {
+            // Handle socket response if needed
+            if (response?.error) {
+                console.error('Message sending failed:', response.error);
+                setError('Failed to send message. Please try again.');
+                
+                // Remove optimistic message on error
+                setChats((prevChats) =>
+                    prevChats.map((chat) =>
+                        chat.id === activeChat.id
+                            ? {
+                                ...chat,
+                                messages: sortMessagesByCreatedAt(
+                                    chat.messages.filter(msg => msg.id !== tempId)
+                                ),
+                            }
+                            : chat
+                    )
+                );
+                
+                setActiveChat((prevChat) => ({
+                    ...prevChat,
+                    messages: sortMessagesByCreatedAt(
+                        prevChat.messages.filter(msg => msg.id !== tempId)
+                    ),
+                }));
+                
+                // Restore message in input on error
+                setMessage(messageText);
+            } else {
+                console.log('Message sent successfully');
+            }
+        });
+
+    } catch (err) {
+        console.error('Error sending message:', err);
+        setError('Failed to send message. Please try again.');
+        
+        // Remove optimistic message on error
+        setChats((prevChats) =>
+            prevChats.map((chat) =>
+                chat.id === activeChat.id
+                    ? {
+                        ...chat,
+                        messages: sortMessagesByCreatedAt(
+                            chat.messages.filter(msg => msg.id !== tempId)
+                        ),
+                    }
+                    : chat
+            )
+        );
+        
+        setActiveChat((prevChat) => ({
+            ...prevChat,
+            messages: sortMessagesByCreatedAt(
+                prevChat.messages.filter(msg => msg.id !== tempId)
+            ),
+        }));
+        
+        // Restore message in input on error
+        setMessage(messageText);
+        
+        // Don't clear image on error so user can retry
+    } finally {
+        setSendingMessage(false);
+    }
+}, [message, selectedImage, activeChat, currentUser?.id, removeSelectedImage, emit]);;
     
     console.log('current chat', activeChat);
 
@@ -374,6 +467,8 @@ Thank you 🙏
             sendMessage();
         }
     }, [sendMessage]);
+
+    
 
     // Loading state
     if (loading && chats.length === 0) {
@@ -431,29 +526,38 @@ Thank you 🙏
                         Dismiss
                     </button>
                 </div>
+            // </div>
             )}
 
             {/* Chat List */}
             <ChatList 
                 handleChatSelect={handleChatSelect} 
                 chats={chats}
+                isOnline={isOnline}
                 activeChat={activeChat}
                 loading={loading}
             />
 
             {/* Chat Messages */}
             <ChatMessages
-                activeChat={activeChat}
-                message={message}
-                messagesEndRef={messagesEndRef}
-                sendMessage={sendMessage}
-                setMessage={setMessage}
-                user={currentUser}
-                onKeyPress={handleKeyPress}
-                loading={loading || sendingMessage}
-                isConnected={isConnected}
-                disabled={!isConnected || sendingMessage}
-            />
+    activeChat={activeChat}
+    message={message}
+    messagesEndRef={messagesEndRef}
+    sendMessage={sendMessage}
+    setMessage={setMessage}
+    user={currentUser}
+    onKeyPress={handleKeyPress}
+    loading={loading || sendingMessage}
+    isConnected={isConnected}
+    disabled={sendingMessage}
+    // Add these new props
+    isOnline={isOnline}
+    selectedImage={selectedImage}
+    imagePreview={imagePreview}
+    onImageSelect={handleImageSelect}
+    onRemoveImage={removeSelectedImage}
+    fileInputRef={fileInputRef}
+/>
         </div>
     );
 };

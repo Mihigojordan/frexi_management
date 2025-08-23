@@ -16,6 +16,7 @@ export class MessageService {
     senderAdminId?: string;
     senderUserId?: string;
     text: string;
+    imageUrl?:string;
   }) {
      console.log(data);
         
@@ -26,6 +27,7 @@ export class MessageService {
         senderAdminId: data.senderAdminId,
         senderUserId: data.senderUserId,
         text: data.text,
+        imageUrl: data?.imageUrl
       },
     });
   }
