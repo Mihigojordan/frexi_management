@@ -26,7 +26,7 @@ const Conversation = ({ handleChatSelect, chat, activeChat }) => {
                 <div className="flex items-center">
                     <span className="text-lg mr-3">{'👨‍💼'}</span>
                     <div>
-                        <span className="font-medium text-gray-900">{'Frexi Admin'}</span>
+                        <span className="font-medium text-gray-900">{chat.user.firstname} {chat.user.lastname} </span>
                     </div>
                 </div>
                 <div className="text-right">

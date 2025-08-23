@@ -17,6 +17,8 @@ export class MessageService {
     senderUserId?: string;
     text: string;
   }) {
+     console.log(data);
+        
     return this.prisma.message.create({
       data: {
         conversationId: data.conversationId,

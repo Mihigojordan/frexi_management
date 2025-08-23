@@ -20,7 +20,7 @@ const ChatMessages = ({setMessage,message,activeChat, messagesEndRef, sendMessag
                         <div className="flex items-center">
                             <span className="text-lg mr-3">{'👨‍💼'}</span>
                             <div>
-                                <span className="font-medium text-gray-900">{'Frexi Admin'}</span>
+                                <span className="font-medium text-gray-900">{activeChat?.user.firstname} {activeChat?.user.lastname} {(!activeChat?.user.lastname || !activeChat?.user.firstname )&& activeChat.user.email} </span>
                                 {/* <p className="text-sm text-primary-600">Online</p> */}
                             </div>
                         </div>
@@ -36,7 +36,7 @@ const ChatMessages = ({setMessage,message,activeChat, messagesEndRef, sendMessag
                             </div>
                         ) : (
                             activeChat.messages.map((msg) => (
-                                <Message key={msg.id} msg={msg} isOwnMessage={msg?.senderUserId === user.id} />
+                                <Message key={msg.id} msg={msg} isOwnMessage={msg?.senderAdminId === user.id} />
                                 
                             ))
                         )}

@@ -26,10 +26,12 @@ const Message = ({ msg ,isOwnMessage }) => {
                     }`}
             >
                 <p className="text-sm whitespace-pre-line">{msg?.text}</p>
+                
                 <span
                     className={`text-xs ${isOwnMessage ? 'text-primary-200' : 'text-gray-500'
                         } block mt-1`}
                 >
+                  
                     {formatTime(msg?.createdAt)}
                 </span>
             </div>

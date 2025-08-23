@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   MapPin, 
   Plane, 
@@ -26,10 +26,17 @@ import useAdminAuth from '../AdminAuthContext';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Dashboard from '../../pages/dashboard/DashboardHome';
 import { Outlet } from 'react-router-dom';
+import { useSocket } from '../SocketContext';
 
 const DashboardLayout = () => {
 
     const [isOpen, setIsOpen] = useState(false)
+
+      const { user } = useAdminAuth();
+      const { emit, isConnected } = useSocket();
+     
+     
+    
  
   const onToggle = () => {
     setIsOpen(!isOpen)

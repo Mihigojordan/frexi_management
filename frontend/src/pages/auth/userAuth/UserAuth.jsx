@@ -162,9 +162,9 @@ export default function FrexiAuthPage() {
 
     try {
       const registrationData = {
-        firstName: registerData.firstName,
-        lastName: registerData.lastName,
-        fullName: `${registerData.firstName} ${registerData.lastName}`.trim(),
+        firstname: registerData.firstName,
+        lastname: registerData.lastName,
+        fullname: `${registerData.firstName} ${registerData.lastName}`.trim(),
         email: registerData.email,
         password: registerData.password,
         phoneNumber: registerData.phoneNumber,
