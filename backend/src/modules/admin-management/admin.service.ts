@@ -200,6 +200,9 @@ export class AdminService {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
+
+      console.log('loggged out');
+      
       return { message: 'logged out successfully' };
     } catch (error) {
       console.log('error logging out:', error);

@@ -23,7 +23,7 @@ const MessageManagement = () => {
     
     const messagesEndRef = useRef(null);
     const { user: currentUser } = useUserAuth();
-    const { isConnected ,emit} = useSocket(); // Removed emit since we're using the service
+    const { isConnected ,emit,socket} = useSocket(); // Removed emit since we're using the service
     const location = useLocation();
     const navigate = useNavigate();
 
