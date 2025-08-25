@@ -133,7 +133,7 @@ const DestinationCard = ({
             }`}
           >
             {isActive ? (
-              <Link to={`destination/${destination.id}`} className=' flex items-center justify-center capitalize gap-2  ' >
+              <Link to={`/destination/${destination.id}`} className=' flex items-center justify-center capitalize gap-2  ' >
                 more details
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>

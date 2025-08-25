@@ -70,6 +70,7 @@ const ServicePage = lazy(() => import("../pages/landing/ServicePage"));
 const BlogPage  = lazy(()=> import("../pages/landing/BlogPage"))
 const DestinationPage = lazy(()=> import("../pages/landing/DestinationPage"))
 const ContactUsPage = lazy(()=> import("../pages/landing/ContactUsPage"))
+const DestinationDetails = lazy(()=> import("../pages/landing/Destination-details"))
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-screen bg-white">
@@ -101,6 +102,7 @@ const routes = createBrowserRouter([
           { path:'/blogs', element: <SuspenseWrapper> <BlogPage /> </SuspenseWrapper> },
           { path:'/destination', element: <SuspenseWrapper> <DestinationPage /> </SuspenseWrapper> },
           { path:'/contact', element: <SuspenseWrapper> <ContactUsPage /> </SuspenseWrapper> },
+          { path:'/destination/:id', element: <SuspenseWrapper> <DestinationDetails /> </SuspenseWrapper> },
         ]
       },
       {
