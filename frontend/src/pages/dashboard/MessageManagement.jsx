@@ -23,7 +23,7 @@ const AdminMessageManagement = () => {
     
     const messagesEndRef = useRef(null);
     const { user: currentAdmin } = useAdminAuth();
-    const { emit, isConnected } = useSocket();
+    const { emit, isConnected,socket } = useSocket();
     const location = useLocation();
     const navigate = useNavigate();
 
