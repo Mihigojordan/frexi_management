@@ -30,7 +30,7 @@ const UserDashboardLayout = () => {
       emit('joinRoom', { userId: user.id });
       hasJoinedRoom.current = true;
     }
-  }, [user?.id, isConnected, emit]);
+  }, [user?.id, isConnected, emit,socket]);
 
   // Reset room join flag when disconnected
   useEffect(() => {
