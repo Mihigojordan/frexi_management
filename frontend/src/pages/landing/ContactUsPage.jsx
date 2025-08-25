@@ -9,7 +9,7 @@ const ContactUs = () => {
             <HeaderBanner title={'Contact Us'} />
             <ContactInfo />
             <ContactForm />
-            <MapSection />
+           
         </>
     )
 }

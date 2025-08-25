@@ -102,30 +102,11 @@ const galleryImages = [
             })}
           </div>
 
-          {/* Load More Button */}
-          <div className="mt-16 text-center">
-            <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-              <span className="relative z-10">Load More Images</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
+      
         </div>
       </div>
 
-      {/* Bottom Wave Effect */}
-      <div className="relative">
-        <svg
-          className="w-full h-20 text-blue-50 transform rotate-180"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z"
-            fill="currentColor"
-          ></path>
-        </svg>
-        <div className="bg-blue-50 h-32"></div>
-      </div>
+   
     </div>
   );
 };

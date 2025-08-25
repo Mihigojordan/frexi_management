@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   MapPin, 
   Plane, 
@@ -26,10 +26,33 @@ import useAdminAuth from '../AdminAuthContext';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Dashboard from '../../pages/dashboard/DashboardHome';
 import { Outlet } from 'react-router-dom';
+import { useSocket } from '../SocketContext';
 
 const DashboardLayout = () => {
 
     const [isOpen, setIsOpen] = useState(false)
+
+      const { user } = useAdminAuth();
+      const { emit, isConnected ,socket } = useSocket();
+     
+      
+       const isOnline = useRef(false);
+       // Join room when user is available and socket is connected
+       useEffect(() => {
+         if (user?.id && isConnected && !isOnline.current) {
+           console.log('onile admin :', user.id);
+           emit('goOnline', { adminId: user.id });
+           isOnline.current = true;
+         }
+       }, [user?.id, isConnected, emit,socket]);
+       
+    
+  useEffect(() => {
+     if (!isConnected) {
+      
+       isOnline.current = false;
+     }
+   }, [isConnected]);
  
   const onToggle = () => {
     setIsOpen(!isOpen)

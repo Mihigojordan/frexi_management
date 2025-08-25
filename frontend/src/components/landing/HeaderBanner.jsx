@@ -1,5 +1,6 @@
 import { ChevronRight, Home } from 'lucide-react'
 import React from 'react'
+import ImageBanner from '../../assets/bg/breadcumb-bg.jpg'
 
 const HeaderBanner = ({title}) => {
     return (
@@ -8,7 +9,7 @@ const HeaderBanner = ({title}) => {
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
-                    backgroundImage: 'url(https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)'
+                    backgroundImage: `url(${ImageBanner})`
                 }}
             >
                 {/* Overlay */}

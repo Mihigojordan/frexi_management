@@ -1,171 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Search, ArrowRight, ChevronUp, MapPin, Clock, Star, Mountain, Menu, X } from 'lucide-react';
-import logo from '../../assets/image/frexilogo.png';
-import { Link } from 'react-router-dom';
-const Navbar = () => {
+import React, { useState } from "react";
+import { ArrowRight, Menu, X } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
+import logo from "../../assets/image/frexilogo.png";
+
+const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleLanguage = () => {
-    setIsLanguageOpen(!isLanguageOpen);
-  };
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
-    { name: 'Destination', href: '/destination' },
-    { name: 'Service', href: '/service' },
-    { name: 'Gallery', href: '/gallery' },
-    { name: 'Blog', href: '/blogs' },
-    { name: 'Contact Us', href: '/contact' },
-    { name: '', href: '/auth/user' },
+    { name: "Home", href: "/" },
+    { name: "About Us", href: "/about" },
+    { name: "Destination", href: "/destination" },
+    { name: "Tour Package", href: "/tour" },
+    { name: "Service", href: "/service" },
+    { name: "Gallery", href: "/gallery" },
+    { name: "Blog", href: "/blogs" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "", href: "/auth/user" },
   ];
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Top Info Bar - Hidden on mobile */}
-      <div className="bg-gray-50 text-sm text-gray-600 hidden lg:block">
-        <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-1">
-              <MapPin className="w-4 h-4" />
-              <span>Makuza Peace Piazza 3rd Floor F3-28, KN 4 Ave, Kigali</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
-              <span>from monday - sunday</span>
-            </div>
-            <span>24 / 7</span>
+    <div className=" sticky top-0 bg-white shadow-sm z-50">
+    <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8  bg-white shadow-sm z-50">
+      <div className="flex justify-between items-center py-4">
+        {/* Logo */}
+        <div className="flex items-center h-16 w-20 group">
+          <div className="relative">
+            <img
+              src={logo}
+              className="h-full transition-transform duration-300 group-hover:scale-105"
+              alt="Frexi Logo"
+            />
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <button 
-                onClick={toggleLanguage}
-                className="hover:text-gray-800 flex items-center space-x-1"
+        </div>
+
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center space-x-1">
+          {navLinks
+            .filter((link) => link.name)
+            .map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.href}
+                className={({ isActive }) =>
+                  `relative px-4 py-2.5 font-medium transition-all duration-300 rounded-lg hover:bg-gray-50 group ${
+                    isActive
+                      ? "text-white shadow-md"
+                      : "text-gray-700 hover:text-gray-900"
+                  }`
+                }
+                style={({ isActive }) => ({
+                  backgroundColor: isActive ? "#113d48" : "transparent",
+                })}
               >
-                <span>Language</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {isLanguageOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg border">
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kinyarwanda</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">French</a>
-                </div>
-              )}
-            </div>
-            <a href="#faq" className="hover:text-gray-800">FAQ</a>
-            <a href="#support" className="hover:text-gray-800">Support</a>
-          </div>
+                {link.name}
+                <span
+                  className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 group-hover:w-8 transition-all duration-300"
+                  style={{ backgroundColor: "#113d48" }}
+                ></span>
+              </NavLink>
+            ))}
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/auth/user"
+            className="hidden sm:flex items-center space-x-2 text-white px-8 py-3 rounded-xl hover:opacity-90 hover:shadow-lg transition-all duration-300 font-semibold transform hover:scale-105 shadow-md"
+            style={{ backgroundColor: "#113d48" }}
+          >
+            <span>Book Now</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-3 rounded-xl hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md"
+          >
+            {isMenuOpen ? (
+              <X className="w-6 h-6 text-gray-600" />
+            ) : (
+              <Menu className="w-6 h-6 text-gray-600" />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Main Navigation */}
-      <nav className=" mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          {/* Logo */}
-          <div className="flex items-center h-16">
-            <img src={logo} className='h-full' alt="" />
-          </div>
-
-          {/* Desktop Navigation Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className="text-gray-700 hover:text-gray-900 font-medium transition-colors relative group"
-                style={{color: link.name === 'Home' ? '#113d48' : ''}}
-              >
-                {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300" style={{backgroundColor: '#113d48'}}></span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Desktop Book Now Button & Mobile Menu Button */}
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/auth/user"
-              className="text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium hidden sm:inline-block"
-              style={{backgroundColor: '#113d48'}}
-            >
-              Book Now →
-            </Link>
-            
-            {/* Mobile Menu Button */}
-            <button
-              onClick={toggleMenu}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              {isMenuOpen ? (
-                <X className="w-6 h-6 text-gray-600" />
-              ) : (
-                <Menu className="w-6 h-6 text-gray-600" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        <div className={`md:hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-        } overflow-hidden`}>
-          <div className="py-4 border-t border-gray-200">
-            {/* Mobile Top Info */}
-            <div className="lg:hidden pb-4 mb-4 border-b border-gray-200">
-              <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
-                <MapPin className="w-4 h-4" />
-                <span>Makuza Peace Piazza, Kigali</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Clock className="w-4 h-4" />
-                <span>Monday - Sunday, 24/7</span>
-              </div>
-            </div>
-
-            {/* Mobile Navigation Links */}
-            <div className="space-y-2">
-              {navLinks.map((link) => (
-                <Link
+      {/* Mobile Menu */}
+      <div
+        className={`lg:hidden transition-all duration-500 ease-in-out ${
+          isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        } overflow-hidden`}
+      >
+        <div className="py-6 border-t border-gray-200">
+          <div className="space-y-2 mb-6">
+            {navLinks
+              .filter((link) => link.name)
+              .map((link) => (
+                <NavLink
                   key={link.name}
                   to={link.href}
-                  className="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium"
-                  style={{color: link.name === 'Home' ? '#113d48' : ''}}
+                  className={({ isActive }) =>
+                    `flex items-center justify-between px-4 py-4 font-medium rounded-xl transition-all duration-200 border group ${
+                      isActive
+                        ? "text-white shadow-md border-transparent"
+                        : "text-gray-700 hover:bg-gray-50 border-transparent hover:border-gray-200 hover:shadow-sm"
+                    }`
+                  }
+                  style={({ isActive }) => ({
+                    backgroundColor: isActive ? "#113d48" : "transparent",
+                  })}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {link.name}
-                </Link>
+                  <span>{link.name}</span>
+                  <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                </NavLink>
               ))}
-            </div>
+          </div>
 
-            {/* Mobile Book Now Button */}
-            <div className="pt-4 mt-4 border-t border-gray-200">
-              <Link
-                to="/auth/user"
-                className="block w-full text-center text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-medium"
-                style={{backgroundColor: '#113d48'}}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Book Now →
-              </Link>
-            </div>
-
-            {/* Mobile Language & Support */}
-            <div className="pt-4 flex justify-center space-x-6 text-sm text-gray-600">
-              <button className="hover:text-gray-800">Language</button>
-              <a href="#faq" className="hover:text-gray-800">FAQ</a>
-              <a href="#support" className="hover:text-gray-800">Support</a>
-            </div>
+          {/* Mobile Book Now */}
+          <div className="mb-6">
+            <Link
+              to="/auth/user"
+              className="flex items-center justify-center space-x-2 w-full text-white px-6 py-4 rounded-xl hover:opacity-90 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+              style={{ backgroundColor: "#113d48" }}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span>Book Now</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
+    </div>
   );
 };
 
-export default Navbar
+export default Navigation;

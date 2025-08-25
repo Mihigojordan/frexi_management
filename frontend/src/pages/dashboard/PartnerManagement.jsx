@@ -40,7 +40,7 @@ const PartnerManagement = () => {
   const [notification, setNotification] = useState(null);
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(5);
 
   // Fetch all partners using the real service
   const fetchPartners = async (showRefreshLoader = false) => {
@@ -274,7 +274,7 @@ const PartnerManagement = () => {
   const CardView = () => (
     <div className="md:hidden">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-        {currentItems.map((partner, index) => (
+        {currentItems.map((partner) => (
           <div
             key={partner.id}
             className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"

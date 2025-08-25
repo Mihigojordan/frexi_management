@@ -10,14 +10,12 @@ const DestinationCard = ({
   viewMode = 'grid'
 }) => {
   const {
-    _id,
-    id,
+ 
     name,
     country,
     mainPhotoUrl,
     rating,
-    estimatedBudget,
-    description,
+   
     isActive = true
   } = destination;
 
@@ -39,15 +37,6 @@ const DestinationCard = ({
         })}
       </div>
     );
-  };
-
-  const formatBudget = (budget) => {
-    if (!budget) return null;
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(budget);
   };
 
   const getImageUrl = () => {

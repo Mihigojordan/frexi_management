@@ -20,6 +20,8 @@ model Admin {
   adminEmail String?  @unique
   password   String?
   isLocked   Boolean? @default(false)
+  blogs Blog[]
+  message Message[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -30,6 +32,8 @@ model User{
   lastname   String?
   email  String @unique
   phoneNumber String
+  conversation Conversation[]
+  message Message[]
   password String
   createdAt  DateTime @default(now())
 }
@@ -83,7 +87,7 @@ model Tour {
 }
 
 model Partner {
-  id            String   @id @default(cuid())
+  id            String   @id @default(uuid())
   name          String?
   email         String?   @unique
   phone         String?   @unique
@@ -91,4 +95,55 @@ model Partner {
   imageUrl      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Blog {
+  id            String   @id @default(uuid())
+  title          String?
+  description      Json // Rich description object
+  imageUrl      String?
+  authorId      String?
+  author       Admin?    @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id             String      @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  senderType     SenderType
+  senderAdminId  String?      // set if senderType = ADMIN
+  senderAdmin    Admin?       @relation(fields: [senderAdminId], references: [id])
+
+  senderUserId   String?      // set if senderType = USER
+  senderUser     User?        @relation(fields: [senderUserId], references: [id])
+  imageUrl       String?
+  text           String
+  createdAt      DateTime     @default(now())
+}
+
+enum SenderType {
+  USER
+  ADMIN
 }

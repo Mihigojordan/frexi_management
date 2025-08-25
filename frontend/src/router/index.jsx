@@ -14,10 +14,17 @@ import AuthLayout from "../context/layouts/AuthLayout";
 import DashboardLayout from "../context/layouts/DashboardLayout";
 import FrexiAuthPage from "../pages/auth/userAuth/UserAuth";
 import ProtectPrivateUserRoute from "../components/protectors/ProtectPrivateUserRoute";
-import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
+
 
 // Static assets
 import logo from "../assets/image/frexilogo.png";
+import ViewBlogPage from "../components/dashboard/blog/ViewMorePage";
+import TourPage from "../pages/landing/TourPage";
+import TourDetailsPage from "../pages/landing/TourDetailsPage";
+import UserDashboardLayout from "../context/layouts/UserDashboardLayout";
+import UserDashboardHome from "../pages/user-dashboard/DashboardHome";
+import MessageManagement from "../pages/user-dashboard/MessageManagement";
+import AdminMessageManagement from "../pages/dashboard/MessageManagement";
 
 // Admin Auth - Lazy loaded
 const AdminLogin = lazy(() => import("../pages/auth/Login"));
@@ -61,8 +68,14 @@ const HomePage = lazy(() => import("../pages/landing/HomePage"));
 const PartnerManagement = lazy(() =>
   import("../pages/dashboard/PartnerManagement")
 );
+const BlogsManagement = lazy(() =>
+  import("../pages/dashboard/BlogsManagement")
+);
 const TestimonialManagement = lazy(() =>
   import("../pages/dashboard/TestmonialManagement")
+);
+const ContactMessageManagement = lazy(() =>
+  import("../pages/dashboard/ContactMessageManagement")
 );
 const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
 const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
@@ -72,6 +85,7 @@ const DestinationPage = lazy(()=> import("../pages/landing/DestinationPage"))
 const ContactUsPage = lazy(()=> import("../pages/landing/ContactUsPage"))
 const DestinationDetails = lazy(()=> import("../pages/landing/Destination-details"))
 
+// eslint-disable-next-line react-refresh/only-export-components
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-screen bg-white">
     <img
@@ -82,6 +96,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 const SuspenseWrapper = ({ children }) => {
   return <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>;
 };
@@ -101,6 +116,8 @@ const routes = createBrowserRouter([
           { path:'/service', element: <SuspenseWrapper> <ServicePage /> </SuspenseWrapper> },
           { path:'/blogs', element: <SuspenseWrapper> <BlogPage /> </SuspenseWrapper> },
           { path:'/destination', element: <SuspenseWrapper> <DestinationPage /> </SuspenseWrapper> },
+          { path:'/tour', element: <SuspenseWrapper> <TourPage /> </SuspenseWrapper> },
+          { path:'/tour/:id', element: <SuspenseWrapper> <TourDetailsPage /> </SuspenseWrapper> },
           { path:'/contact', element: <SuspenseWrapper> <ContactUsPage /> </SuspenseWrapper> },
           { path:'/destination/:id', element: <SuspenseWrapper> <DestinationDetails /> </SuspenseWrapper> },
         ]
@@ -175,6 +192,23 @@ const routes = createBrowserRouter([
                 path: "testimonial",
                 element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
               },
+              {
+
+                path: "contact-message",
+                element: <SuspenseWrapper><ContactMessageManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "messages",
+                element: <SuspenseWrapper><AdminMessageManagement /></SuspenseWrapper>,
+       },
+              {
+                path: "blogs",
+                element: <SuspenseWrapper><BlogsManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "blogs/:id",
+                element: <SuspenseWrapper><ViewBlogPage /></SuspenseWrapper>,
+              },
             ],
           },
         ],
@@ -195,8 +229,20 @@ const routes = createBrowserRouter([
       },
       {
         path:'dashboard',
-        element:<UserDashboardHome/>
-      }
+        element:<UserDashboardLayout/>,
+        children:[
+          {
+            index:true,
+            element:<SuspenseWrapper><UserDashboardHome/></SuspenseWrapper>
+          },
+          {
+            path:"messages",
+            element: <SuspenseWrapper><MessageManagement /> </SuspenseWrapper>
+          }
+          
+        ]
+      },
+      
     ]
   },
   {
