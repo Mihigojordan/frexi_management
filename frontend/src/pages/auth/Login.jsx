@@ -15,7 +15,7 @@ const AdminLogin = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation();1
 
   // Redirect if already authenticated
   useEffect(() => {
