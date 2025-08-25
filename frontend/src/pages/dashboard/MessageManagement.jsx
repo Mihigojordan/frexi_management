@@ -62,7 +62,7 @@ const fileInputRef = useRef(null);
           emit('joinRoom', { adminId: currentAdmin.id, conversationId:activeChat?.id });
           hasJoinedRoom.current = true;
         }
-      }, [currentAdmin?.id, isConnected, activeChat?.id , emit]);
+      }, [currentAdmin?.id, isConnected, activeChat?.id , emit,socket]);
     
       // Reset room join flag when disconnected
       useEffect(() => {
@@ -124,7 +124,7 @@ useSocketEvent('userOffline', (data) => {
                 }));
             }
         }
-    }, [activeChat?.id]);
+    }, [activeChat?.id,socket]);
 
     // Fetch all conversations for admin
     const fetchAllConversations = useCallback(async () => {
