@@ -35,6 +35,7 @@ const AdminProfile = lazy(() => import("../pages/dashboard/AdminProfile"));
 const ProtectPrivateAdminRoute = lazy(() =>
   import("../components/protectors/ProtectPrivateAdminRoute")
 );
+const ProtectPrivateEmployeeRoute = lazy(()=> import('../components/protectors/ProtectEmployeeRoutes'))
 const UnlockScreen = lazy(() => import("../pages/auth/UnlockScreen"));
 
 // Tours - Lazy loaded
@@ -79,6 +80,7 @@ const ContactMessageManagement = lazy(() =>
 );
 const ClientManagement = lazy(()=> import("../pages/dashboard/ClientManagment"))
 const EmployeeManagement = lazy(()=> import("../pages/dashboard/EmployeeManagement"))
+const EmployeeLogin = lazy(() => import("../pages/auth/employee/EmployeeLogin"));
 
 const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
 const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
@@ -141,7 +143,106 @@ const routes = createBrowserRouter([
           },
           {
             path: "dashboard",
-            element: <DashboardLayout />,
+            element: <DashboardLayout role={"admin"} />,
+            children: [
+              {
+                index: true,
+                element: <SuspenseWrapper><Dashboard /></SuspenseWrapper>,
+              },
+
+              // tour
+              {
+                path: "tours",
+                element: <SuspenseWrapper><TourManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "tours/:id",
+                element: <SuspenseWrapper><TourViewPage /></SuspenseWrapper>,
+              },
+              {
+                path: "tours/create",
+                element: <SuspenseWrapper><CreateTourPage /></SuspenseWrapper>,
+              },
+              {
+                path: "tours/update/:id",
+                element: <SuspenseWrapper><UpdateTourPage /></SuspenseWrapper>,
+              },
+
+              // destination
+              {
+                path: "destinations",
+                element: <SuspenseWrapper><DestinationManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "destinations/:id",
+                element: <SuspenseWrapper><DestinationViewPage /></SuspenseWrapper>,
+              },
+              {
+                path: "destinations/create",
+                element: <SuspenseWrapper><CreateDestinationPage /></SuspenseWrapper>,
+              },
+              {
+                path: "destinations/update/:id",
+                element: <SuspenseWrapper><UpdateDestinationPage /></SuspenseWrapper>,
+              },
+              {
+                path: "profile",
+                element: <SuspenseWrapper><AdminProfile /></SuspenseWrapper>,
+              },
+              {
+                path: "partner",
+                element: <SuspenseWrapper><PartnerManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "testimonial",
+                element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "client",
+                element: <SuspenseWrapper><ClientManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "employee",
+                element: <SuspenseWrapper><EmployeeManagement /></SuspenseWrapper>,
+              },
+              {
+
+                path: "contact-message",
+                element: <SuspenseWrapper><ContactMessageManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "messages",
+                element: <SuspenseWrapper><AdminMessageManagement /></SuspenseWrapper>,
+       },
+              {
+                path: "blogs",
+                element: <SuspenseWrapper><BlogsManagement /></SuspenseWrapper>,
+              },
+              {
+                path: "blogs/:id",
+                element: <SuspenseWrapper><ViewBlogPage /></SuspenseWrapper>,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "employee",
+        element: (
+          <SuspenseWrapper>
+            <ProtectPrivateEmployeeRoute>
+              <Outlet />
+            </ProtectPrivateEmployeeRoute>
+          </SuspenseWrapper>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Navigate to={"/employee/dashboard"} replace />,
+          },
+          {
+            path: "dashboard",
+            element: <DashboardLayout role={"employee"} />,
             children: [
               {
                 index: true,
@@ -277,6 +378,20 @@ const routes = createBrowserRouter([
   {
     path: "/auth/user",
     element: <FrexiAuthPage />,
+  },
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "employee/login",
+        element: <SuspenseWrapper><EmployeeLogin /></SuspenseWrapper>,
+      },
+      {
+        path: "admin/unlock",
+        element: <SuspenseWrapper><UnlockScreen /></SuspenseWrapper>,
+      },
+    ],
   },
 ]);
 

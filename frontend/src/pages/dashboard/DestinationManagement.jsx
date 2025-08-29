@@ -553,7 +553,7 @@ const DestinationManagement = () => {
             <TableView />
           </>
         )}
-
+  
         {/* Delete Destination Modal */}
         <DeleteDestinationModal
           isOpen={isDeleteModalOpen}

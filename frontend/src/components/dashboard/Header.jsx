@@ -2,10 +2,16 @@ import { Bell, LogOut, Menu, Settings, User, Lock, ChevronDown } from 'lucide-re
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAdminAuth from '../../context/AdminAuthContext'
+import useEmployeeAuth from '../../context/EmployeeAuthContext'
 import { API_URL } from '../../api/api'
 
-const Header = ({ onToggle }) => {
-  const { user, logout, lockAdmin } = useAdminAuth()
+const Header = ({ onToggle, role }) => {
+  const adminAuth = useAdminAuth()
+  const employeeAuth = useEmployeeAuth()
+  
+  // Dynamically select the appropriate auth context based on role
+  const authContext = role === 'admin' ? adminAuth : employeeAuth
+  const { user, logout, lockAdmin, lockEmployee } = authContext
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isLocking, setIsLocking] = useState(false)
@@ -23,7 +29,11 @@ const Header = ({ onToggle }) => {
   const handleLock = async () => {
     setIsLocking(true)
     try {
-      await lockAdmin()
+      if (role === 'admin') {
+        await lockAdmin()
+      } else {
+        await lockEmployee()
+      }
       // The context will update isLocked state, and the ProtectedRoute will handle the redirect
     } catch (error) {
       console.error('Lock error:', error)
@@ -33,9 +43,33 @@ const Header = ({ onToggle }) => {
     }
   }
 
-  // Get display name
+  // Get display name based on role and available data
   const getDisplayName = () => {
-    return user?.adminName || 'Admin'
+    if (role === 'admin') {
+      return user?.adminName || 'Admin'
+    } else {
+      // For employee, combine first and last name or use individual names
+      if (user?.firstname && user?.lastname) {
+        return `${user.firstname} ${user.lastname}`
+      }
+      if (user?.firstname) {
+        return user.firstname
+      }
+      if (user?.lastname) {
+        return user.lastname
+      }
+      return 'Employee'
+    }
+  }
+
+  // Get profile route based on role
+  const getProfileRoute = () => {
+    return role === 'admin' ? '/admin/dashboard/profile' : '/employee/dashboard/profile'
+  }
+
+  // Get role display text
+  const getRoleDisplay = () => {
+    return role === 'admin' ? 'Administrator' : 'Employee'
   }
 
   // Close dropdown when clicking outside
@@ -67,15 +101,15 @@ const Header = ({ onToggle }) => {
   }, [])
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-white shadow-sm border-b border-primary-200">
       <div className="px-6 py-3">
         <div className="flex md:items-center flex-wrap justify-center gap-3 md:gap-0 md:justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg lg:hidden flex items-center justify-center cursor-pointer" onClick={onToggle}>
+              <div className={`w-8 h-8 ${role === 'admin' ? 'bg-gradient-to-r from-primary-500 to-primary-600' : 'bg-gradient-to-r from-blue-500 to-blue-600'} rounded-lg lg:hidden flex items-center justify-center cursor-pointer`} onClick={onToggle}>
                 <Menu className="w-5 h-5 text-white" />
               </div>
-              <h1 className="text-xl font-bold text-gray-900">Welcome to Dashboard Management</h1>
+              <h1 className="text-xl font-bold text-primary-800">Welcome to Frexi</h1>
             </div>
           </div>
           
@@ -94,7 +128,7 @@ const Header = ({ onToggle }) => {
                 className="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 disabled={isLocking}
               >
-                <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center overflow-hidden">
+                <div className={`w-8 h-8 ${role === 'admin' ? 'bg-primary-100' : 'bg-blue-100'} rounded-full flex items-center justify-center overflow-hidden`}>
                   {user?.profileImg ? (
                     <img 
                       src={`${API_URL}${user.profileImg}`} 
@@ -102,12 +136,14 @@ const Header = ({ onToggle }) => {
                       className="w-8 h-8 rounded-full object-cover"
                     />
                   ) : (
-                    <User className="w-5 h-5 text-primary-600" />
+                    <User className={`w-5 h-5 ${role === 'admin' ? 'text-primary-600' : 'text-blue-600'}`} />
                   )}
                 </div>
                 <div className="text-left">
                   <div className="text-sm font-medium text-gray-700">{getDisplayName()}</div>
-                  <div className="text-xs text-primary-600">Administrator</div>
+                  <div className={`text-xs ${role === 'admin' ? 'text-primary-600' : 'text-blue-600'}`}>
+                    {getRoleDisplay()}
+                  </div>
                 </div>
                 <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -117,20 +153,24 @@ const Header = ({ onToggle }) => {
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                   <div className="py-1">
                     {/* User Info Header */}
-                    <div className="px-4 py-3 border-b border-gray-100 bg-primary-50">
+                    <div className={`px-4 py-3 border-b border-gray-100 ${role === 'admin' ? 'bg-primary-50' : 'bg-blue-50'}`}>
                       <div className="text-sm font-medium text-gray-900">{getDisplayName()}</div>
-                      <div className="text-xs text-gray-600">{user?.adminEmail}</div>
-                      <div className="text-xs font-medium text-primary-600">Administrator</div>
+                      <div className="text-xs text-gray-600">
+                        {role === 'admin' ? user?.adminEmail : user?.email}
+                      </div>
+                      <div className={`text-xs font-medium ${role === 'admin' ? 'text-primary-600' : 'text-blue-600'}`}>
+                        {getRoleDisplay()}
+                      </div>
                     </div>
 
                     {/* Menu Items */}
                     <div className="py-1">
                       <button
                         onClick={() => {
-                          navigate('/admin/dashboard/profile');
+                          navigate(getProfileRoute());
                           setIsDropdownOpen(false);
                         }}
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 transition-colors"
+                        className={`flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:${role === 'admin' ? 'bg-primary-50' : 'bg-blue-50'} transition-colors`}
                       >
                         <User className="w-4 h-4 mr-2" />
                         My Profile
@@ -142,7 +182,7 @@ const Header = ({ onToggle }) => {
                           setIsDropdownOpen(false);
                         }}
                         disabled={isLocking}
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:${role === 'admin' ? 'bg-primary-50' : 'bg-blue-50'} transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
                         <Lock className="w-4 h-4 mr-2" />
                         {isLocking ? 'Locking...' : 'Lock Screen'}

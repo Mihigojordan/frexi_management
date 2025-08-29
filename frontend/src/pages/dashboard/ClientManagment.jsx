@@ -177,7 +177,7 @@ const AddEditClientModal = ({ isOpen, onClose, onSubmit, client, isLoading, isEd
               value={formData.email}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              placeholder="Enter email (optional)"
+              placeholder="Enter email"
             />
           </div>
 
@@ -188,11 +188,11 @@ const AddEditClientModal = ({ isOpen, onClose, onSubmit, client, isLoading, isEd
             </label>
             <PhoneInput
               international
-              defaultCountry="US"
+              defaultCountry="RW"
               value={formData.phoneNumber}
               onChange={handlePhoneChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              placeholder="Enter phone number (optional)"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+              placeholder="Enter phone number "
             />
           </div>
 

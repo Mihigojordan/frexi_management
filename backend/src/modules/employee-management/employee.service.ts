@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+import { deleteFile } from 'src/common/utils/file-upload.util';
 import { EmailService } from 'src/global/email/email.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -180,6 +181,13 @@ export class EmployeeService {
     },
   ) {
     try {
+      const employee = await this.findOne(id);
+      if (!employee) {
+        throw new BadRequestException('employee not found');
+      }
+      if (data.profilePhoto) {
+        deleteFile(String(employee.profilePhoto));
+      }
       return await this.prisma.employee.update({ where: { id }, data });
     } catch (error) {
       console.error(error);
@@ -189,7 +197,12 @@ export class EmployeeService {
 
   async remove(id: string) {
     try {
+      const employee = await this.findOne(id);
+      if (!employee) {
+        throw new BadRequestException('employee not found');
+      } 
       await this.prisma.employee.delete({ where: { id } });
+      deleteFile(String(employee.profilePhoto))
       return { message: 'Employee deleted successfully' };
     } catch (error) {
       console.error(error);
