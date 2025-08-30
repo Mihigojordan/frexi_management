@@ -81,6 +81,8 @@ const ContactMessageManagement = lazy(() =>
 const ClientManagement = lazy(()=> import("../pages/dashboard/ClientManagment"))
 const EmployeeManagement = lazy(()=> import("../pages/dashboard/EmployeeManagement"))
 const EmployeeLogin = lazy(() => import("../pages/auth/employee/EmployeeLogin"));
+const  EmployeeProfile = lazy(() => import("../pages/dashboard/EmployeeProfile") )
+const EmployeeUnlockScreen = lazy(()=> import("../pages/auth/employee/EmployeeLockScreen"))
 
 const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
 const YachtGallery = lazy(() => import("../pages/landing/GalleryPage"));
@@ -147,31 +149,31 @@ const routes = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <SuspenseWrapper><Dashboard /></SuspenseWrapper>,
+                element: <SuspenseWrapper><Dashboard  /></SuspenseWrapper>,
               },
 
               // tour
               {
                 path: "tours",
-                element: <SuspenseWrapper><TourManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><TourManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "tours/:id",
-                element: <SuspenseWrapper><TourViewPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><TourViewPage  /></SuspenseWrapper>,
               },
               {
                 path: "tours/create",
-                element: <SuspenseWrapper><CreateTourPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><CreateTourPage role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "tours/update/:id",
-                element: <SuspenseWrapper><UpdateTourPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><UpdateTourPage role={'admin'} /></SuspenseWrapper>,
               },
 
               // destination
               {
                 path: "destinations",
-                element: <SuspenseWrapper><DestinationManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><DestinationManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "destinations/:id",
@@ -179,11 +181,11 @@ const routes = createBrowserRouter([
               },
               {
                 path: "destinations/create",
-                element: <SuspenseWrapper><CreateDestinationPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><CreateDestinationPage role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "destinations/update/:id",
-                element: <SuspenseWrapper><UpdateDestinationPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><UpdateDestinationPage role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "profile",
@@ -191,32 +193,32 @@ const routes = createBrowserRouter([
               },
               {
                 path: "partner",
-                element: <SuspenseWrapper><PartnerManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><PartnerManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "testimonial",
-                element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><TestimonialManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "client",
-                element: <SuspenseWrapper><ClientManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><ClientManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "employee",
-                element: <SuspenseWrapper><EmployeeManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><EmployeeManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
 
                 path: "contact-message",
-                element: <SuspenseWrapper><ContactMessageManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><ContactMessageManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "messages",
-                element: <SuspenseWrapper><AdminMessageManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><AdminMessageManagement  /></SuspenseWrapper>,
        },
               {
                 path: "blogs",
-                element: <SuspenseWrapper><BlogsManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><BlogsManagement role={'admin'} /></SuspenseWrapper>,
               },
               {
                 path: "blogs/:id",
@@ -252,25 +254,25 @@ const routes = createBrowserRouter([
               // tour
               {
                 path: "tours",
-                element: <SuspenseWrapper><TourManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><TourManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "tours/:id",
-                element: <SuspenseWrapper><TourViewPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><TourViewPage/></SuspenseWrapper>,
               },
               {
                 path: "tours/create",
-                element: <SuspenseWrapper><CreateTourPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><CreateTourPage role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "tours/update/:id",
-                element: <SuspenseWrapper><UpdateTourPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><UpdateTourPage role={"employee"} /></SuspenseWrapper>,
               },
 
               // destination
               {
                 path: "destinations",
-                element: <SuspenseWrapper><DestinationManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><DestinationManagement role={'employee'} /></SuspenseWrapper>,
               },
               {
                 path: "destinations/:id",
@@ -278,36 +280,36 @@ const routes = createBrowserRouter([
               },
               {
                 path: "destinations/create",
-                element: <SuspenseWrapper><CreateDestinationPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><CreateDestinationPage role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "destinations/update/:id",
-                element: <SuspenseWrapper><UpdateDestinationPage /></SuspenseWrapper>,
+                element: <SuspenseWrapper><UpdateDestinationPage role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "profile",
-                element: <SuspenseWrapper><AdminProfile /></SuspenseWrapper>,
+                element: <SuspenseWrapper><EmployeeProfile /></SuspenseWrapper>,
               },
               {
                 path: "partner",
-                element: <SuspenseWrapper><PartnerManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><PartnerManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "testimonial",
-                element: <SuspenseWrapper><TestimonialManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><TestimonialManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "client",
-                element: <SuspenseWrapper><ClientManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><ClientManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "employee",
-                element: <SuspenseWrapper><EmployeeManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><EmployeeManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
 
                 path: "contact-message",
-                element: <SuspenseWrapper><ContactMessageManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><ContactMessageManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "messages",
@@ -315,7 +317,7 @@ const routes = createBrowserRouter([
        },
               {
                 path: "blogs",
-                element: <SuspenseWrapper><BlogsManagement /></SuspenseWrapper>,
+                element: <SuspenseWrapper><BlogsManagement role={"employee"} /></SuspenseWrapper>,
               },
               {
                 path: "blogs/:id",
@@ -388,8 +390,8 @@ const routes = createBrowserRouter([
         element: <SuspenseWrapper><EmployeeLogin /></SuspenseWrapper>,
       },
       {
-        path: "admin/unlock",
-        element: <SuspenseWrapper><UnlockScreen /></SuspenseWrapper>,
+        path: "employee/unlock",
+        element: <SuspenseWrapper><EmployeeUnlockScreen /></SuspenseWrapper>,
       },
     ],
   },

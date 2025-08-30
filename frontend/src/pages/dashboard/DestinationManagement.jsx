@@ -4,7 +4,7 @@ import DeleteDestinationModal from '../../components/dashboard/destination/Delet
 import destinationService from '../../services/destinationServices';
 import { useNavigate } from 'react-router-dom';
 
-const DestinationManagement = () => {
+const DestinationManagement = ({ role }) => {
   const [destinations, setDestinations] = useState([]);
   const [filteredDestinations, setFilteredDestinations] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,12 +97,12 @@ const DestinationManagement = () => {
 
   const handleAddDestination = () => {
     setSelectedDestination(null);
-    navigate('/admin/dashboard/destinations/create')
+    navigate( role== 'admin'? '/admin/dashboard/destinations/create': '/employee/dashboard/destinations/create');
   };
 
   const handleEditDestination = (destination) => {
    if (!destination.id) return;
-    navigate(`/admin/dashboard/destinations/update/${destination.id}`);
+    navigate( role == 'admin' ? `/admin/dashboard/destinations/update/${destination.id}`: `/employee/dashboard/destinations/update/${destination.id}`);
     setIsViewModalOpen(true);
   };
 
@@ -113,7 +113,7 @@ const DestinationManagement = () => {
 
   const handleViewDestination = (destination) => {
     if (!destination.id) return;
-    navigate(`/admin/dashboard/destinations/${destination.id}`);
+    navigate( role == 'admin' ? `/admin/dashboard/destinations/${destination.id}`: `/employee/dashboard/destinations/${destination.id}`);
     setIsViewModalOpen(true);
   };
 
@@ -553,7 +553,7 @@ const DestinationManagement = () => {
             <TableView />
           </>
         )}
-  
+
         {/* Delete Destination Modal */}
         <DeleteDestinationModal
           isOpen={isDeleteModalOpen}

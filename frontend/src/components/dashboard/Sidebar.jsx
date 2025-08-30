@@ -49,12 +49,12 @@ const Sidebar = ({ isOpen = true, onToggle, role }) => {
 
   const employeeItems = [
     { key: 'dashboard', label: 'Dashboard', icon: TrendingUp, path: '/employee/dashboard' },
-    { key: 'tours_management', label: 'Tours Management', icon: MapPin, path: '/employee/dashboard/tours' },
-    { key: 'destinations_management', label: 'Destinations Management', icon: RouteIcon, path: '/employee/dashboard/destinations' },
-    { key: 'client_management', label: 'Client Management', icon: Users, path: '/employee/dashboard/client' },
-    { key: 'testimonial_management', label: 'Testimonial Management', icon: UserRoundCog, path: '/employee/dashboard/testimonial' },
-    { key: 'blog_management', label: 'Blog Management', icon: LetterTextIcon, path: '/employee/dashboard/blogs' },
-    { key: 'message_management', label: 'Message Management', icon: MessageCircle, path: '/employee/dashboard/messages' },
+    { key: 'tours', label: 'Tours ', icon: MapPin, path: '/employee/dashboard/tours' },
+    { key: 'destinations', label: 'Destinations ', icon: RouteIcon, path: '/employee/dashboard/destinations' },
+    { key: 'client', label: 'Client ', icon: Users, path: '/employee/dashboard/client' },
+    { key: 'testimonial', label: 'Testimonial ', icon: UserRoundCog, path: '/employee/dashboard/testimonial' },
+    { key: 'blog', label: 'Blog ', icon: LetterTextIcon, path: '/employee/dashboard/blogs' },
+    { key: 'message', label: 'Message ', icon: MessageCircle, path: '/employee/dashboard/messages' },
   ];
 
   const getProfileRoute = () => role === 'admin' ? '/admin/dashboard/profile' : '/employee/dashboard/profile';

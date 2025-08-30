@@ -6,7 +6,7 @@ import { Plus, X, Upload, MapPin, DollarSign, Globe, Camera, Tag, Loader } from 
 import tourService from '../../../services/toursServices';
 import Swal from 'sweetalert2';
 
-const UpdateTourPage = () => {
+const UpdateTourPage = ({ role }) => {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -120,7 +120,7 @@ setHighlights(() => {
             } catch (error) {
                 console.error('Error fetching tour data:', error);
                 alert('Failed to load tour data. Please try again.');
-                navigate('/admin/dashboard/tours');
+                navigate( role == 'admin' ? '/admin/dashboard/tours' : '/employee/dashboard/tours' );
             } finally {
                 setIsInitialLoading(false);
             }

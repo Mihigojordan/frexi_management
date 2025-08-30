@@ -26,7 +26,7 @@ import ViewPartnerModal from "../../components/dashboard/partner/ViewPartnerModa
 import partnerService from "../../services/partnerService";
 
 // Main Partner Management Component
-const PartnerManagement = () => {
+const PartnerManagement = ({ role }) => {
   const [partners, setPartners] = useState([]);
   const [filteredPartners, setFilteredPartners] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

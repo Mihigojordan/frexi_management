@@ -193,7 +193,7 @@ export class AdminService {
         });
       }
 
-      res.clearCookie('AccessHostToken', {
+      res.clearCookie('AccessAdminToken', {
         httpOnly: true,
         secure: true, // <-- Required for SameSite=None in production
         sameSite: 'none', // <-- Required for cross-origin cookies

@@ -427,7 +427,7 @@ const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
 };
 
 // Main Employee Management Component
-const EmployeeManagement = () => {
+const EmployeeManagement = ({ role }) => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

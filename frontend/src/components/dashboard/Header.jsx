@@ -49,14 +49,14 @@ const Header = ({ onToggle, role }) => {
       return user?.adminName || 'Admin'
     } else {
       // For employee, combine first and last name or use individual names
-      if (user?.firstname && user?.lastname) {
-        return `${user.firstname} ${user.lastname}`
+      if (user?.firstName && user?.lastName) {
+        return `${user.firstName} ${user.lastName}`
       }
-      if (user?.firstname) {
-        return user.firstname
+      if (user?.firstName) {
+        return user.firstName
       }
-      if (user?.lastname) {
-        return user.lastname
+      if (user?.lastName) {
+        return user.lastName
       }
       return 'Employee'
     }

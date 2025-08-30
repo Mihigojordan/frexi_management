@@ -355,7 +355,7 @@ const ViewClientModal = ({ isOpen, onClose, client, testimonials }) => {
 };
 
 // Main Client Management Component
-const ClientManagement = () => {
+const ClientManagement = ({ role }) => {
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

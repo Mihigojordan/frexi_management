@@ -25,7 +25,7 @@ import blogService from "../../services/blogServices";
 import { useNavigate } from "react-router-dom";
 
 // Main Blog Management Component
-const BlogManagement = () => {
+const BlogManagement = ( { role }) => {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -139,7 +139,7 @@ const BlogManagement = () => {
 
   const handleViewBlog = (blog) => {
     if(!blog.id) return showNotification("Blog ID is missing", "error");
-    navigate('/admin/dashboard/blogs/' + blog.id);
+    navigate( role == 'admin'? '/admin/dashboard/blogs/' + blog.id : '/employee/dashboard/blogs/' + blog.id  );
   };
 
   // Handle form submission using the real service
