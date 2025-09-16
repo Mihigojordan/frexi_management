@@ -4,7 +4,7 @@ import DeleteTourModal from '../../components/dashboard/tour/DeleteTourModal';
 import { useNavigate } from 'react-router-dom';
 import tourService from '../../services/toursServices';
 
-const TourManagement = () => {
+const TourManagement = ({ role }) => {
   const [tours, setTours] = useState([]);
   const [filteredTours, setFilteredTours] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,12 +97,12 @@ const TourManagement = () => {
 
   const handleAddTour = () => {
     setSelectedTour(null);
-    navigate('/admin/dashboard/tours/create')
+    navigate( role == 'admin'? '/admin/dashboard/tours/create': '/employee/dashboard/tours/create');
   };
 
   const handleEditTour = (tour) => {
    if (!tour.id) return;
-    navigate(`/admin/dashboard/tours/update/${tour.id}`);
+    navigate( role == 'admin' ? `/admin/dashboard/tours/update/${tour.id}` : `/employee/dashboard/tours/update/${tour.id}`);
     setIsViewModalOpen(true);
   };
 
@@ -113,7 +113,7 @@ const TourManagement = () => {
 
   const handleViewTour = (tour) => {
     if (!tour.id) return;
-    navigate(`/admin/dashboard/tours/${tour.id}`);
+    navigate(role == 'admin' ? `/admin/dashboard/tours/${tour.id}`: `/employee/dashboard/tours/${tour.id}` );
     setIsViewModalOpen(true);
   };
 

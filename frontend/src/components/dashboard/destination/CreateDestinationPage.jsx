@@ -5,7 +5,7 @@ import { Plus, X, Upload, MapPin, DollarSign, Globe, Camera, Tag } from 'lucide-
 import destinationServices from '../../../services/destinationServices';
 import { useNavigate } from 'react-router-dom';
 
-const CreateDestinationPage = () => {
+const CreateDestinationPage = ({ role }) => {
   const [formData, setFormData] = useState({
     name: '',
     country: '',
@@ -266,7 +266,7 @@ const removeGalleryPreview = (index) => {
       setNewHighlight('');
       setMainPhoto(null);
       setGalleryFiles([]);
-      navigate('/admin/dashboard/destinations')
+      navigate( role == 'admin'? '/admin/dashboard/destinations': '/employee/dashboard/destinations')
       setMainPhotoPreview(null);
 setGalleryPreviews([]);
 

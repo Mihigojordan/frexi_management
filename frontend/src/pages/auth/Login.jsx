@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Eye, EyeOff, Shield, AlertCircle, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Shield, AlertCircle, ArrowLeft, MapPin, Plane } from "lucide-react";
 import useAdminAuth from "../../context/AdminAuthContext"; 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import frexilogo from "../../assets/image/frexilogo.png"; // Adjust path as needed
@@ -17,7 +17,7 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation();1
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -26,6 +26,38 @@ const AdminLogin = () => {
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, authLoading, navigate, location]);
+
+  // Validation functions
+  const validateEmail = (email) => {
+    if (!email) return "Email is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return "Password is required";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    return "";
+  };
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case "email":
+        return validateEmail(value);
+      case "password":
+        return validatePassword(value);
+      default:
+        return "";
+    }
+  };
+
+  // Check if form is valid
+  const isFormValid = () => {
+    const hasData = formData.email && formData.password;
+    const hasErrors = Object.values(errors).some(error => error);
+    return hasData && !hasErrors;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,13 +104,13 @@ const AdminLogin = () => {
         const from = location.state?.from?.pathname || "/admin/dashboard";
         navigate(from, { replace: true });
       } else {
-        setError(response.message || "Login failed");
+        setErrors({ general: response.message || "Login failed" });
       }
     } catch (err) {
       console.error("Admin login error:", err);
-      setError(err.message || "Login failed. Please try again.");
+      setErrors({ general: err.message || "Login failed. Please try again." });
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 

@@ -428,7 +428,7 @@ const ViewTestimonialModal = ({ isOpen, onClose, testimonial }) => {
 };
 
 // Main Testimonial Management Component
-const TestimonialManagement = () => {
+const TestimonialManagement = ({ role }) => {
   const [testimonials, setTestimonials] = useState([]);
   const [filteredTestimonials, setFilteredTestimonials] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

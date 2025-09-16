@@ -17,7 +17,7 @@ import {
 
 import notificationService from "../../services/contactService"; // replace with your real service
 
-const NotificationManagement = () => {
+const NotificationManagement = ({ role }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

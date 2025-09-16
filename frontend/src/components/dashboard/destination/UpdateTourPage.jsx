@@ -6,7 +6,7 @@ import { Plus, X, Upload, MapPin, DollarSign, Globe, Camera, Tag, Loader } from 
 import destinationService from '../../../services/destinationServices';
 import Swal from 'sweetalert2';
 
-const UpdateDestinationPage = () => {
+const UpdateDestinationPage = ({ role }) => {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -120,7 +120,7 @@ setHighlights(() => {
             } catch (error) {
                 console.error('Error fetching destination data:', error);
                 alert('Failed to load destination data. Please try again.');
-                navigate('/admin/dashboard/destinations');
+                navigate( role == 'admin' ? '/admin/dashboard/destinations': '/employee/dashboard/destinations');
             } finally {
                 setIsInitialLoading(false);
             }
